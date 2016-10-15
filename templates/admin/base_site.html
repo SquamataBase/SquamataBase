@@ -4,3 +4,11 @@
 {% block extrastyle %}
 <link rel="stylesheet" type="text/css" href="{% static "admin/css/extra_style.css" %}" />
 {% endblock %}
+
+{% block title %}
+SquamataBase
+{% endblock %}
+
+{% block branding %}
+<h1 id="site-name"><a href="{% url 'admin:index' %}">SquamataBase Administration</a></h1>
+{% endblock %}

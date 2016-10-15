@@ -1,6 +1,6 @@
 from django import forms
 from dal import autocomplete
-from Glossary.models import OntologyCollection, OntologyTerm
+from SquamataBase.Glossary.models import OntologyCollection, OntologyTerm
 from .models import *
 from .widgets import *
 

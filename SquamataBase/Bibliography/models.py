@@ -1,5 +1,5 @@
 from django.db import models
-from Glossary.models import OntologyTerm
+from SquamataBase.Glossary.models import OntologyTerm
 
 
 class Ref(models.Model):

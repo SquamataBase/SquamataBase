@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.db.models import Q, F
 from dal import autocomplete
-from MuseumCatalog.models import Voucher
+from SquamataBase.MuseumCatalog.models import Voucher
 from .models import IndividualSet, IndividualSetVoucher, FoodRecord
 
 

@@ -1,9 +1,9 @@
 from django.db import models
-from Bibliography.models import Ref
-from Geography.models import Locality
-from Glossary.models import OntologyTerm
-from MuseumCatalog.models import Voucher
-from Taxonomy.models import Taxon
+from SquamataBase.Bibliography.models import Ref
+from SquamataBase.Geography.models import Locality
+from SquamataBase.Glossary.models import OntologyTerm
+from SquamataBase.MuseumCatalog.models import Voucher
+from SquamataBase.Taxonomy.models import Taxon
 from .validators import *
 
 

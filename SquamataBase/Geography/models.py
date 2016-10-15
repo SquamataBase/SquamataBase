@@ -1,5 +1,5 @@
 from django.contrib.gis.db import models
-from Glossary.models import OntologyTerm
+from SquamataBase.Glossary.models import OntologyTerm
 
 
 class SpatialRefSys(models.Model):

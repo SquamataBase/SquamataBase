@@ -1,6 +1,6 @@
 from django.contrib.gis import admin
 from django.core.exceptions import ObjectDoesNotExist
-from Glossary.models import OntologyCollection, OntologyTerm
+from SquamataBase.Glossary.models import OntologyCollection, OntologyTerm
 from .models import *
 from .forms import *
 

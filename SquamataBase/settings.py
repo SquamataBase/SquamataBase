@@ -1,8 +1,5 @@
 import os
 
-ADMIN_SITE_HEADER = 'SquamataBase Administration'
-ADMIN_SITE_TITLE = 'SquamataBase'
-
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -22,12 +19,18 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
-    'Taxonomy.apps.TaxonomyConfig',
-    'Glossary.apps.GlossaryConfig',
-    'Geography.apps.GeographyConfig',
-    'Bibliography.apps.BibliographyConfig',
-    'MuseumCatalog.apps.MuseumCatalogConfig',
-    'FoodRecord.apps.FoodRecordConfig',
+    #'Taxonomy.apps.TaxonomyConfig',
+    #'Glossary.apps.GlossaryConfig',
+    #'Geography.apps.GeographyConfig',
+    #'Bibliography.apps.BibliographyConfig',
+    #'MuseumCatalog.apps.MuseumCatalogConfig',
+    #'FoodRecord.apps.FoodRecordConfig',
+    'SquamataBase.Taxonomy',
+    'SquamataBase.Glossary',
+    'SquamataBase.Geography',
+    'SquamataBase.Bibliography',
+    'SquamataBase.MuseumCatalog',
+    'SquamataBase.FoodRecord',
     'dal',
     'dal_select2',
     'django.contrib.postgres',  # include to use postgres unaccent extension

@@ -1,15 +1,11 @@
 from django.conf.urls import url, include
-from django.conf import settings
 from django.contrib.gis import admin
-from MuseumCatalog.views import *
-from Taxonomy.views import *
-from Geography.views import *
-from Glossary.views import *
-from Bibliography.views import *
-from FoodRecord.views import *
-
-admin.site.site_header = settings.ADMIN_SITE_HEADER
-admin.site.site_title = settings.ADMIN_SITE_TITLE
+from SquamataBase.MuseumCatalog.views import *
+from SquamataBase.Taxonomy.views import *
+from SquamataBase.Geography.views import *
+from SquamataBase.Glossary.views import *
+from SquamataBase.Bibliography.views import *
+from SquamataBase.FoodRecord.views import *
 
 autocompletes = [
     url(r'^museum-autocomplete/$', MuseumAutocomplete.as_view(), 

@@ -1,8 +1,8 @@
 from django.contrib import admin
 from django.utils.html import format_html
 from django.core.exceptions import ObjectDoesNotExist
-from Geography.models import Locality
-from Glossary.models import OntologyCollection, OntologyTerm
+from SquamataBase.Geography.models import Locality
+from SquamataBase.Glossary.models import OntologyCollection, OntologyTerm
 from .models import *
 from .forms import *
 
