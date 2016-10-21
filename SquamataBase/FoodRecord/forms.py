@@ -1,6 +1,7 @@
 from django import forms
 from dal import autocomplete
 from SquamataBase.Glossary.models import OntologyCollection, OntologyTerm
+from .multiform.forms import MultiModelForm
 from .models import *
 from .widgets import *
 
@@ -180,4 +181,9 @@ class FoodRecordForm(forms.ModelForm):
                 },
             ),
         }
+
+
+class FoodRecordEntryForm(MultiModelForm):
+    pass
+
         
