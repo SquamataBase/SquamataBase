@@ -6,6 +6,7 @@ from SquamataBase.Geography.views import *
 from SquamataBase.Glossary.views import *
 from SquamataBase.Bibliography.views import *
 from SquamataBase.FoodRecord.views import *
+from SquamataBase.api import *
 
 autocompletes = [
     url(r'^museum-autocomplete/$', MuseumAutocomplete.as_view(), 
@@ -46,6 +47,7 @@ autocompletes = [
 urlpatterns = [
     
     url(r'^admin/', admin.site.urls),
+    url(r'^api/', QueryAPI.as_view(), name='api-view'),
     
 ] + autocompletes
 

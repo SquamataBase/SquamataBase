@@ -19,12 +19,6 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
-    #'Taxonomy.apps.TaxonomyConfig',
-    #'Glossary.apps.GlossaryConfig',
-    #'Geography.apps.GeographyConfig',
-    #'Bibliography.apps.BibliographyConfig',
-    #'MuseumCatalog.apps.MuseumCatalogConfig',
-    #'FoodRecord.apps.FoodRecordConfig',
     'SquamataBase.Taxonomy',
     'SquamataBase.Glossary',
     'SquamataBase.Geography',
