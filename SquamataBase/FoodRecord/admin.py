@@ -79,9 +79,9 @@ class DataSetAdmin(admin.ModelAdmin):
 
     class Media:
         js = ('FoodRecord/js/reference_placeholder.js',
-              'FoodRecord/js/responsive_tabs.js',)
+              'admin/js/responsive_tabs.js',)
         css = {
-            'all': ('FoodRecord/css/admin_tabs.css',),
+            'all': ('admin/css/admin_tabs.css',),
         }
         
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
@@ -180,9 +180,9 @@ class IndividualSetAdmin(admin.ModelAdmin):
     
     class Media:
         js = ('FoodRecord/js/taxon_placeholder.js',
-              'FoodRecord/js/responsive_tabs.js',)
+              'admin/js/responsive_tabs.js',)
         css = {
-            'all': ('FoodRecord/css/admin_tabs.css',),
+            'all': ('admin/css/admin_tabs.css',),
         }
     
     def get_vouchers(self, obj):

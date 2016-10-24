@@ -1,12 +1,15 @@
 from django.db import models
 from SquamataBase.Glossary.models import OntologyTerm
-
+from SquamataBase.Workbench.models import Workbench
 
 class Ref(models.Model):
     """Base model for storing references to data sources."""
     
     ref_type = models.ForeignKey(
         OntologyTerm, on_delete=models.PROTECT)
+
+    wb = models.ForeignKey(
+        Workbench, blank=True, null=True, on_delete=models.SET_NULL)
     
     class Meta:
         db_table = 'sb_ref'

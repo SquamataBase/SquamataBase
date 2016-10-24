@@ -60,6 +60,7 @@ class RefAdmin(admin.ModelAdmin):
         ContributionInlineAdmin,
     )
     
+    exclude = ('wb',)
     list_display = ('id', 'get_title')
     search_fields = ('journalarticle__title', 'book__title', 'bookchapter__title',)
     

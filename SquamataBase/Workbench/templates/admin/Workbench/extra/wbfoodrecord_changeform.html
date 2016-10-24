@@ -54,6 +54,7 @@
     <li class="current"><a href="#predator-pane">Predator</a></li>
     <li><a href="#prey-pane">Prey</a></li>
     <li><a href="#context-pane">Context</a></li>
+    <li><a href="#datasource-pane">Data Source</a></li>
 </ul>
 
 <div class="tab">
@@ -75,6 +76,14 @@
     <div class="tab-content" id="context-pane">
         {% for inline_admin_formset in inline_admin_formsets %}
             {% if inline_admin_formset.opts.verbose_name == 'foodrecord' %}
+                {% include inline_admin_formset.opts.template %}
+            {% endif %}
+        {% endfor %}
+    </div>
+
+    <div class="tab-content" id="datasource-pane">
+        {% for inline_admin_formset in inline_admin_formsets %}
+            {% if inline_admin_formset.opts.verbose_name == 'datasource' %}
                 {% include inline_admin_formset.opts.template %}
             {% endif %}
         {% endfor %}
