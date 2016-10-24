@@ -7,7 +7,7 @@ from .widgets import *
 class IndividualSetForm(forms.ModelForm):
     
     TAXON_CONTEXT = (
-        ('life',        'All life'),
+        ('life',        '---------'),
         ('amphibians',  'Amphibians'),
         ('birds',       'Birds'),
         ('fish',        'Fishes'),
@@ -22,7 +22,7 @@ class IndividualSetForm(forms.ModelForm):
         ('plants',      'Plants'),
     )
     
-    taxon_context = forms.ChoiceField(choices=TAXON_CONTEXT, required=False, initial='reptiles')
+    taxon_lookup_context = forms.ChoiceField(choices=TAXON_CONTEXT, required=False, initial='life')
     
     class Meta:
         model = IndividualSet
@@ -34,7 +34,7 @@ class IndividualSetForm(forms.ModelForm):
                     'data-placeholder': '',
                     'data-minimum-input-length': 2,
                 },
-                forward = ['taxon_context'],
+                forward = ['taxon_lookup_context'],
             ),
         }
         

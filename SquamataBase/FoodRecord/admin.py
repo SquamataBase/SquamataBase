@@ -158,7 +158,7 @@ class IndividualSetAdmin(admin.ModelAdmin):
     fieldsets = (
         ('Taxon',  {
             'fields': (
-                'taxon_context', 'taxon',
+                'taxon_lookup_context', 'taxon',
                 ('verbatim_name','ambiguous'),
                 'lifestage', 'sex', 'component_part'),
         }),

@@ -27,10 +27,12 @@ class TaxonAutocomplete(autocomplete.Select2QuerySetView):
             return Taxon.objects.none()
 
         if self.q:
-            taxon_context = self.forwarded.get('taxon_context', None)
+            taxon_context = self.forwarded.get('taxon_lookup_context', None)
             m = Taxon
             q = self.q.lower().capitalize()  # format the query term so that it matches storage in database.
             if taxon_context:
+                if taxon_context == 'life':
+                    return Taxon.objects.none()  # full taxonomy is too big for autocompletion
                 m = self.TAXON_CONTEXT_MODELS[taxon_context]
             c1 = Q(**{'scientific_name__startswith': q})  # no need to use case-insensitive query because we know formatting of query matches data
             c1 &= Q(**{'taxon_status__exact': 'synonym'})

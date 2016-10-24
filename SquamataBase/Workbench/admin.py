@@ -81,7 +81,7 @@ class IndividualSetNestedInlineAdmin(nested_admin.NestedStackedInline):
     fieldsets = (
         ('Taxon',  {
             'fields': (
-                'taxon_context', 'taxon',
+                'taxon_lookup_context', 'taxon',
                 ('verbatim_name','ambiguous'),
                 'lifestage', 'sex', 'component_part'),
         }),
@@ -291,7 +291,7 @@ class FoodRecordWorkbenchAdmin(nested_admin.NestedModelAdmin):
     def save_related(self, request, form, formsets, change):
         """
         We need to override save_related so that we can attach the
-        predator and prey specimens to their appropriate foreign key
+        related models their appropriate foreign key
         fields in the food record before it is saved.
         """
         specimens = []
