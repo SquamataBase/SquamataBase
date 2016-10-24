@@ -51,7 +51,7 @@
 {% endif %}
 
 <ul class="tabs-menu">
-    <li class="current"><a href="#individualset-pane">Individual Set</a></li>
+    <li class="current"><a href="#specimen-pane">Specimen</a></li>
     <li><a href="#vouchers-pane">Vouchers</a></li>
     <li><a href="#measurements-pane">Measurements</a></li>
     <li><a href="#parentsets-pane">Parent Sets</a></li>
@@ -59,7 +59,7 @@
 
 <div class="tab">
 
-    <div class="tab-content" id="individualset-pane">
+    <div class="tab-content" id="specimen-pane">
         {% block field_sets %}
         {% for fieldset in adminform %}
           {% include "admin/includes/fieldset.html" %}

@@ -21,71 +21,12 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.CreateModel(
-            name='IndividualSet',
-            fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('taxon', models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, to='Taxonomy.Taxon')),
-                ('verbatim_name', models.CharField(max_length=255)),
-                ('ambiguous', models.BooleanField()),
-                ('count', models.IntegerField(blank=True, null=True)),
-                ('mass', models.DecimalField(blank=True, decimal_places=3, max_digits=10, null=True)),
-                ('mass_unit', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.PROTECT, related_name='individualset_massunitset', to='Glossary.OntologyTerm')),
-                ('volume', models.DecimalField(blank=True, decimal_places=3, max_digits=10, null=True)),
-                ('volume_unit', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.PROTECT, related_name='individualset_volumeunitset', to='Glossary.OntologyTerm')),
-                ('lifestage', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.PROTECT, related_name='individualset_lifestageset', to='Glossary.OntologyTerm')),
-                ('sex', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.PROTECT, related_name='individualset_sexset', to='Glossary.OntologyTerm')),
-                ('component_part', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.PROTECT, related_name='individualset_componentset', to='Glossary.OntologyTerm')),
-            ],
-            options={
-                'db_table': 'sb_individual_set',
-            },
-        ),
-        migrations.CreateModel(
-            name='IndividualSetIntersection',
-            fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('individual_set', models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, related_name='individualsetintersection_childset', to='FoodRecord.IndividualSet')),
-                ('intersects_with', models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, related_name='individualsetintersection_parentset', to='FoodRecord.IndividualSet')),
-            ],
-            options={
-                'verbose_name': 'intersection',
-                'db_table': 'sb_individual_set_intersection',
-            },
-        ),
-        migrations.CreateModel(
-            name='IndividualSetMeasurement',
-            fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('individual_set', models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, to='FoodRecord.IndividualSet')),
-                ('measurement_type', models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, related_name='individualsetmeasurement_measurementtypeset', to='Glossary.OntologyTerm')),
-                ('measurement_value', models.DecimalField(decimal_places=3, max_digits=10)),
-                ('measurement_unit', models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, related_name='individualsetmeasurement_measurementunitset', to='Glossary.OntologyTerm')),
-                ('verbatim_value', models.CharField(max_length=255)),
-            ],
-            options={
-                'verbose_name': 'measurement',
-                'db_table': 'sb_individual_set_measurement',
-            },
-        ),
-        migrations.CreateModel(
-            name='IndividualSetVoucher',
-            fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('individual_set', models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, to='FoodRecord.IndividualSet')),
-                ('voucher', models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, to='Specimen.Voucher')),
-            ],
-            options={
-                'verbose_name': 'voucher',
-                'db_table': 'sb_individual_set_voucher',
-            },
-        ),
-        migrations.CreateModel(
             name='FoodRecord',
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('ref', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.PROTECT, to='Bibliography.Ref')),
-                ('predator', models.ForeignKey(help_text='search on id, latin name, or voucher code', on_delete=django.db.models.deletion.PROTECT, related_name='foodrecord_predatorset', to='FoodRecord.IndividualSet')),
-                ('prey', models.ForeignKey(help_text='search on id, latin name, or voucher code', on_delete=django.db.models.deletion.PROTECT, related_name='foodrecord_preyset', to='FoodRecord.IndividualSet')),
+                ('predator', models.ForeignKey(help_text='search on id, latin name, or voucher code', on_delete=django.db.models.deletion.PROTECT, related_name='foodrecord_predatorset', to='Specimen.Specimen')),
+                ('prey', models.ForeignKey(help_text='search on id, latin name, or voucher code', on_delete=django.db.models.deletion.PROTECT, related_name='foodrecord_preyset', to='Specimen.Specimen')),
                 ('basis', models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, related_name='foodrecord_evidenceset', to='Glossary.OntologyTerm')),
                 ('context', models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, related_name='foodrecord_contextset', to='Glossary.OntologyTerm')),
                 ('conditions', models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, related_name='foodrecord_conditionset', to='Glossary.OntologyTerm')),

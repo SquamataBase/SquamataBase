@@ -30,7 +30,7 @@ class Migration(migrations.Migration):
             name='MuseumCollection',
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('museum', models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, to='MuseumCatalog.Museum')),
+                ('museum', models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, to='Specimen.Museum')),
                 ('collection_name', models.CharField(max_length=255)),
                 ('collection_code', models.CharField(max_length=255, blank=True, null=True)),
             ],
@@ -42,13 +42,73 @@ class Migration(migrations.Migration):
             name='Voucher',
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('museum', models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, to='MuseumCatalog.Museum')),
-                ('museum_collection', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.PROTECT, to='MuseumCatalog.MuseumCollection')),
+                ('museum', models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, to='Specimen.Museum')),
+                ('museum_collection', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.PROTECT, to='Specimen.MuseumCollection')),
                 ('catalog_number', models.CharField(blank=True, max_length=255, null=True)),
                 ('field_number', models.CharField(blank=True, max_length=255, null=True)),
             ],
             options={
                 'db_table': 'sb_voucher',
+            },
+        ),
+        migrations.CreateModel(
+            name='Specimen',
+            fields=[
+                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('taxon', models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, to='Taxonomy.Taxon')),
+                ('verbatim_name', models.CharField(max_length=255)),
+                ('ambiguous', models.BooleanField()),
+                ('count', models.IntegerField(blank=True, null=True)),
+                ('mass', models.DecimalField(blank=True, decimal_places=3, max_digits=10, null=True)),
+                ('mass_unit', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.PROTECT, related_name='specimen_massunitset', to='Glossary.OntologyTerm')),
+                ('volume', models.DecimalField(blank=True, decimal_places=3, max_digits=10, null=True)),
+                ('volume_unit', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.PROTECT, related_name='specimen_volumeunitset', to='Glossary.OntologyTerm')),
+                ('lifestage', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.PROTECT, related_name='specimen_lifestageset', to='Glossary.OntologyTerm')),
+                ('sex', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.PROTECT, related_name='specimen_sexset', to='Glossary.OntologyTerm')),
+                ('component_part', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.PROTECT, related_name='specimen_componentset', to='Glossary.OntologyTerm')),
+                ('wb', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, to='Workbench.Workbench'))
+            ],
+            options={
+                'db_table': 'sb_specimen',
+            },
+        ),
+        migrations.CreateModel(
+            name='SpecimenIntersection',
+            fields=[
+                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('specimen', models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, related_name='specimenintersection_childset', to='Specimen.Specimen')),
+                ('intersects_with', models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, related_name='specimenintersection_parentset', to='Specimen.Specimen')),
+            ],
+            options={
+                'verbose_name': 'intersection',
+                'db_table': 'sb_specimen_intersection',
+            },
+        ),
+        migrations.CreateModel(
+            name='SpecimenMeasurement',
+            fields=[
+                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('specimen', models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, to='Specimen.Specimen')),
+                ('measurement_type', models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, related_name='specimenmeasurement_measurementtypeset', to='Glossary.OntologyTerm')),
+                ('measurement_value', models.DecimalField(decimal_places=3, max_digits=10)),
+                ('measurement_unit', models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, related_name='specimenmeasurement_measurementunitset', to='Glossary.OntologyTerm')),
+                ('verbatim_value', models.CharField(max_length=255)),
+            ],
+            options={
+                'verbose_name': 'measurement',
+                'db_table': 'sb_specimen_measurement',
+            },
+        ),
+        migrations.CreateModel(
+            name='SpecimenVoucher',
+            fields=[
+                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('specimen', models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, to='Specimen.Specimen')),
+                ('voucher', models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, to='Specimen.Voucher')),
+            ],
+            options={
+                'verbose_name': 'voucher',
+                'db_table': 'sb_specimen_voucher',
             },
         ),
     ]

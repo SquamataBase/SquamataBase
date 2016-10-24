@@ -1,6 +1,8 @@
 from django.contrib import admin
 import nested_admin
 from SquamataBase.Glossary.models import *
+from SquamataBase.Specimen.models import *
+from SquamataBase.Specimen.forms import *
 from SquamataBase.FoodRecord.models import *
 from SquamataBase.FoodRecord.forms import *
 from SquamataBase.Bibliography.models import *
@@ -8,8 +10,8 @@ from SquamataBase.Bibliography.forms import *
 from .models import *
 
 
-class IndividualSetMeasurementNestedInlineAdmin(nested_admin.NestedTabularInline):
-    model = IndividualSetMeasurement
+class SpecimenMeasurementNestedInlineAdmin(nested_admin.NestedTabularInline):
+    model = SpecimenMeasurement
     extra = 1
     show_change_link = True
     fieldsets = (
@@ -39,12 +41,12 @@ class IndividualSetMeasurementNestedInlineAdmin(nested_admin.NestedTabularInline
             except ObjectDoesNotExist:
                 cid = 0
             kwargs['queryset'] = OntologyTerm.objects.filter(collection=cid)
-        return super(IndividualSetMeasurementNestedInlineAdmin, self).formfield_for_foreignkey(db_field, request, **kwargs)
+        return super(SpecimenMeasurementNestedInlineAdmin, self).formfield_for_foreignkey(db_field, request, **kwargs)
 
     
-class IndividualSetVoucherNestedInlineAdmin(nested_admin.NestedTabularInline):
-    model = IndividualSetVoucher
-    form = IndividualSetVoucherForm
+class SpecimenVoucherNestedInlineAdmin(nested_admin.NestedTabularInline):
+    model = SpecimenVoucher
+    form = SpecimenVoucherForm
     extra = 1
     show_change_link = True
     def get_extra(self, request, obj=None, **kwargs):
@@ -53,10 +55,10 @@ class IndividualSetVoucherNestedInlineAdmin(nested_admin.NestedTabularInline):
         return self.extra
         
  
-class IndividualSetIntersectionNestedInlineAdmin(nested_admin.NestedTabularInline):
-    model = IndividualSetIntersection
-    form = IndividualSetIntersectionForm
-    fk_name = 'individual_set'
+class SpecimenIntersectionNestedInlineAdmin(nested_admin.NestedTabularInline):
+    model = SpecimenIntersection
+    form = SpecimenIntersectionForm
+    fk_name = 'specimen'
     extra = 1
     show_change_link = True
     def get_extra(self, request, obj=None, **kwargs):
@@ -65,18 +67,18 @@ class IndividualSetIntersectionNestedInlineAdmin(nested_admin.NestedTabularInlin
         return self.extra
 
 
-class IndividualSetNestedInlineAdmin(nested_admin.NestedStackedInline):
-    model = IndividualSet
-    form = IndividualSetForm
+class SpecimenNestedInlineAdmin(nested_admin.NestedStackedInline):
+    model = Specimen
+    form = SpecimenForm
     extra = 2
     max_num = 2
     can_delete = False
     verbose_name = 'specimen'
     template = 'admin/Workbench/extra/inline_specimen.html'
 
-    inlines = [IndividualSetMeasurementNestedInlineAdmin,
-               IndividualSetVoucherNestedInlineAdmin,
-               IndividualSetIntersectionNestedInlineAdmin]
+    inlines = [SpecimenMeasurementNestedInlineAdmin,
+               SpecimenVoucherNestedInlineAdmin,
+               SpecimenIntersectionNestedInlineAdmin]
 
     fieldsets = (
         ('Taxon',  {
@@ -125,7 +127,7 @@ class IndividualSetNestedInlineAdmin(nested_admin.NestedStackedInline):
             except ObjectDoesNotExist:
                 cid = 0
             kwargs['queryset'] = OntologyTerm.objects.filter(collection=cid)
-        return super(IndividualSetNestedInlineAdmin, self).formfield_for_foreignkey(db_field, request, **kwargs)
+        return super(SpecimenNestedInlineAdmin, self).formfield_for_foreignkey(db_field, request, **kwargs)
 
 
 class FoodRecordNestedInlineAdmin(nested_admin.NestedStackedInline):
@@ -280,7 +282,7 @@ class RefNestedInlineAdmin(nested_admin.NestedStackedInline):
 @admin.register(FoodRecordWorkbench)
 class FoodRecordWorkbenchAdmin(nested_admin.NestedModelAdmin):
     change_form_template = 'admin/Workbench/extra/wbfoodrecord_changeform.html'
-    inlines = [IndividualSetNestedInlineAdmin, FoodRecordNestedInlineAdmin, RefNestedInlineAdmin]
+    inlines = [SpecimenNestedInlineAdmin, FoodRecordNestedInlineAdmin, RefNestedInlineAdmin]
 
     class Media:
         js = ('admin/js/responsive_tabs.js',)
@@ -297,7 +299,7 @@ class FoodRecordWorkbenchAdmin(nested_admin.NestedModelAdmin):
         specimens = []
         data_source = []
         for formset in formsets:
-            if formset.prefix == 'individualset_set':
+            if formset.prefix == 'specimen_set':
                 specimens.extend(formset.save())
             elif formset.prefix == 'ref_set':
                 data_source.extend(formset.save())

@@ -19,9 +19,4 @@ class Migration(migrations.Migration):
             name='wb',
             field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, to='Workbench.Workbench'),
         ),
-        migrations.AddField(
-            model_name='individualset',
-            name='wb',
-            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, to='Workbench.Workbench'),
-        ),
     ]

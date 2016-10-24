@@ -4,70 +4,6 @@ from SquamataBase.Glossary.models import OntologyCollection, OntologyTerm
 from .models import *
 from .widgets import *
 
-class IndividualSetForm(forms.ModelForm):
-    
-    TAXON_CONTEXT = (
-        ('life',        '---------'),
-        ('amphibians',  'Amphibians'),
-        ('birds',       'Birds'),
-        ('fish',        'Fishes'),
-        ('mammals',     'Mammals'),
-        ('reptiles',    'Reptiles'),
-        ('annelids',    'Annelids'),
-        ('arthropods',  'Arthropods'),
-        ('mollusks',    'Mollusks'),
-        ('onychophora', 'Onychophorans'),
-        ('animals',     'Animals'),
-        ('fungi',       'Fungi'),
-        ('plants',      'Plants'),
-    )
-    
-    taxon_lookup_context = forms.ChoiceField(choices=TAXON_CONTEXT, required=False, initial='life')
-    
-    class Meta:
-        model = IndividualSet
-        fields = ('__all__')
-        widgets = {
-            'taxon': autocomplete.ModelSelect2(
-                url = 'taxon-autocomplete',
-                attrs = {
-                    'data-placeholder': '',
-                    'data-minimum-input-length': 2,
-                },
-                forward = ['taxon_lookup_context'],
-            ),
-        }
-        
-        
-class IndividualSetVoucherForm(forms.ModelForm):
-    class Meta:
-        model = IndividualSetVoucher
-        fields = ('__all__')
-        widgets = {
-            'voucher': autocomplete.ModelSelect2(
-                url = 'voucher-autocomplete',
-                attrs = {
-                    'data-placeholder': 'Search for vouchers . . .',
-                    'data-minimum-input-length': 2,
-                },
-            ),
-        }
-
-
-class IndividualSetIntersectionForm(forms.ModelForm):
-    class Meta:
-        model = IndividualSetIntersection
-        fields = ('__all__')
-        widgets = {
-            'intersects_with': autocomplete.ModelSelect2(
-                url = 'individual-autocomplete',
-                attrs = {
-                    'data-placeholder': 'Search for individuals . . .',
-                    'data-minimum-input-length': 1,
-                },
-            ),
-        }
-
 
 class DataSetForm(forms.ModelForm):
     
@@ -159,16 +95,16 @@ class FoodRecordForm(forms.ModelForm):
                 forward = ['ref_type'],
             ),
             'predator': autocomplete.ModelSelect2(
-                url = 'individual-autocomplete',
+                url = 'specimen-autocomplete',
                 attrs = {
-                    'data-placeholder': 'Search for individuals . . .',
+                    'data-placeholder': 'Search for specimens . . .',
                     'data-minimum-input-length': 1,
                 },
             ),
             'prey': autocomplete.ModelSelect2(
-                url = 'individual-autocomplete',
+                url = 'specimen-autocomplete',
                 attrs = {
-                    'data-placeholder': 'Search for individuals . . .',
+                    'data-placeholder': 'Search for specimens . . .',
                     'data-minimum-input-length': 1,
                 },
             ),

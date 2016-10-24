@@ -2,139 +2,10 @@ from django.db import models
 from SquamataBase.Bibliography.models import Ref
 from SquamataBase.Geography.models import Locality
 from SquamataBase.Glossary.models import OntologyTerm
-from SquamataBase.Specimen.models import Voucher
+from SquamataBase.Specimen.models import Specimen, Voucher
 from SquamataBase.Taxonomy.models import Taxon
 from SquamataBase.Workbench.models import Workbench
 from .validators import *
-
-
-class IndividualSet(models.Model):
-    """Table that holds instances of sets of individual organisms.
-    
-    .. py:attribute:: taxon
-    .. py:attribute:: verbatim_name
-    .. py:attribute:: ambiguous
-    .. py:attribute:: count
-    .. py:attribute:: mass
-    .. py:attribute:: mass_unit
-    .. py:attribute:: volume
-    .. py:attribute:: volume_unit
-    .. py:attribute:: lifestage
-    .. py:attribute:: sex
-    .. py:attribute:: anatomical_part
-    """
-    wb = models.ForeignKey(
-        Workbench, blank=True, null=True, on_delete=models.SET_NULL)
-
-    taxon = models.ForeignKey(
-        Taxon, on_delete=models.PROTECT)
-        
-    verbatim_name = models.CharField(
-        max_length=255)
-        
-    ambiguous = models.BooleanField()
-    
-    count = models.IntegerField(
-        blank=True, null=True)
-    
-    mass = models.DecimalField(
-        max_digits=10, decimal_places=3, blank=True, null=True)
-    
-    mass_unit = models.ForeignKey(
-        OntologyTerm, related_name='individualset_massunitset',
-        blank=True, null=True, on_delete=models.PROTECT)
-    
-    volume = models.DecimalField(
-        max_digits=10, decimal_places=3, blank=True, null=True)
-    
-    volume_unit = models.ForeignKey(
-        OntologyTerm, related_name='individualset_volumeunitset',
-        blank=True, null=True, on_delete=models.PROTECT)
-    
-    lifestage = models.ForeignKey(
-        OntologyTerm, related_name='individualset_lifestageset',
-        blank=True, null=True, on_delete=models.PROTECT)
-    
-    sex = models.ForeignKey(
-        OntologyTerm, related_name='individualset_sexset',
-        blank=True, null=True, on_delete=models.PROTECT)
-        
-    component_part = models.ForeignKey(
-        OntologyTerm, related_name='individualset_componentset',
-        blank=True, null=True, on_delete=models.PROTECT)
-    
-    class Meta:
-        db_table = 'sb_individual_set'
-        
-    def __str__(self):
-        vouchers = IndividualSetVoucher.objects.filter(individual_set=self.id)
-        voucher_str= ':'.join([str(v) for v in vouchers])
-        if voucher_str != '':
-            return ' | '.join([str(self.id), self.taxon.scientific_name,
-                                voucher_str])
-        return ' | '.join([str(self.id), self.taxon.scientific_name])
-
-
-class IndividualSetIntersection(models.Model):
-    """Overlapping sets of individual organisms."""
-    
-    individual_set = models.ForeignKey(
-        IndividualSet, related_name='individualsetintersection_childset',
-        on_delete=models.PROTECT)
-        
-    intersects_with = models.ForeignKey(
-        IndividualSet, related_name='individualsetintersection_parentset',
-        on_delete=models.PROTECT)
-
-    class Meta:
-        db_table = 'sb_individual_set_intersection'
-        verbose_name = 'intersection'
-
-    def __str__(self):
-        return ''
-
-class IndividualSetMeasurement(models.Model):
-    """Measurements made on sets of individual organisms."""
-    
-    individual_set = models.ForeignKey(
-        IndividualSet, on_delete=models.PROTECT)
-        
-    measurement_type = models.ForeignKey(
-        OntologyTerm, related_name='individualsetmeasurement_measurementtypeset',
-        on_delete=models.PROTECT)
-        
-    measurement_value = models.DecimalField(
-        max_digits=10, decimal_places=3)
-        
-    measurement_unit = models.ForeignKey(
-        OntologyTerm, related_name='individualsetmeasurement_measurementunitset',
-        on_delete=models.PROTECT)
-        
-    verbatim_value = models.CharField(
-        max_length=255)
-
-    class Meta:
-        db_table = 'sb_individual_set_measurement'
-        verbose_name = 'measurement'
-
-    def __str__(self):
-        return ''
-
-class IndividualSetVoucher(models.Model):
-    """Voucher specimens associated with individual organisms."""
-    
-    individual_set = models.ForeignKey(
-        IndividualSet, on_delete=models.PROTECT)
-        
-    voucher = models.ForeignKey(
-        Voucher, on_delete=models.PROTECT)
-
-    class Meta:
-        db_table = 'sb_individual_set_voucher'
-        verbose_name = 'voucher'
-        
-    def __str__(self):
-        return str(self.voucher)
 
 
 class FoodRecord(models.Model):
@@ -170,12 +41,12 @@ class FoodRecord(models.Model):
         Ref, blank=True, null=True, on_delete=models.PROTECT)
         
     predator = models.ForeignKey(
-        IndividualSet, related_name='foodrecord_predatorset',
+        Specimen, related_name='foodrecord_predatorset',
         help_text='search on id, latin name, or voucher code',
         on_delete=models.PROTECT)
         
     prey = models.ForeignKey(
-        IndividualSet, related_name='foodrecord_preyset',
+        Specimen, related_name='foodrecord_preyset',
         help_text='search on id, latin name, or voucher code',
         on_delete=models.PROTECT)
         

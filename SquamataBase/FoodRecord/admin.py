@@ -94,129 +94,6 @@ class DataSetAdmin(admin.ModelAdmin):
         return super(DataSetAdmin, self).formfield_for_foreignkey(db_field, request, **kwargs)
   
 
-class IndividualSetMeasurementInlineAdmin(admin.TabularInline):
-    model = IndividualSetMeasurement
-    extra = 1
-    show_change_link = True
-    fieldsets = (
-        ('Measurement', {
-            'fields': ('measurement_type', 'measurement_unit'),
-        }),
-        ('Value', {
-            'fields': ('measurement_value', 'verbatim_value'),
-        }),
-    )
-    
-    def get_extra(self, request, obj=None, **kwargs):
-        if obj:
-            return 0;
-        return self.extra
-    
-    def formfield_for_foreignkey(self, db_field, request, **kwargs):
-        if db_field.name == 'measurement_unit':
-            try:
-                cid = OntologyCollection.objects.get(collection_name='measurement_units').id
-            except ObjectDoesNotExist:
-                cid = 0
-            kwargs['queryset'] = OntologyTerm.objects.filter(collection=cid)
-        if db_field.name == 'measurement_type':
-            try:
-                cid = OntologyCollection.objects.get(collection_name='measurement_types').id
-            except ObjectDoesNotExist:
-                cid = 0
-            kwargs['queryset'] = OntologyTerm.objects.filter(collection=cid)
-        return super(IndividualSetMeasurementInlineAdmin, self).formfield_for_foreignkey(db_field, request, **kwargs)
-
-    
-class IndividualSetVoucherInlineAdmin(admin.TabularInline):
-    model = IndividualSetVoucher
-    form = IndividualSetVoucherForm
-    extra = 1
-    show_change_link = True
-    def get_extra(self, request, obj=None, **kwargs):
-        if obj:
-            return 0;
-        return self.extra
-        
- 
-class IndividualSetIntersectionInlineAdmin(admin.TabularInline):
-    model = IndividualSetIntersection
-    form = IndividualSetIntersectionForm
-    fk_name = 'individual_set'
-    extra = 1
-    show_change_link = True
-    def get_extra(self, request, obj=None, **kwargs):
-        if obj:
-            return 0;
-        return self.extra
- 
-        
-@admin.register(IndividualSet)
-class IndividualSetAdmin(admin.ModelAdmin):
-    form = IndividualSetForm
-    change_form_template = 'admin/FoodRecord/extra/individualset_changeform.html'
-    fieldsets = (
-        ('Taxon',  {
-            'fields': (
-                'taxon_lookup_context', 'taxon',
-                ('verbatim_name','ambiguous'),
-                'lifestage', 'sex', 'component_part'),
-        }),
-        ('Amount',  {
-            'fields': (
-                'count',
-                ('mass', 'mass_unit'),
-                ('volume','volume_unit'),),
-        }),
-    )
-    
-    inlines = (
-        IndividualSetVoucherInlineAdmin,
-        IndividualSetMeasurementInlineAdmin,
-        IndividualSetIntersectionInlineAdmin,
-    )
-        
-    list_display = ('id', 'taxon', 'get_vouchers')
-    
-    class Media:
-        js = ('FoodRecord/js/taxon_placeholder.js',
-              'admin/js/responsive_tabs.js',)
-        css = {
-            'all': ('admin/css/admin_tabs.css',),
-        }
-    
-    def get_vouchers(self, obj):
-        return ':'.join((str(v) for v in IndividualSetVoucher.objects.filter(individual_set=obj.id)))
-    get_vouchers.short_description = 'Voucher'
-    
-    def formfield_for_foreignkey(self, db_field, request, **kwargs):
-        if db_field.name == 'mass_unit' or db_field.name == 'volume_unit':
-            try:
-                cid = OntologyCollection.objects.get(collection_name='measurement_units').id
-            except ObjectDoesNotExist:
-                cid = 0
-            kwargs['queryset'] = OntologyTerm.objects.filter(collection=cid)
-        if db_field.name == 'lifestage':
-            try:
-                cid = OntologyCollection.objects.get(collection_name='life_stages').id
-            except ObjectDoesNotExist:
-                cid = 0
-            kwargs['queryset'] = OntologyTerm.objects.filter(collection=cid)
-        if db_field.name == 'sex':
-            try:
-                cid = OntologyCollection.objects.get(collection_name='sexes').id
-            except ObjectDoesNotExist:
-                cid = 0
-            kwargs['queryset'] = OntologyTerm.objects.filter(collection=cid)
-        if db_field.name == 'component_part':
-            try:
-                cid = OntologyCollection.objects.get(collection_name='organism_components').id
-            except ObjectDoesNotExist:
-                cid = 0
-            kwargs['queryset'] = OntologyTerm.objects.filter(collection=cid)
-        return super(IndividualSetAdmin, self).formfield_for_foreignkey(db_field, request, **kwargs)
-
-
 @admin.register(FoodRecord)
 class FoodRecordAdmin(admin.ModelAdmin):
     form = FoodRecordForm
@@ -224,7 +101,7 @@ class FoodRecordAdmin(admin.ModelAdmin):
         ('Data Source', {
             'fields': ('ref_type', 'ref',),
         }),
-        ('Individuals', {
+        ('Specimens', {
             'fields': ('predator', 'prey',),
         }),
         ('Context', {
@@ -251,7 +128,7 @@ class FoodRecordAdmin(admin.ModelAdmin):
         
     def get_predator(self, obj):
         return format_html(
-            '<a href="/admin/FoodRecord/individualset/{}/change/">{}</a>',
+            '<a href="/admin/Specimen/specimen/{}/change/">{}</a>',
             obj.predator.id, 
             obj.predator.taxon.scientific_name
         )
@@ -259,7 +136,7 @@ class FoodRecordAdmin(admin.ModelAdmin):
         
     def get_prey(self, obj):
         return format_html(
-            '<a href="/admin/FoodRecord/individualset/{}/change/">{}</a>',
+            '<a href="/admin/Specimen/specimen/{}/change/">{}</a>',
              obj.prey.id, 
              obj.prey.taxon.scientific_name
         )
