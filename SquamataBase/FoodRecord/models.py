@@ -4,6 +4,7 @@ from SquamataBase.Geography.models import Locality
 from SquamataBase.Glossary.models import OntologyTerm
 from SquamataBase.MuseumCatalog.models import Voucher
 from SquamataBase.Taxonomy.models import Taxon
+from SquamataBase.Workbench.models import Workbench
 from .validators import *
 
 
@@ -22,7 +23,9 @@ class IndividualSet(models.Model):
     .. py:attribute:: sex
     .. py:attribute:: anatomical_part
     """
-    
+    wb = models.ForeignKey(
+        Workbench, blank=True, null=True, on_delete=models.SET_NULL)
+
     taxon = models.ForeignKey(
         Taxon, on_delete=models.PROTECT)
         
@@ -160,6 +163,8 @@ class FoodRecord(models.Model):
         
             What orientation was the prey swallowed from?
     """
+    wb = models.ForeignKey(
+        Workbench, blank=True, null=True, on_delete=models.SET_NULL)
     
     ref = models.ForeignKey(
         Ref, blank=True, null=True, on_delete=models.PROTECT)

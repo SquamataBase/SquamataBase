@@ -47,6 +47,7 @@ autocompletes = [
 urlpatterns = [
     
     url(r'^admin/', admin.site.urls),
+    url(r'^nested_admin/', include('nested_admin.urls')),
     url(r'^api/', QueryAPI.as_view(), name='api-view'),
     
 ] + autocompletes

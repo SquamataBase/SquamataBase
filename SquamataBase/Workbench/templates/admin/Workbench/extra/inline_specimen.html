@@ -1,0 +1,54 @@
+{% extends "admin/stacked_inline_noheader.html" %}
+
+{% block start_of_loop %}<div class="tab-content" id="{% if inline_admin_form.form.prefix == 'individualset_set-0' %}predator-pane{% elif inline_admin_form.form.prefix == 'individualset_set-1' %}prey-pane{% else %}empty-pane{% endif %}">{% endblock %}
+
+{% block before_field_sets %}
+
+<ul class="tabs-menu">
+    <li class="current"><a href="#specimen-pane-{{inline_admin_form.form.prefix}}">Specimen</a></li>
+    <li><a href="#vouchers-pane-{{inline_admin_form.form.prefix}}">Vouchers</a></li>
+    <li><a href="#measurements-pane-{{inline_admin_form.form.prefix}}">Measurements</a></li>
+    <li><a href="#parentsets-pane-{{inline_admin_form.form.prefix}}">Parent Sets</a></li>
+</ul>
+{% endblock %}
+
+<div class="tab">
+
+    {% block field_sets %}
+        <div class="tab-content" id="specimen-pane-{{inline_admin_form.form.prefix}}">
+            {{ block.super }}
+        </div>
+    {% endblock %}
+    
+    {% block nested_inlines %}
+        {% if inline_admin_form.form.inlines %}
+            <div class="tab-content" id="vouchers-pane-{{inline_admin_form.form.prefix}}">
+            {% for nested in inline_admin_form.form.inlines %}
+                {% if nested.opts.verbose_name == 'voucher' %}
+                    {% include nested.opts.template with inline_admin_formset=nested %}
+                {% endif %}
+            {% endfor %}
+            </div>
+
+            <div class="tab-content" id="measurements-pane-{{inline_admin_form.form.prefix}}">
+            {% for nested in inline_admin_form.form.inlines %}
+                {% if nested.opts.verbose_name == 'measurement' %}
+                    {% include nested.opts.template with inline_admin_formset=nested %}
+                {% endif %}
+            {% endfor %}
+            </div>
+
+            <div class="tab-content" id="parentsets-pane-{{inline_admin_form.form.prefix}}">
+            {% for nested in inline_admin_form.form.inlines %}
+                {% if nested.opts.verbose_name == 'intersection' %}
+                    {% include nested.opts.template with inline_admin_formset=nested %}
+                {% endif %}
+            {% endfor %}
+            </div>
+        {% endif %}
+
+    {% endblock %}
+
+</div>
+
+{% block end_of_loop %}</div>{% endblock %}

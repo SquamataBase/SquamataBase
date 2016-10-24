@@ -25,6 +25,8 @@ INSTALLED_APPS = [
     'SquamataBase.Bibliography',
     'SquamataBase.MuseumCatalog',
     'SquamataBase.FoodRecord',
+    'SquamataBase.Workbench',
+    'nested_admin',
     'dal',
     'dal_select2',
     'django.contrib.postgres',  # include to use postgres unaccent extension
