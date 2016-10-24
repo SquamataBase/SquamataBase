@@ -89,6 +89,7 @@ class SpecimenIntersectionInlineAdmin(admin.TabularInline):
         if obj:
             return 0;
         return self.extra
+
  
         
 @admin.register(Specimen)

@@ -1,5 +1,7 @@
 from django.shortcuts import render
-from django.db.models import Q
+from django.db.models import Q, Value
+from django.db.models.functions import Concat
+from django.utils.translation import ugettext as _
 from dal import autocomplete
 from .models import Journal, Book, BookChapter, JournalArticle, Person
 
@@ -58,10 +60,42 @@ class PersonAutocomplete(autocomplete.Select2QuerySetView):
             return Person.objects.none()
 
         if self.q:
-            c = Q(**{'last_name__unaccent__istartswith': self.q})
-            c |= Q(**{'first_name__unaccent__istartswith': self.q})
-            return Person.objects.filter(c)
-                    
+            qs = Person.objects.annotate(full_name=Concat('first_name', Value(' '), 'last_name'))
+            return qs.filter(full_name__unaccent__icontains=self.q)
+
         return Person.objects.none()
 
+
+    def get_create_option(self, context, q):
+        """Form the correct create_option to append to results."""
+        create_option = []
+        display_create_option = False
+        if self.create_field and q:
+            page_obj = context.get('page_obj', None)
+            if page_obj is None or page_obj.number == 1:
+                display_create_option = True
+
+        if display_create_option and self.has_add_permission(self.request):
+            vals = q.strip().split(',')
+            last_name = ' '.join([w.capitalize() for w in vals[0].strip().split(' ')])
+            try:
+                first_name = first_name = ' '.join([w.capitalize() for w in vals[1].strip().split(' ')])
+            except IndexError:
+                first_name = ''
+            full_name = ', '.join([last_name, first_name])
+            create_option = [{
+                'id': q,
+                'text': _('Create "%(new_value)s"') % {'new_value': full_name},
+                'create_id': True,
+            }]
+        return create_option
+
+
+    def create_object(self, text):
+        """Create a person given last name, first name."""
+        vals = text.strip().split(',')
+        assert len(vals) == 2
+        first_name = ' '.join([w.capitalize() for w in vals[1].strip().split(' ')])
+        last_name = ' '.join([w.capitalize() for w in vals[0].strip().split(' .')])
+        return self.get_queryset().create(**{'first_name': first_name, 'last_name': last_name})
 

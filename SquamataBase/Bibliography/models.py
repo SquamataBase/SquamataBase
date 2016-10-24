@@ -44,7 +44,7 @@ class Person(models.Model):
         verbose_name_plural = 'people'
         
     def __str__(self):
-        return ' '.join([self.first_name, self.last_name])
+        return ', '.join([self.last_name, self.first_name])
 
 
 class Contribution(models.Model):

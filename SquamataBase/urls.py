@@ -30,7 +30,7 @@ autocompletes = [
                 name='ontology-collection-autocomplete',),
     url(r'^ontology-term-autocomplete/$', OntologyTermAutocomplete.as_view(),
             name='ontology-term-autocomplete',),
-    url(r'^journal-autocomplete/$', JournalAutocomplete.as_view(),
+    url(r'^journal-autocomplete/$', JournalAutocomplete.as_view(create_field='journal_name'),
             name='journal-autocomplete',),
     url(r'^book-autocomplete/$', BookAutocomplete.as_view(),
             name='book-autocomplete',),
@@ -40,7 +40,7 @@ autocompletes = [
             name='specimen-autocomplete',),
     url(r'^foodrecord-autocomplete/$', FoodRecordAutocomplete.as_view(),
             name='foodrecord-autocomplete',),
-    url(r'^person-autocomplete/$', PersonAutocomplete.as_view(),
+    url(r'^person-autocomplete/$', PersonAutocomplete.as_view(create_field='first_name|last_name'),
             name='person-autocomplete',),
 ]
 
