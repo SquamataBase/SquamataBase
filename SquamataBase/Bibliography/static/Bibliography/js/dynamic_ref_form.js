@@ -1,52 +1,22 @@
 $(document).ready(function() {
-    
-    var pubs = [];
-    pubs["---------"] = '';
-    pubs["Journal article"] = 'journalarticle-group';
-    pubs["Book chapter"] = 'bookchapter-group';
-    pubs["Book"] = 'book-group';
-    
-    var init = pubs[$('#id_ref_type :selected').text()];
-    
-    $('#journalarticle-group').hide();
-    $('#book-group').hide();
-    $('#bookchapter-group').hide();
-    $('#contribution_set-group').hide();
-    
-    var w = '';
-    
-    if (init === '') {
-        // do nothing
-    } else {
-        // handle redirect back to add/change page because of form errors
-    
-        $('#' + init).show();
-        $('fieldset h2').hide();
-        $('fieldset h3').hide();
+
+    $(".js-inline-admin-formset").css("display", "none");
+
+    var no_sel = $("#id_ref_type").children("option:selected").text();
+    var base_id = "#grouptype-group";
+    var authors = "#contribution_set-group";
+
+    $("#id_ref_type").on("change", function() {
         
-        $('#contribution_set-group').show();
-        $('#contribution_set-group').find('h2').show();
-        
-        w = init;
-    }
-    
-    $('#id_ref_type').on('change', function() {
-        var v = pubs[$('#id_ref_type :selected').text()];
-        if (v === '') {
-            $('#journalarticle-group').hide();
-            $('#book-group').hide();
-            $('#bookchapter-group').hide();
-            $('#contribution_set-group').hide();
-        } else {
-            $('#' + w).hide();
-            $('#' + v).show();
-            $('fieldset h2').hide();
-            $('fieldset h3').hide();
-        
-            $('#contribution_set-group').show();
-            $('#contribution_set-group').find('h2').show();
-        
-            w = v;
+        var opt_sel = $(this).children("option:selected").text().replace(" ", "").toLowerCase();
+        var id = base_id.replace("grouptype", opt_sel);
+
+        $(".js-inline-admin-formset").not(id).css("display", "none");
+
+        if (opt_sel !== no_sel) {
+            $(id).show();
+            $(id).find("h2, h3").hide();
+            $(authors).show();
         }
     });
     
