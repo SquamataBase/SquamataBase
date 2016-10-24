@@ -23,7 +23,7 @@ INSTALLED_APPS = [
     'SquamataBase.Glossary',
     'SquamataBase.Geography',
     'SquamataBase.Bibliography',
-    'SquamataBase.MuseumCatalog',
+    'SquamataBase.Specimen',
     'SquamataBase.FoodRecord',
     'SquamataBase.Workbench',
     'nested_admin',

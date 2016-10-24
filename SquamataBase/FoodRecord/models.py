@@ -2,7 +2,7 @@ from django.db import models
 from SquamataBase.Bibliography.models import Ref
 from SquamataBase.Geography.models import Locality
 from SquamataBase.Glossary.models import OntologyTerm
-from SquamataBase.MuseumCatalog.models import Voucher
+from SquamataBase.Specimen.models import Voucher
 from SquamataBase.Taxonomy.models import Taxon
 from SquamataBase.Workbench.models import Workbench
 from .validators import *

@@ -15,7 +15,7 @@ class Migration(migrations.Migration):
         ('Bibliography', '0001_initial'),
         ('Glossary', '0001_initial'),
         ('Geography', '0001_initial'),
-        ('MuseumCatalog', '0001_initial'),
+        ('Specimen', '0001_initial'),
         ('Taxonomy', '0001_initial'),
     ]
 
@@ -72,7 +72,7 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('individual_set', models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, to='FoodRecord.IndividualSet')),
-                ('voucher', models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, to='MuseumCatalog.Voucher')),
+                ('voucher', models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, to='Specimen.Voucher')),
             ],
             options={
                 'verbose_name': 'voucher',

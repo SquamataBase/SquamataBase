@@ -1,6 +1,6 @@
 from django.conf.urls import url, include
 from django.contrib.gis import admin
-from SquamataBase.MuseumCatalog.views import *
+from SquamataBase.Specimen.views import *
 from SquamataBase.Taxonomy.views import *
 from SquamataBase.Geography.views import *
 from SquamataBase.Glossary.views import *
