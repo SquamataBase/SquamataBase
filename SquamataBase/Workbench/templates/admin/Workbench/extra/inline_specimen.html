@@ -1,6 +1,6 @@
 {% extends "admin/stacked_inline_noheader.html" %}
 
-{% block start_of_loop %}<div class="tab-content" id="{% if inline_admin_form.form.prefix == 'individualset_set-0' %}predator-pane{% elif inline_admin_form.form.prefix == 'individualset_set-1' %}prey-pane{% else %}empty-pane{% endif %}">{% endblock %}
+{% block start_of_loop %}<div class="tab-content" id="{% if inline_admin_form.form.prefix == 'specimen_set-0' %}predator-pane{% elif inline_admin_form.form.prefix == 'specimen_set-1' %}prey-pane{% else %}empty-pane{% endif %}">{% endblock %}
 
 {% block before_field_sets %}
 
