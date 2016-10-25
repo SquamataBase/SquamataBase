@@ -94,13 +94,6 @@ class SpecimenNestedInlineAdmin(nested_admin.NestedStackedInline):
                 ('volume','volume_unit'),),
         }),
     )
-        
-    class Media:
-        js = ('admin/Workbench/js/taxon_autocomplete.js',
-              'admin/js/responsive_tabs.js',)
-        css = {
-            'all': ('admin/css/admin_tabs.css',),
-        }
     
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
         if db_field.name == 'mass_unit' or db_field.name == 'volume_unit':
@@ -155,9 +148,6 @@ class FoodRecordNestedInlineAdmin(nested_admin.NestedStackedInline):
             'fields': ('remark',),
         }),   
     )
-    
-    class Media:
-        js = ('admin/Workbench/js/format_time.js',)
     
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
         if db_field.name == 'basis':
@@ -265,8 +255,6 @@ class RefNestedInlineAdmin(nested_admin.NestedStackedInline):
         ContributionNestedInlineAdmin,
     )
         
-    class Media:
-        js = ('admin/Workbench/js/dynamic_ref_form.js',)
     
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
         if db_field.name == 'ref_type':
@@ -281,11 +269,15 @@ class RefNestedInlineAdmin(nested_admin.NestedStackedInline):
 
 @admin.register(FoodRecordWorkbench)
 class FoodRecordWorkbenchAdmin(nested_admin.NestedModelAdmin):
+
     change_form_template = 'admin/Workbench/extra/wbfoodrecord_changeform.html'
     inlines = [SpecimenNestedInlineAdmin, FoodRecordNestedInlineAdmin, RefNestedInlineAdmin]
 
     class Media:
-        js = ('admin/js/responsive_tabs.js',)
+        js = ('admin/js/responsive_tabs.js',
+              'admin/Workbench/js/dynamic_ref_form.js',
+              'admin/Workbench/js/format_time.js',
+              'admin/Workbench/js/taxon_autocomplete.js',)
         css = {
             'all': ('admin/css/admin_tabs.css',),
         }
