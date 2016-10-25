@@ -1,4 +1,5 @@
 from django.contrib import admin
+from django.db.models import Q
 from django.core.exceptions import ObjectDoesNotExist
 from SquamataBase.Glossary.models import OntologyCollection, OntologyTerm
 from .models import *
@@ -50,6 +51,23 @@ class ContributionInlineAdmin(admin.TabularInline):
         return super(ContributionInlineAdmin, self).formfield_for_foreignkey(db_field, request, **kwargs) 
 
 
+class RefTypeFilter(admin.SimpleListFilter):
+    title = 'Data source'
+    parameter_name = 'ref_type__id__exact'
+
+    def lookups(self, request, model_admin):
+
+        qs = OntologyTerm.objects.filter(Q(**{'id__in': Ref.objects.distinct().values_list('ref_type_id', flat=True)}))
+        
+        for ref_type in qs:
+            yield (str(ref_type.id), str(ref_type))
+
+    def queryset(self, request, queryset):
+        if self.value():
+            return queryset.filter(ref_type_id=self.value())
+        return queryset
+
+
 @admin.register(Ref)
 class RefAdmin(admin.ModelAdmin):
     
@@ -61,8 +79,9 @@ class RefAdmin(admin.ModelAdmin):
     )
     
     exclude = ('wb',)
-    list_display = ('id', 'get_title')
+    list_display = ('id', 'get_title',)
     search_fields = ('journalarticle__title', 'book__title', 'bookchapter__title',)
+    list_filter = (RefTypeFilter, )
 
     class Media:
         js = ('Bibliography/js/dynamic_ref_form.js',)
