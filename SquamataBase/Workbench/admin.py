@@ -96,7 +96,7 @@ class SpecimenNestedInlineAdmin(nested_admin.NestedStackedInline):
     )
         
     class Media:
-        js = ('FoodRecord/js/taxon_placeholder.js',
+        js = ('admin/Workbench/js/taxon_autocomplete.js',
               'admin/js/responsive_tabs.js',)
         css = {
             'all': ('admin/css/admin_tabs.css',),
@@ -157,7 +157,7 @@ class FoodRecordNestedInlineAdmin(nested_admin.NestedStackedInline):
     )
     
     class Media:
-        js = ('FoodRecord/js/reference_placeholder.js', 'FoodRecord/js/format_time.js')
+        js = ('admin/Workbench/js/format_time.js',)
     
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
         if db_field.name == 'basis':
