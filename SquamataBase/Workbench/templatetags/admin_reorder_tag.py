@@ -35,20 +35,30 @@ def admin_reorder(context, token):
         len(order), item)
     if "app_list" in context:
         # sort the app list
+        settings.ADMIN_REORDER.insert(0, ('auth', ()))
         order = OrderedDict(settings.ADMIN_REORDER)
         context["app_list"].sort(key=lambda app: sort(list(order.keys()), 
             app["app_label"]))
-        exclude = []
         for i, app in enumerate(context["app_list"]):
             # sort the model list for each app
             app_name = app["app_label"]
-            if app_name in settings.ADMIN_EXCLUDE:
-                exclude.append(i)
-                continue
             model_order = [m for m in order.get(app_name, [])]
             context["app_list"][i]["models"].sort(key=lambda model: 
                 sort(model_order, model["object_name"]))
-        for i in context["app_list"][:]:
-            if context["app_list"].index(i) in exclude:
-                context["app_list"].remove(i)
+    return ""
+
+
+@register_render_tag
+def admin_exclude(context, token):
+    if "app_list" in context:
+        exclude = OrderedDict(settings.ADMIN_EXCLUDE)
+
+        for i, app in enumerate(context["app_list"]):
+            app_name = app["app_label"]
+            app_models = exclude.get(app_name, [])
+            context["app_list"][i]["models"][:] = [model for model in context["app_list"][i]["models"] if model["object_name"] not in app_models]
+
+
+        context["app_list"][:] = [app for app in context["app_list"] if app["app_label"] not in exclude or len(exclude.get(app["app_label"], []))]
+
     return ""

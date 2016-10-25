@@ -63,7 +63,7 @@ class RefAdmin(admin.ModelAdmin):
     exclude = ('wb',)
     list_display = ('id', 'get_title')
     search_fields = ('journalarticle__title', 'book__title', 'bookchapter__title',)
-    
+
     class Media:
         js = ('Bibliography/js/dynamic_ref_form.js',)
     

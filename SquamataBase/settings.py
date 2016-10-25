@@ -15,22 +15,6 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
-# Reorder the apps on the admin index page.
-# Tuple following the app label dictates order of models within app.
-# If left blank order is alphabetical.
-ADMIN_REORDER = [
-    ('Workbench', ()),
-    ('Specimen', ()),
-    ('Bibliography', ('Ref', 'Person', 'Journal')),
-    ('FoodRecord', ()),
-    ('Glossary', ()),
-    ('Geography', ()),
-    ('Taxonomy', ())
-]
-
-# Exclude (registered) apps from the admin index
-ADMIN_EXCLUDE = ['Specimen', 'Bibliography', 'FoodRecord', 'Geography', 'Glossary']
-
 # Application definition
 
 INSTALLED_APPS = [
@@ -85,6 +69,28 @@ TEMPLATES = [
 
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "static"),
+]
+
+# Order of the apps and models on the admin index page.
+# Blank specifies alphabetical order.
+ADMIN_REORDER = [
+    ('Workbench', []),
+    ('Specimen', []),
+    ('Bibliography', ['Ref', 'Person', 'Journal']),
+    ('FoodRecord', []),
+    ('Glossary', []),
+    ('Geography', []),
+    ('Taxonomy', [])
+]
+
+# Registered apps to be excluded from the admin index page
+# if logged in user is not superuser.
+ADMIN_EXCLUDE = [
+    ('Specimen', []),
+    ('Bibliography', ['Person', 'Journal']),
+    ('FoodRecord', []),
+    ('Geography', []),
+    ('Glossary', []),
 ]
 
 WSGI_APPLICATION = 'SquamataBase.wsgi.application'

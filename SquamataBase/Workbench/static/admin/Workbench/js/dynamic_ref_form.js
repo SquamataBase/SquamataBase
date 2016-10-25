@@ -2,7 +2,7 @@ $(document).ready(function() {
 
     $("#ref_set-0 > div").css("display", "none");
 
-    var no_sel = $("select[name='ref_set-0-ref_type']").children("option:selected").text();
+    var no_sel = "---------";
     var base_id = "#ref_set-0-grouptype-group";
     var authors = "#ref_set-0-contribution_set-group";
 
@@ -18,5 +18,12 @@ $(document).ready(function() {
             $(authors).show();
         }
     });
+
+    var x = document.getElementById("id_ref_set-0-ref_type");
+    var init_sel = $(x).children("option:selected").text().replace(" ", "").toLowerCase();
+
+    if (init_sel !== no_sel) {
+        $("select[name='ref_set-0-ref_type']").trigger("change");
+    }    
     
 });
