@@ -6,6 +6,7 @@ from SquamataBase.Geography.views import *
 from SquamataBase.Glossary.views import *
 from SquamataBase.Bibliography.views import *
 from SquamataBase.FoodRecord.views import *
+from SquamataBase.Workbench.admin import workbench
 from SquamataBase.api import *
 
 autocompletes = [
@@ -47,6 +48,7 @@ autocompletes = [
 urlpatterns = [
     
     url(r'^admin/', admin.site.urls),
+    url(r'^workbench/', workbench.urls),
     url(r'^nested_admin/', include('nested_admin.urls')),
     url(r'^api/', QueryAPI.as_view(), name='api-view'),
     

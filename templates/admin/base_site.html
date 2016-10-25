@@ -1,5 +1,5 @@
 {% extends "admin/base.html" %}
-{% load admin_static %}
+{% load admin_static admin_reorder_tag %}
 
 {% block extrastyle %}
 <link rel="stylesheet" type="text/css" href="{% static "admin/css/extra_style.css" %}" />
@@ -10,5 +10,8 @@ SquamataBase
 {% endblock %}
 
 {% block branding %}
+{% admin_reorder %}
 <h1 id="site-name"><a href="{% url 'admin:index' %}">SquamataBase Administration</a></h1>
 {% endblock %}
+
+{% block nav-global %}{% endblock %}

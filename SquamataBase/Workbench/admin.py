@@ -311,3 +311,9 @@ class FoodRecordWorkbenchAdmin(nested_admin.NestedModelAdmin):
         super(FoodRecordWorkbenchAdmin, self).save_related(request, form, formsets, change)
 
 
+from django.contrib.admin import AdminSite
+class WorkbenchAdminSite(AdminSite):
+    pass
+
+workbench = WorkbenchAdminSite(name='workbench')
+workbench.register(FoodRecordWorkbench, FoodRecordWorkbenchAdmin)

@@ -15,6 +15,21 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+# Reorder the apps on the admin index page.
+# Tuple following the app label dictates order of models within app.
+# If left blank order is alphabetical.
+ADMIN_REORDER = [
+    ('Workbench', ()),
+    ('Specimen', ()),
+    ('Bibliography', ('Ref', 'Person', 'Journal')),
+    ('FoodRecord', ()),
+    ('Glossary', ()),
+    ('Geography', ()),
+    ('Taxonomy', ())
+]
+
+# Exclude (registered) apps from the admin index
+ADMIN_EXCLUDE = ['Specimen', 'Bibliography', 'FoodRecord', 'Geography', 'Glossary']
 
 # Application definition
 
