@@ -115,6 +115,46 @@ class FoodRecordForm(forms.ModelForm):
                     'data-minimum-input-length': 2,
                 },
             ),
+            'basis': autocomplete.ModelSelect2(
+                attrs = {
+                    'data-placeholder': '',
+                }
+            ),
+            'context': autocomplete.ModelSelect2(
+                attrs = {
+                    'data-placeholder': '',
+                }
+            ),
+            'conditions': autocomplete.ModelSelect2(
+                attrs = {
+                    'data-placeholder': '',
+                }
+            ),
+            'outcome': autocomplete.ModelSelect2(
+                attrs = {
+                    'data-placeholder': '',
+                }
+            ),
+            'ingestion_direction': autocomplete.ModelSelect2(
+                attrs = {
+                    'data-placeholder': '',
+                }
+            ),
+            'prey_capture_mode': autocomplete.ModelSelect2(
+                attrs = {
+                    'data-placeholder': '',
+                }
+            ),
+            'prey_handle_mode': autocomplete.ModelSelect2(
+                attrs = {
+                    'data-placeholder': '',
+                }
+            ),
+            'habitat': autocomplete.ModelSelect2(
+                attrs = {
+                    'data-placeholder': '',
+                }
+            ),
         }
 
 

@@ -74,6 +74,21 @@ class SpecimenForm(forms.ModelForm):
                 },
                 forward = ['taxon_lookup_context'],
             ),
+            'lifestage': autocomplete.ModelSelect2(
+                attrs = {
+                    'data-placeholder': '',
+                }
+            ),
+            'sex': autocomplete.ModelSelect2(
+                attrs = {
+                    'data-placeholder': '',
+                }
+            ),
+            'component_part': autocomplete.ModelSelect2(
+                attrs = {
+                    'data-placeholder': '',
+                }
+            ),
         }
         
         

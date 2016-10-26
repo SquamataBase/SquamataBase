@@ -120,7 +120,7 @@ class SpecimenAdmin(admin.ModelAdmin):
     list_display = ('id', 'taxon', 'get_vouchers')
     
     class Media:
-        js = ('FoodRecord/js/taxon_placeholder.js',
+        js = ('Specimen/js/taxon_autocomplete.js',
               'admin/js/responsive_tabs.js',)
         css = {
             'all': ('admin/css/admin_tabs.css',),

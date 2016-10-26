@@ -286,7 +286,7 @@ class FoodRecordWorkbenchAdmin(nested_admin.NestedModelAdmin):
     def save_related(self, request, form, formsets, change):
         """
         We need to override save_related so that we can attach the
-        related models their appropriate foreign key
+        related models to their appropriate foreign key
         fields in the food record before it is saved.
         """
         specimens = []
