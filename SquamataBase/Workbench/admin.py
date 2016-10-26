@@ -1,4 +1,5 @@
 from django.contrib import admin
+from django.utils.html import format_html
 import nested_admin
 from SquamataBase.Glossary.models import *
 from SquamataBase.Specimen.models import *
@@ -251,7 +252,7 @@ class RefNestedInlineAdmin(nested_admin.NestedStackedInline):
 class FoodRecordWorkbenchAdmin(nested_admin.NestedModelAdmin):
 
     change_form_template = 'admin/Workbench/extra/wbfoodrecord_changeform.html'
-    inlines = [SpecimenNestedInlineAdmin, FoodRecordNestedInlineAdmin, RefNestedInlineAdmin]
+    inlines = [SpecimenNestedInlineAdmin, RefNestedInlineAdmin, FoodRecordNestedInlineAdmin]
 
     class Media:
         js = ('admin/js/responsive_tabs.js',
@@ -262,6 +263,34 @@ class FoodRecordWorkbenchAdmin(nested_admin.NestedModelAdmin):
             'all': ('admin/css/admin_tabs.css',),
         }
 
+    list_display = ('id', 'get_fr', 'get_predator', 'get_prey')
+
+    def get_fr(self, obj):
+        f = FoodRecord.objects.get(wb_id=obj.id)
+        return format_html(
+            '<a href="/admin/FoodRecord/foodrecord/{}/change/">{}</a>',
+            f.id, 
+            f.id
+        )
+    get_fr.short_description = 'Food Record ID'
+
+    def get_predator(self, obj):
+        f = FoodRecord.objects.get(wb_id=obj.id)
+        return format_html(
+            '<a href="/admin/Specimen/specimen/{}/change/">{}</a>',
+            f.predator.id, 
+            f.predator.taxon.scientific_name
+        )
+    get_predator.short_description = 'Predator'
+        
+    def get_prey(self, obj):
+        f = FoodRecord.objects.get(wb_id=obj.id)
+        return format_html(
+            '<a href="/admin/Specimen/specimen/{}/change/">{}</a>',
+             f.prey.id, 
+             f.prey.taxon.scientific_name
+        )
+    get_prey.short_description = 'Prey'
 
     def save_related(self, request, form, formsets, change):
         """

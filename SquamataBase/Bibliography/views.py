@@ -16,7 +16,7 @@ class JournalAutocomplete(autocomplete.Select2QuerySetView):
         if self.q:
             return qs.filter(Q(**{'journal_name__istartswith': self.q}))
                     
-        return Journal.objects.none()
+        return qs
 
 
 class BookAutocomplete(autocomplete.Select2QuerySetView):

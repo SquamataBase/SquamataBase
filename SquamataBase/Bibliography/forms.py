@@ -11,9 +11,10 @@ class JournalArticleForm(forms.ModelForm):
                 url = 'journal-autocomplete',
                 attrs = {
                     'data-placeholder': 'Search for journals . . .',
-                    'data-minimum-input-length': 2,
+                    #'data-minimum-input-length': 2,
                 },
             ),
+            'title': forms.Textarea(attrs={'rows': 1, 'cols': 30})
         }
 
 

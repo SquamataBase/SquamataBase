@@ -9,8 +9,8 @@ from SquamataBase.FoodRecord.views import *
 from SquamataBase.api import *
 
 autocompletes = [
-    url(r'^museum-autocomplete/$', MuseumAutocomplete.as_view(), 
-            name='museum-autocomplete',),
+    #url(r'^museum-autocomplete/$', MuseumAutocomplete.as_view(), 
+    #        name='museum-autocomplete',),
     url(r'^museum-collection-autocomplete/$', MuseumCollectionAutocomplete.as_view(), 
             name='museum-collection-autocomplete',),
     url(r'^voucher-autocomplete/$', VoucherAutocomplete.as_view(), 
