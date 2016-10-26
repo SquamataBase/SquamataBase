@@ -37,6 +37,17 @@ class Taxon(models.Model):
     def __str__(self):
         return self.scientific_name
 
+    def get_ancestors(self):
+        if self.parent_name is None:
+            return Taxon.objects.none()
+        return Taxon.objects.filter(col_taxon_id=self.parent_name.col_taxon_id) | self.parent_name.get_ancestors()
+
+    def get_descendants(self):
+        for child in Taxon.objects.filter(parent_name=self.col_taxon_id):
+            yield child
+            for d in child.get_descendants():
+                yield d 
+
 
 class TaxonView(models.Model):
     """SQL view of a subset of taxa.

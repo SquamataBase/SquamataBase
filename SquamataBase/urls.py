@@ -48,7 +48,7 @@ urlpatterns = [
     
     url(r'^admin/', admin.site.urls),
     url(r'^nested_admin/', include('nested_admin.urls')),
-    url(r'^api/', QueryAPI.as_view(), name='api-view'),
+    url(r'^foodrecords/', FoodRecordAPI.as_view(), name='foodrecords'),
     
 ] + autocompletes
 
