@@ -24,6 +24,8 @@ class MuseumCollectionAutocomplete(autocomplete.Select2QuerySetView):
         museum = self.forwarded.get('museum', None)
         if museum:
             qs = qs.filter(museum_id=museum)
+        else:
+            return MuseumCollection.objects.none()
         if self.q:  
             return qs.filter(Q(**{'collection_name__istartswith': self.q}))
                     

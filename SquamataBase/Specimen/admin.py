@@ -24,6 +24,7 @@ class MuseumAdmin(admin.ModelAdmin):
 
 @admin.register(MuseumCollection)
 class MuseumCollectionAdmin(admin.ModelAdmin):
+    form = MuseumCollectionForm
     list_display = ('id', 'museum', 'collection_name',)
 
     

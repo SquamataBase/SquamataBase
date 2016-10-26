@@ -3,6 +3,20 @@ from dal import autocomplete
 from django.core.exceptions import ValidationError             
 from .models import *
 
+
+class MuseumCollectionForm(forms.ModelForm):
+    class Meta:
+        model = MuseumCollection
+        fields = ('__all__')
+        widgets = {
+            'museum': autocomplete.ModelSelect2(
+                attrs = {
+                    'data-placeholder': '',
+                },
+            ),
+        }
+
+
 class VoucherForm(forms.ModelForm):
     
     class Meta:
@@ -10,15 +24,14 @@ class VoucherForm(forms.ModelForm):
         fields = ('__all__')
         widgets = {
             'museum': autocomplete.ModelSelect2(
-                url = 'museum-autocomplete',
                 attrs = {
-                    'data-minimum-input-length': 2,
+                    'data-placeholder': '',
                 },
             ),
             'museum_collection': autocomplete.ModelSelect2(
                 url = 'museum-collection-autocomplete',
                 attrs = {
-                    'data-minimum-input-length': 0,
+                    'data-placeholder': '',
                 },
                 forward = ['museum']
             ),
