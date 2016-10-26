@@ -282,6 +282,7 @@ class FoodRecordWorkbenchAdmin(nested_admin.NestedModelAdmin):
             'all': ('admin/css/admin_tabs.css',),
         }
 
+
     def save_related(self, request, form, formsets, change):
         """
         We need to override save_related so that we can attach the
@@ -292,12 +293,19 @@ class FoodRecordWorkbenchAdmin(nested_admin.NestedModelAdmin):
         data_source = []
         for formset in formsets:
             if formset.prefix == 'specimen_set':
-                specimens.extend(formset.save())
+                if not change:
+                    specimens.extend(formset.save())
+                else:
+                    specimens.extend([form.instance for form in formset.forms])
             elif formset.prefix == 'ref_set':
-                data_source.extend(formset.save())
+                if not change:
+                    data_source.extend(formset.save())
+                else:
+                    data_source.extend([form.instance for form in formset.forms])
             elif formset.prefix == 'foodrecord_set':
-                for form in formset.forms:
-                    setattr(form.instance, 'predator', specimens[0])
-                    setattr(form.instance, 'prey', specimens[1])
-                    setattr(form.instance, 'ref', data_source[0])
+                if len(formset.save(commit=False)):  # ensure that save_m2m method is attached to form
+                    for form in formset.forms:
+                        setattr(form.instance, 'predator', specimens[0])
+                        setattr(form.instance, 'prey', specimens[1])
+                        setattr(form.instance, 'ref', data_source[0])
         super(FoodRecordWorkbenchAdmin, self).save_related(request, form, formsets, change)
