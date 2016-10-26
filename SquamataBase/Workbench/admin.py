@@ -13,7 +13,6 @@ from .models import *
 class SpecimenMeasurementNestedInlineAdmin(nested_admin.NestedTabularInline):
     model = SpecimenMeasurement
     extra = 1
-    show_change_link = True
     fieldsets = (
         ('Measurement', {
             'fields': ('measurement_type', 'measurement_unit'),
@@ -22,11 +21,6 @@ class SpecimenMeasurementNestedInlineAdmin(nested_admin.NestedTabularInline):
             'fields': ('measurement_value', 'verbatim_value'),
         }),
     )
-    
-    def get_extra(self, request, obj=None, **kwargs):
-        if obj:
-            return 0;
-        return self.extra
     
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
         if db_field.name == 'measurement_unit':
@@ -48,23 +42,13 @@ class SpecimenVoucherNestedInlineAdmin(nested_admin.NestedTabularInline):
     model = SpecimenVoucher
     form = SpecimenVoucherForm
     extra = 1
-    show_change_link = True
-    def get_extra(self, request, obj=None, **kwargs):
-        if obj:
-            return 0;
-        return self.extra
-        
+
  
 class SpecimenIntersectionNestedInlineAdmin(nested_admin.NestedTabularInline):
     model = SpecimenIntersection
     form = SpecimenIntersectionForm
     fk_name = 'specimen'
     extra = 1
-    show_change_link = True
-    def get_extra(self, request, obj=None, **kwargs):
-        if obj:
-            return 0;
-        return self.extra
 
 
 class SpecimenNestedInlineAdmin(nested_admin.NestedStackedInline):
@@ -201,17 +185,18 @@ class FoodRecordNestedInlineAdmin(nested_admin.NestedStackedInline):
         return super(FoodRecordNestedInlineAdmin, self).formfield_for_foreignkey(db_field, request, **kwargs)
 
 
-
 class JournalArticleNestedInlineAdmin(nested_admin.NestedStackedInline):
     model = JournalArticle
     form = JournalArticleForm
     can_delete = False
     template = 'admin/stacked_inline_noheader.html'
 
+
 class BookNestedInlineAdmin(nested_admin.NestedStackedInline):
     model = Book
     can_delete = False
     template = 'admin/stacked_inline_noheader.html'
+
         
 class BookChapterNestedInlineAdmin(nested_admin.NestedStackedInline):
     model = BookChapter
@@ -219,17 +204,12 @@ class BookChapterNestedInlineAdmin(nested_admin.NestedStackedInline):
     can_delete = False
     template = 'admin/stacked_inline_noheader.html'
 
+
 class ContributionNestedInlineAdmin(nested_admin.NestedTabularInline):
     model = Contribution
     form = ContributionForm
     extra = 1
-    show_change_link = True
-    
-    def get_extra(self, request, obj=None, **kwargs):
-        if obj:
-            return 0;
-        return self.extra
-    
+
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
         if db_field.name == 'person_role':
             try:
