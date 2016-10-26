@@ -267,6 +267,7 @@ class FoodRecordWorkbenchAdmin(nested_admin.NestedModelAdmin):
 
     def get_fr(self, obj):
         f = FoodRecord.objects.get(wb_id=obj.id)
+        return f.id
         return format_html(
             '<a href="/admin/FoodRecord/foodrecord/{}/change/">{}</a>',
             f.id, 
@@ -276,6 +277,7 @@ class FoodRecordWorkbenchAdmin(nested_admin.NestedModelAdmin):
 
     def get_predator(self, obj):
         f = FoodRecord.objects.get(wb_id=obj.id)
+        return f.predator.taxon.scientific_name
         return format_html(
             '<a href="/admin/Specimen/specimen/{}/change/">{}</a>',
             f.predator.id, 
@@ -285,6 +287,7 @@ class FoodRecordWorkbenchAdmin(nested_admin.NestedModelAdmin):
         
     def get_prey(self, obj):
         f = FoodRecord.objects.get(wb_id=obj.id)
+        return f.prey.taxon.scientific_name
         return format_html(
             '<a href="/admin/Specimen/specimen/{}/change/">{}</a>',
              f.prey.id, 

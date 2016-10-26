@@ -14,7 +14,7 @@ class JournalArticleForm(forms.ModelForm):
                     #'data-minimum-input-length': 2,
                 },
             ),
-            'title': forms.Textarea(attrs={'rows': 1, 'cols': 30})
+            'title': forms.Textarea(attrs={'rows': 1, 'cols': 30, 'class': 'vTextField'})
         }
 
 
