@@ -1,5 +1,5 @@
 from django.db import models
-
+from django.db.models import F
 
 class Taxon(models.Model):
     """Skeleton taxon concept from Catalogue of Life."""
@@ -40,13 +40,13 @@ class Taxon(models.Model):
     def get_ancestors(self):
         if self.parent_name is None:
             return Taxon.objects.none()
-        return Taxon.objects.filter(col_taxon_id=self.parent_name.col_taxon_id) | self.parent_name.get_ancestors()
+        return Taxon.objects.filter(col_taxon_id=self.parent_name.col_taxon_id).select_related('parent_name') | self.parent_name.get_ancestors()
 
     def get_descendants(self):
         for child in Taxon.objects.filter(parent_name=self.col_taxon_id):
             yield child
             for d in child.get_descendants():
-                yield d 
+                yield d
 
 
 class TaxonView(models.Model):
