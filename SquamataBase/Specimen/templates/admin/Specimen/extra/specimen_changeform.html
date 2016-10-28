@@ -54,7 +54,7 @@
     <li class="current"><a href="#specimen-pane">Specimen</a></li>
     <li><a href="#vouchers-pane">Vouchers</a></li>
     <li><a href="#measurements-pane">Measurements</a></li>
-    <li><a href="#parentsets-pane">Parent Sets</a></li>
+    <li><a href="#subsetset-pane">Subset</a></li>
 </ul>
 
 <div class="tab">
@@ -85,7 +85,7 @@
         {% endfor %}
     </div>
     
-    <div class="tab-content" id="parentsets-pane">
+    <div class="tab-content" id="subset-pane">
         {% for inline_admin_formset in inline_admin_formsets %}
             {% if inline_admin_formset.opts.verbose_name == 'intersection' %}
                 {% include inline_admin_formset.opts.template %}

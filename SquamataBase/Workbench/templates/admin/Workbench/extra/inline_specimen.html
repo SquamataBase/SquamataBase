@@ -8,7 +8,7 @@
     <li class="current"><a href="#specimen-pane-{{inline_admin_form.form.prefix}}">Specimen</a></li>
     <li><a href="#vouchers-pane-{{inline_admin_form.form.prefix}}">Vouchers</a></li>
     <li><a href="#measurements-pane-{{inline_admin_form.form.prefix}}">Measurements</a></li>
-    <li><a href="#parentsets-pane-{{inline_admin_form.form.prefix}}">Parent Sets</a></li>
+    <li><a href="#subset-pane-{{inline_admin_form.form.prefix}}">Subset</a></li>
 </ul>
 {% endblock %}
 
@@ -38,7 +38,7 @@
             {% endfor %}
             </div>
 
-            <div class="tab-content" id="parentsets-pane-{{inline_admin_form.form.prefix}}">
+            <div class="tab-content" id="subset-pane-{{inline_admin_form.form.prefix}}">
             {% for nested in inline_admin_form.form.inlines %}
                 {% if nested.opts.verbose_name == 'intersection' %}
                     {% include nested.opts.template with inline_admin_formset=nested %}

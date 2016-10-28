@@ -260,7 +260,7 @@ class FoodRecordWorkbenchAdmin(nested_admin.NestedModelAdmin):
               'admin/Workbench/js/format_time.js',
               'admin/Workbench/js/taxon_autocomplete.js',)
         css = {
-            'all': ('admin/css/admin_tabs.css',),
+            'all': ('admin/css/admin_tabs.css', 'admin/Workbench/css/inline_specimen.css',),
         }
 
     list_display = ('id', 'get_fr', 'get_predator', 'get_prey')

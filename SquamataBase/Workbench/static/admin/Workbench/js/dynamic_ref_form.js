@@ -24,6 +24,7 @@ $(document).ready(function() {
 
     if (init_sel !== no_sel) {
         $("select[name='ref_set-0-ref_type']").trigger("change");
+        $("select[name='ref_set-0-ref_type']").prop("disabled", true);
     }    
     
 });
