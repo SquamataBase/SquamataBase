@@ -135,7 +135,7 @@ class NamedPlace(models.Model):
         verbose_name_plural = 'Place names'
     
     def __str__(self):
-        return ', '.join([str(p) for p in [self.place_name, self.adm2, self.adm1, self.adm0] if p != '' and p is not None])
+        return self.place_name
 
 class Locality(models.Model):
     """Points on the map."""

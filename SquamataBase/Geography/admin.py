@@ -59,7 +59,7 @@ class NamedPlaceAdmin(admin.OSMGeoAdmin):
         }),
     )
     
-    list_display = ('id', 'place_name')
+    list_display = ('id', 'place_name', 'adm2', 'adm1', 'adm0')
     #list_filter = ('adm0',)
     search_fields = ('place_name',)
 
