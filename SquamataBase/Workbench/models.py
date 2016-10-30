@@ -8,8 +8,8 @@ class Workbench(models.Model):
 class FoodRecordWorkbench(Workbench):
     class Meta:
         proxy = True
-        verbose_name = 'Food Record'
-        verbose_name_plural = 'Food Records'
+        verbose_name = 'food record'
+        verbose_name_plural = 'food records'
 
     def __str__(self):
         return 'Food Record'

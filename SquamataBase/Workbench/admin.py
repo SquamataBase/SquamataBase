@@ -1,4 +1,5 @@
 from django.contrib import admin
+from django.http import HttpResponseRedirect
 from django.utils.html import format_html
 import nested_admin
 from SquamataBase.Glossary.models import *
@@ -264,6 +265,7 @@ class FoodRecordWorkbenchAdmin(nested_admin.NestedModelAdmin):
         }
 
     list_display = ('id', 'get_fr', 'get_predator', 'get_prey')
+    actions = ['duplicate', 'add_another_prey', 'add_to_dataset']
 
     def get_fr(self, obj):
         f = FoodRecord.objects.get(wb_id=obj.id)
@@ -321,3 +323,86 @@ class FoodRecordWorkbenchAdmin(nested_admin.NestedModelAdmin):
                         setattr(form.instance, 'prey', specimens[1])
                         setattr(form.instance, 'ref', data_source[0])
         super(FoodRecordWorkbenchAdmin, self).save_related(request, form, formsets, change)
+
+
+    def duplicate(self, request, queryset):
+        """Action to duplicate a food record."""
+
+        if len(queryset) > 1:
+            from django.contrib import messages
+            self.message_user(request, "This action may only be applied to one record at a time.", messages.WARNING)
+        else:
+            message=[{'added': {}}]
+            wb = queryset[0]  # get the selected workbench instance
+            foodrecord = FoodRecord.objects.get(wb=wb)  # select the food record attached to the workbench instance
+            wb.id = None  # clone the workbench instance
+            wb.save()
+            self.log_addition(request, wb, message)
+            pred = foodrecord.predator
+            prey = foodrecord.prey
+            pred.id = None  # clone the predator
+            prey.id = None  # clone the prey
+            pred.save()
+            prey.save()
+            foodrecord.id = None  # clone the food record with new predator and prey
+            foodrecord.wb = wb
+            foodrecord.predator = pred
+            foodrecord.prey = prey
+            foodrecord.save()
+            self.message_user(request, "Food record successfully duplicated. You may edit it below.")
+            return HttpResponseRedirect("/admin/Workbench/foodrecordworkbench/%s/change/" % wb.id)
+    duplicate.short_description = 'Duplicate selected food record'
+
+    def add_another_prey(self, request, queryset):
+        """Action to add another prey item to a predator."""
+        
+        if len(queryset) > 1:
+            from django.contrib import messages
+            self.message_user(request, "This action may only be applied to one record at a time.", messages.WARNING)
+        else:
+            message=[{'added': {}}]
+            wb = queryset[0]  # get the selected workbench instance
+            foodrecord = FoodRecord.objects.get(wb=wb)  # select the food record attached to the workbench instance
+            wb.id = None  # clone the workbench instance
+            wb.save()
+            self.log_addition(request, wb, message)
+            prey = foodrecord.prey
+            prey.id = None  # clone the prey
+            prey.save()
+            foodrecord.id = None  # clone the food record with new prey (but same predator)
+            foodrecord.wb = wb
+            foodrecord.prey = prey
+            foodrecord.save()
+            self.message_user(request, "Prey item successfully added. You may edit it below.")
+            return HttpResponseRedirect("/admin/Workbench/foodrecordworkbench/%s/change/" % wb.id)
+    add_another_prey.short_description = 'Add prey item to selected food record'
+
+
+    def add_to_dataset(self, request, queryset):
+        """Action to add selected food records to a dataset."""
+        return HttpResponseRedirect('/admin/FoodRecord/dataset/11/change/')
+        # select the food records attached to the selected workbench rows
+        foodrecords = FoodRecord.objects.filter(wb_id__in=queryset.values_list('id', flat=True))
+        dataset = DataSet()  # create a new blank dataset
+        dataset.save()  # and save it to the database
+        dataset_localities = []
+        dataset_methods = []
+        for foodrecord in foodrecords:
+            f = DataSetFoodRecord(dataset=dataset, foodrecord=foodrecord)
+            f.save()
+            if foodrecord.locality not in dataset_localities:
+                dataset_localities.extend([foodrecord.locality])
+                l = DataSetLocality(dataset=dataset, locality=foodrecord.locality)
+                l.save()
+            if foodrecord.basis not in dataset_methods:
+                dataset_methods.extend([foodrecord.basis])
+                m = DataSetMethod(dataset=dataset, basis=foodrecord.basis)
+                m.save()
+        self.message_user(
+            request, 
+            "%s food records successfully added to the dataset. "
+            "You may fill in the details below." % len(foodrecords)
+        )
+        return HttpResponseRedirect('/admin/FoodRecord/dataset/%s/change/' % dataset.id)
+    add_to_dataset.short_description = 'Add selected food records to dataset'
+

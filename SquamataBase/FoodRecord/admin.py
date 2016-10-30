@@ -54,7 +54,7 @@ class DataSetAdmin(admin.ModelAdmin):
     change_form_template = 'admin/FoodRecord/extra/dataset_changeform.html'
     fieldsets = (
         ('Data Source', {
-            'fields': ('ref_type', 'ref',),
+            'fields': ('ref',),
         }),
         ('Predator Set', {
             'fields': ('n_predators_examined', 'n_predators_ate'),
@@ -69,6 +69,7 @@ class DataSetAdmin(admin.ModelAdmin):
             'fields': ('start_date', 'end_date'),
         }),
     )
+
     inlines = (
         DataSetMethodInlineAdmin,
         DataSetLocalityInlineAdmin,
@@ -92,14 +93,19 @@ class DataSetAdmin(admin.ModelAdmin):
                 cid = 0
             kwargs['queryset'] = OntologyTerm.objects.filter(collection=cid)
         return super(DataSetAdmin, self).formfield_for_foreignkey(db_field, request, **kwargs)
-  
 
+    def response_post_change(self, request, obj):
+        # we only add datasets via the Workbench action, so redirect back
+        # to that index page
+        return HttpResponseRedirect('/admin/Workbench/foodrecordworkbench/')
+
+  
 @admin.register(FoodRecord)
 class FoodRecordAdmin(admin.ModelAdmin):
     form = FoodRecordForm
     fieldsets = (
         ('Data Source', {
-            'fields': ('ref_type', 'ref',),
+            'fields': ('ref',),
         }),
         ('Specimens', {
             'fields': ('predator', 'prey',),

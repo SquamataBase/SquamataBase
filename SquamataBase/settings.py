@@ -77,7 +77,7 @@ ADMIN_REORDER = [
     ('Workbench', []),
     ('Specimen', []),
     ('Bibliography', ['Ref', 'Person', 'Journal']),
-    ('FoodRecord', []),
+    ('FoodRecord', ['FoodRecord', 'DataSet']),
     ('Glossary', []),
     ('Geography', []),
     ('Taxonomy', [])
