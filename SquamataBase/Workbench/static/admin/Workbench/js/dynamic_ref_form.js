@@ -25,6 +25,11 @@ $(document).ready(function() {
     if (init_sel !== no_sel) {
         $("select[name='ref_set-0-ref_type']").trigger("change");
         $("select[name='ref_set-0-ref_type']").prop("disabled", true);
-    }    
+    }
+
+    $('form').submit( function(e) {
+        // enable the select widget on submit so that it gets included in form validation
+        $("select[name='ref_set-0-ref_type']").prop("disabled", false);
+    }); 
     
 });
