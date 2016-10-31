@@ -267,6 +267,22 @@ class FoodRecordWorkbenchAdmin(nested_admin.NestedModelAdmin):
     list_display = ('id', 'get_fr', 'get_predator', 'get_prey')
     actions = ['duplicate', 'add_another_prey', 'add_to_dataset']
 
+
+    def change_view(self, request, object_id, form_url='', extra_context=None):
+        """Hook to make workbench foreign keys dynamic.
+        
+           Predator specimens and references may be shared across workbench
+           rows, so we add a hook here in the change view to dynamically 
+           update these fields when the edit view is first loaded. The
+           data in that field doesn't need to be persistent as it is only used
+           to create better form views for adding and editing records.
+        """
+        foodrecord = FoodRecord.objects.select_related('predator', 'ref').get(wb_id=object_id)
+        Specimen.objects.filter(id=foodrecord.predator.id).update(wb_id=object_id)
+        Ref.objects.filter(id=foodrecord.ref.id).update(wb_id=object_id)
+        return super(FoodRecordWorkbenchAdmin, self).change_view(request, object_id, form_url, extra_context)
+
+
     def get_fr(self, obj):
         f = FoodRecord.objects.get(wb_id=obj.id)
         return f.id
