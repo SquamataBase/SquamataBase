@@ -1,4 +1,5 @@
 from django.contrib import admin
+from django.http import HttpResponseRedirect
 from django.utils.html import format_html
 from django.core.exceptions import ObjectDoesNotExist
 from SquamataBase.Geography.models import Locality
@@ -94,7 +95,7 @@ class DataSetAdmin(admin.ModelAdmin):
             kwargs['queryset'] = OntologyTerm.objects.filter(collection=cid)
         return super(DataSetAdmin, self).formfield_for_foreignkey(db_field, request, **kwargs)
 
-    def response_post_change(self, request, obj):
+    def response_post_save_change(self, request, obj):
         # we only add datasets via the Workbench action, so redirect back
         # to that index page
         return HttpResponseRedirect('/admin/Workbench/foodrecordworkbench/')

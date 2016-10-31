@@ -380,14 +380,19 @@ class FoodRecordWorkbenchAdmin(nested_admin.NestedModelAdmin):
 
     def add_to_dataset(self, request, queryset):
         """Action to add selected food records to a dataset."""
-        return HttpResponseRedirect('/admin/FoodRecord/dataset/11/change/')
+        
         # select the food records attached to the selected workbench rows
-        foodrecords = FoodRecord.objects.filter(wb_id__in=queryset.values_list('id', flat=True))
+        foodrecords = FoodRecord.objects.filter(wb_id__in=queryset.values_list('id', flat=True)).select_related('ref')
         dataset = DataSet()  # create a new blank dataset
         dataset.save()  # and save it to the database
         dataset_localities = []
         dataset_methods = []
+        ref_assigned = False
         for foodrecord in foodrecords:
+            if not ref_assigned:
+                if foodrecord.ref is not None:
+                    dataset.ref = foodrecord.ref
+                    ref_assigned = True
             f = DataSetFoodRecord(dataset=dataset, foodrecord=foodrecord)
             f.save()
             if foodrecord.locality not in dataset_localities:
