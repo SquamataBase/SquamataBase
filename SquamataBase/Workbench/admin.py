@@ -358,6 +358,8 @@ class FoodRecordWorkbenchAdmin(nested_admin.NestedModelAdmin):
             prey = foodrecord.prey
             pred.id = None  # clone the predator
             prey.id = None  # clone the prey
+            pred.wb = wb
+            prey.wb = wb
             pred.save()
             prey.save()
             foodrecord.id = None  # clone the food record with new predator and prey
@@ -384,6 +386,7 @@ class FoodRecordWorkbenchAdmin(nested_admin.NestedModelAdmin):
             self.log_addition(request, wb, message)
             prey = foodrecord.prey
             prey.id = None  # clone the prey
+            prey.wb = wb
             prey.save()
             foodrecord.id = None  # clone the food record with new prey (but same predator)
             foodrecord.wb = wb
