@@ -1,10 +1,16 @@
 import json
+from django.views.generic import TemplateView
 from django.views.generic.list import BaseListView
 from django.http import HttpResponse
 from django.db.models import Q
 from SquamataBase.Specimen.models import *
 from SquamataBase.FoodRecord.models import *
 from SquamataBase.Taxonomy.models import Taxon
+
+
+class SiteView(TemplateView):
+    template_name = "site/index.html"
+
 
 class BaseAPIView(BaseListView):
     """Base view for web API."""
