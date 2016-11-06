@@ -26,17 +26,17 @@ class TaxonomyAPI(BaseAPIView):
     """API view to query taxonomy."""
 
     def dispatch(self, request, *args, **kwargs):
-        self.taxon_name = request.GET.get('taxon_name', '').lower().capitalize()
-        self.taxon_id = request.GET.get('taxon_id', None)
+        self.taxon_name = [name.lower().capitalize() for name in json.loads(request.GET.get('taxon_name', '[]'))]
+        self.taxon_id = json.loads(request.GET.get('taxon_id', '[]'))
         return super(BaseAPIView, self).dispatch(request, *args, **kwargs)
 
     def get_queryset(self):
         if self.taxon_id and not self.taxon_name:
-            return Taxon.objects.filter(pk=int(self.taxon_id))
+            return Taxon.objects.filter(pk__in=self.taxon_id)
         elif self.taxon_name and not self.taxon_id:
-            return Taxon.objects.filter(scientific_name=self.taxon_name)
+            return Taxon.objects.filter(scientific_name__in=self.taxon_name)
         elif self.taxon_name and self.taxon_id:
-            return Taxon.objects.filter(scientific_name=self.taxon_name).filter(pk=int(self.taxon_id))
+            return Taxon.objects.filter(scientific_name__in=self.taxon_name).filter(pk__in=self.taxon_id)
         else:
             return []
 
@@ -127,9 +127,10 @@ class FoodRecordAPI(BaseAPIView):
     def get_specimen_json(self, obj):
         convert = lambda obj,to: to(obj) if obj else None
         json_response = {
-            "id": obj.id,
+            "specimen_id": obj.id,
             "taxon": obj.taxon.scientific_name,
-            "rank": obj.taxon.taxon_rank,
+            "taxon_id": obj.taxon.col_taxon_id,
+            "taxon_rank": obj.taxon.taxon_rank,
             "count": obj.count,
             "mass": convert(obj.mass, float),
             "mass_unit": convert(obj.mass_unit, str),
