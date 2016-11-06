@@ -38,16 +38,38 @@ class Taxon(models.Model):
         return self.scientific_name
 
     def get_ancestors(self):
-        if self.parent_name is None:
-            return Taxon.objects.none()
-        return Taxon.objects.filter(col_taxon_id=self.parent_name.col_taxon_id).select_related('parent_name') | self.parent_name.get_ancestors()
+        SQL = """
+            WITH RECURSIVE q AS (
+                SELECT *
+                FROM sb_taxon AS t
+                WHERE t.col_taxon_id = %s
+                UNION ALL
+                SELECT p.*
+                FROM sb_taxon AS p
+                JOIN q
+                ON p.col_taxon_id = q.parent_name_id
+            )
+            SELECT *
+            FROM q
+        """
+        return Taxon.objects.raw(SQL, [self.col_taxon_id])
 
     def get_descendants(self):
-        for child in Taxon.objects.filter(parent_name=self.col_taxon_id):
-            yield child
-            for d in child.get_descendants():
-                yield d
-
+        SQL = """
+            WITH RECURSIVE q AS (
+                SELECT * 
+                FROM sb_taxon AS t
+                WHERE t.col_taxon_id = %s
+                UNION ALL
+                SELECT p.*
+                FROM sb_taxon AS p
+                JOIN q
+                ON p.parent_name_id = q.col_taxon_id
+            )
+            SELECT * 
+            FROM q
+        """
+        return Taxon.objects.raw(SQL, [self.col_taxon_id])
 
 class TaxonView(models.Model):
     """SQL view of a subset of taxa.

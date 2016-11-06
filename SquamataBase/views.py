@@ -9,6 +9,8 @@ from SquamataBase.Taxonomy.models import Taxon
 
 
 class SiteView(TemplateView):
+    """View for the non-admin website."""
+    
     template_name = "site/index.html"
 
 
@@ -19,27 +21,62 @@ class BaseAPIView(BaseListView):
     model_fields = []
     return_fields = {}
 
+
+class TaxonomyAPI(BaseAPIView):
+    """API view to query taxonomy."""
+
+    def dispatch(self, request, *args, **kwargs):
+        self.taxon_name = request.GET.get('taxon_name', '').lower().capitalize()
+        self.taxon_id = request.GET.get('taxon_id', None)
+        return super(BaseAPIView, self).dispatch(request, *args, **kwargs)
+
+    def get_queryset(self):
+        if self.taxon_id and not self.taxon_name:
+            return Taxon.objects.filter(pk=int(self.taxon_id))
+        elif self.taxon_name and not self.taxon_id:
+            return Taxon.objects.filter(scientific_name=self.taxon_name)
+        elif self.taxon_name and self.taxon_id:
+            return Taxon.objects.filter(scientific_name=self.taxon_name).filter(pk=int(self.taxon_id))
+        else:
+            return []
+
+    def get_results(self, context):
+        return [
+            {
+                'id': result.col_taxon_id,
+                'scientific_name': result.scientific_name,
+                'taxon_status': result.taxon_status,
+                'hierarchy': [
+                    {
+                        'id': ancestor.col_taxon_id,
+                        'scientific_name': ancestor.scientific_name,
+                        'rank': ancestor.taxon_rank,
+                    } for ancestor in result.get_ancestors()
+                ],
+            } for result in context['object_list']
+        ]
+
+    def render_to_response(self, context):
+        return HttpResponse(
+            json.dumps({
+                'taxa': self.get_results(context),
+            }),
+            content_type='application/json',
+        )
+
+
 class FoodRecordAPI(BaseAPIView):
     """API view to query food records."""
 
-    sql = """
-        WITH RECURSIVE q AS (
-            SELECT * 
-            FROM sb_taxon AS t
-            WHERE t.scientific_name = %s
-            UNION ALL
-            SELECT p.*
-            FROM sb_taxon AS p
-            JOIN q
-            ON p.parent_name_id = q.col_taxon_id
-        )
-        SELECT col_taxon_id FROM q
-    """
-
-    # basic view - return predator, prey id's and location
+    # Basic view will return predator, prey names and locality data.
+    # These are the fields to call select_related on
     related_fields = [
         'predator__taxon',
         'prey__taxon',
+        'predator__mass_unit',
+        'predator__volume_unit',
+        'prey__mass_unit',
+        'prey__volume_unit',
         'locality__adm0',
         'locality__adm1',
         'locality__adm2',
@@ -48,6 +85,7 @@ class FoodRecordAPI(BaseAPIView):
     def dispatch(self, request, *args, **kwargs):
         self.predator = request.GET.get('predator', '').lower().capitalize()
         self.prey = request.GET.get('prey', '').lower().capitalize()
+        self.prey_categories = json.loads(request.GET.get('prey_categories', '{}'))
         self.view = request.GET.get('view', 'basic').lower()
         if self.view == 'detailed':
             self.related_fields.extend([
@@ -72,14 +110,14 @@ class FoodRecordAPI(BaseAPIView):
 
     def get_queryset(self):
         if self.predator and not self.prey:
-            all_taxa = [taxon.pk for taxon in Taxon.objects.raw(self.sql, [self.predator])]
+            all_taxa = [d.pk for taxon in Taxon.objects.filter(scientific_name=self.predator) for d in taxon.get_descendants()]
             return FoodRecord.objects.filter(Q(**{'predator__taxon__pk__in': all_taxa})).select_related(*self.related_fields)
         elif self.prey and not self.predator:
-            all_taxa = [taxon.pk for taxon in Taxon.objects.raw(self.sql, [self.prey])]
+            all_taxa = [d.pk for taxon in Taxon.objects.filter(scientific_name=self.prey) for d in taxon.get_descendants()]
             return FoodRecord.objects.filter(Q(**{'prey__taxon__pk__in': all_taxa})).select_related(*self.related_fields)
         elif self.predator and self.prey:
-            all_pred = [taxon.pk for taxon in Taxon.objects.raw(self.sql, [self.predator])]
-            all_prey = [taxon.pk for taxon in Taxon.objects.raw(self.sql, [self.prey])]
+            all_pred = [d.pk for taxon in Taxon.objects.filter(scientific_name=self.predator) for d in taxon.get_descendants()]
+            all_prey = [d.pk for taxon in Taxon.objects.filter(scientific_name=self.prey) for d in taxon.get_descendants()]
             return FoodRecord.objects.filter(
                 Q(**{'predator__taxon__pk__in': all_pred})).filter(
                     Q(**{'prey__taxon__pk__in': all_prey})).select_related(*self.related_fields)
@@ -91,7 +129,12 @@ class FoodRecordAPI(BaseAPIView):
         json_response = {
             "id": obj.id,
             "taxon": obj.taxon.scientific_name,
-            "count": obj.count
+            "rank": obj.taxon.taxon_rank,
+            "count": obj.count,
+            "mass": convert(obj.mass, float),
+            "mass_unit": convert(obj.mass_unit, str),
+            "volume": convert(obj.volume, float),
+            "volume_unit": convert(obj.volume_unit, str),
         }
         if self.view == 'detailed':
             measurements = SpecimenMeasurement.objects.filter(specimen=obj).select_related('measurement_type', 'measurement_unit')
@@ -162,13 +205,16 @@ class FoodRecordAPI(BaseAPIView):
         return json_response
 
     def get_results(self, context):
-        return [
-            {
-                'predator': self.get_specimen_json(result.predator),
-                'prey': self.get_specimen_json(result.prey),
-                'details': self.get_details_json(result), 
-            } for result in context['object_list']
-        ]
+        if not len(self.prey_categories):
+            return [
+                {
+                    'predator': self.get_specimen_json(result.predator),
+                    'prey': self.get_specimen_json(result.prey),
+                    'details': self.get_details_json(result), 
+                } for result in context['object_list']
+            ]
+        else:
+            pass
 
     def render_to_response(self, context):
         return HttpResponse(

@@ -49,6 +49,7 @@ urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^nested_admin/', include('nested_admin.urls')),
     url(r'^data/foodrecords/$', FoodRecordAPI.as_view(), name='foodrecords'),
+    url(r'^data/taxonomy/$', TaxonomyAPI.as_view(), name='taxonomy'),
     
 ] + autocompletes
 

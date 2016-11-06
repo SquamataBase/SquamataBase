@@ -401,7 +401,7 @@ class FoodRecordWorkbenchAdmin(nested_admin.NestedModelAdmin):
         """Action to add selected food records to a dataset."""
         
         # select the food records attached to the selected workbench rows
-        foodrecords = FoodRecord.objects.filter(wb_id__in=queryset.values_list('id', flat=True)).select_related('ref')
+        foodrecords = FoodRecord.objects.filter(wb_id__in=queryset.values_list('id', flat=True)).select_related('ref', 'locality', 'basis')
         dataset = DataSet()  # create a new blank dataset
         dataset.save()  # and save it to the database
         dataset_localities = []
