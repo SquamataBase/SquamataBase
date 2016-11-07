@@ -85,7 +85,6 @@ class FoodRecordAPI(BaseAPIView):
     def dispatch(self, request, *args, **kwargs):
         self.predator = request.GET.get('predator', '').lower().capitalize()
         self.prey = request.GET.get('prey', '').lower().capitalize()
-        self.prey_categories = json.loads(request.GET.get('prey_categories', '{}'))
         self.view = request.GET.get('view', 'basic').lower()
         if self.view == 'detailed':
             self.related_fields.extend([
@@ -206,16 +205,13 @@ class FoodRecordAPI(BaseAPIView):
         return json_response
 
     def get_results(self, context):
-        if not len(self.prey_categories):
-            return [
-                {
-                    'predator': self.get_specimen_json(result.predator),
-                    'prey': self.get_specimen_json(result.prey),
-                    'details': self.get_details_json(result), 
-                } for result in context['object_list']
-            ]
-        else:
-            pass
+        return [
+            {
+                'predator': self.get_specimen_json(result.predator),
+                'prey': self.get_specimen_json(result.prey),
+                'details': self.get_details_json(result), 
+            } for result in context['object_list']
+        ]
 
     def render_to_response(self, context):
         return HttpResponse(
