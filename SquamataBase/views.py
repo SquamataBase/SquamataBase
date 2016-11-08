@@ -13,6 +13,18 @@ class SiteView(TemplateView):
     
     template_name = "site/index.html"
 
+    def dispatch(self, request, *args, **kwargs):
+        self.q = request.GET.get('taxon', '').lower().capitalize()
+        kwargs['taxon'] = self.q
+        if self.q:
+            # logic to query food records and add them to the request context data
+            kwargs['foodrecords'] = self.get_queryset()
+        return super(SiteView, self).dispatch(request, *args, **kwargs)
+
+    def get_queryset(self):
+        all_taxa = [d.pk for taxon in Taxon.objects.filter(scientific_name=self.q) for d in taxon.get_descendants()]
+        query = Q(**{'predator__taxon__pk__in': all_taxa}) | Q(**{'prey__taxon__pk__in': all_taxa})
+        return FoodRecord.objects.filter(query)
 
 class BaseAPIView(BaseListView):
     """Base view for web API."""
