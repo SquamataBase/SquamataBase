@@ -71,11 +71,20 @@ footer {
 
 .result-nav-span {
     padding-left: 15px;
+    color: black;
 }
 
 #map-tab, #table-tab {
     background-color: #f1f1f1;
     color: #337ab7;
     padding-top: 0px;
+}
+
+#pagination-navs {
+    padding-left: 10px;
+    
+    position: fixed;
+    bottom: 15px;
+    left: 310px;
 }
 

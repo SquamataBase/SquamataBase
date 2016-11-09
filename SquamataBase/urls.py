@@ -46,6 +46,7 @@ autocompletes = [
 
 urlpatterns = [
     url(r'^$', SiteView.as_view(), name='index'),
+    url(r'^foodrecord/([0-9]+)/$', FoodRecordView.as_view(), name='foodrecord'),
     url(r'^admin/', admin.site.urls),
     url(r'^nested_admin/', include('nested_admin.urls')),
     url(r'^data/foodrecords/$', FoodRecordAPI.as_view(), name='foodrecords'),

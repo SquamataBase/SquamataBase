@@ -1,0 +1,9 @@
+{% load pagination %}
+
+<nav id="pagination-navs" aria-label="...">
+ 	<ul class="pagination">
+ 		{% for i in page_range %}
+ 			{% paginator_number cl i query %}
+ 		{% endfor %}
+  	</ul>
+</nav>

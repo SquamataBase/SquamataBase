@@ -1,5 +1,5 @@
 
-var initializeMap = (function() {
+var map = (function() {
 
     var map = function() {
 
@@ -39,11 +39,24 @@ var initializeMap = (function() {
 
     }();
 
-    $(function() {
-        $("body").on("shown.bs.tab", "#map-tab", function() {
-                map.invalidateSize();
-        });
+    $('.nav-pills a[href="#map-result"]').on("shown.bs.tab", function() {
+            map.invalidateSize();
     });
+
+    return map;
 
 })();
 
+
+mapCoordinates = function(map, coordinates) {
+    for (i = 0; i < coordinates.length; i++) {
+        var coordinate = [coordinates[i][1], coordinates[i][2]];
+        var circle = L.circleMarker(coordinate, {
+            color: 'red',
+            fillColor: '#f03',
+            fillOpacity: 0.5,
+            radius: 5,
+            weight: 1,
+        }).bindPopup().addTo(map);
+    }
+}

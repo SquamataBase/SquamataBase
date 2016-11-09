@@ -3,6 +3,7 @@ from django.views.generic import TemplateView
 from django.views.generic.list import BaseListView
 from django.http import HttpResponse
 from django.db.models import Q
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from SquamataBase.Specimen.models import *
 from SquamataBase.FoodRecord.models import *
 from SquamataBase.Taxonomy.models import Taxon
@@ -18,13 +19,39 @@ class SiteView(TemplateView):
         kwargs['taxon'] = self.q
         if self.q:
             # logic to query food records and add them to the request context data
-            kwargs['foodrecords'] = self.get_queryset()
+            qs = self.get_queryset()
+            paginator = Paginator(qs, 12)
+            page = request.GET.get('page')
+            try:
+                foodrecords = paginator.page(page)
+            except PageNotAnInteger:
+                foodrecords = paginator.page(1)
+            except EmptyPage:
+                foodrecords = paginator.page(paginator.num_pages)
+            kwargs['foodrecords'] = foodrecords
+            kwargs['n_results'] = len(qs)
+            kwargs['coordinates'] = self.fetch_coordinates(qs)
+            if page:
+                kwargs['page'] = page
         return super(SiteView, self).dispatch(request, *args, **kwargs)
 
     def get_queryset(self):
         all_taxa = [d.pk for taxon in Taxon.objects.filter(scientific_name=self.q) for d in taxon.get_descendants()]
         query = Q(**{'predator__taxon__pk__in': all_taxa}) | Q(**{'prey__taxon__pk__in': all_taxa})
         return FoodRecord.objects.filter(query)
+
+    def fetch_coordinates(self, qs):
+        coordinates = []
+        for obj in qs:
+            if obj.locality is not None:
+                if obj.locality.point is not None:
+                    coordinates.append([obj.id, obj.locality.point.y, obj.locality.point.x])  # leaflet expects lat-long format
+        return coordinates
+
+
+class FoodRecordView(TemplateView):
+    template_name = 'site/foodrecord.html'
+
 
 class BaseAPIView(BaseListView):
     """Base view for web API."""
