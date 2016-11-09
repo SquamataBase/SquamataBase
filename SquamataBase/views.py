@@ -20,7 +20,7 @@ class SiteView(TemplateView):
         if self.q:
             # logic to query food records and add them to the request context data
             qs = self.get_queryset()
-            paginator = Paginator(qs, 12)
+            paginator = Paginator(qs, 10)
             page = request.GET.get('page')
             try:
                 foodrecords = paginator.page(page)

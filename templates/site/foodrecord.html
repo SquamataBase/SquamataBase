@@ -1,0 +1,98 @@
+<tr>
+<td class="hiddenRow" colspan="9">
+    <div class="accordion-body collapse" id="foodrecord_{{foodrecord.id}}_id">
+        <ul class="nav nav-tabs">
+            <li role="presentation" class="nav-item active">
+                <a class="nav-link" data-toggle="tab" href="#foodrecord_{{foodrecord.id}}_predator">Predator</a>
+            </li>
+            <li role="presentation" class="nav-item">
+                <a class="nav-link" data-toggle="tab" href="#foodrecord_{{foodrecord.id}}_prey">Prey</a>
+            </li>
+            <li role="presentation" class="nav-item">
+                <a class="nav-link" data-toggle="tab" href="#foodrecord_{{foodrecord.id}}_locality">Locality</a>
+            </li>
+            <li role="presentation" class="nav-item">
+                <a class="nav-link" data-toggle="tab" href="#foodrecord_{{foodrecord.id}}_context">Context</a>
+            </li>
+            <li role="presentation" class="nav-item">
+                <a class="nav-link" data-toggle="tab" href="#foodrecord_{{foodrecord.id}}_ref">Reference</a>
+            </li>
+        </ul>
+        <div class="tab-content">
+            <div class="tab-pane active" id="foodrecord_{{foodrecord.id}}_predator">
+                {% with foodrecord.predator as specimen %}
+                    {% include "site/specimen.html" %}    
+                {% endwith %}
+            </div>
+            <div class="tab-pane" id="foodrecord_{{foodrecord.id}}_prey">
+                {% with foodrecord.prey as specimen %}
+                    {% include "site/specimen.html" %}    
+                {% endwith %}
+            </div>
+            <div class="tab-pane" id="foodrecord_{{foodrecord.id}}_locality">
+                <table class="table table-striped table-hover">
+                    {% with foodrecord.locality as locality %}
+                    <tr>
+                        <td>Country</td><td>{{locality.adm0|default:"-"}}</td>
+                    <tr>
+                    <tr>
+                        <td>State</td><td>{{locality.adm1|default:"-"}}</td>
+                    <tr>
+                    <tr>
+                        <td>County</td><td>{{locality.adm2|default:"-"}}</td>
+                    <tr>
+                    <tr>
+                        <td>Place</td><td>{{locality.named_place|default:"-"}}</td>
+                    <tr>
+                    <tr>
+                        <td>Mud map</td><td>{{locality.dirt_map|default:"-"}}</td>
+                    <tr>
+                    <tr>
+                        <td>Coordinates</td><td>{{locality.verbatim_coordinates|default:"-"}}</td>
+                    <tr>
+                    <tr>
+                        <td>Elevation</td>
+                        <td>
+                            {{locality.elevation_start|default:"-"}} {{locality.elevation_unit|default:""}}
+                            {% if locality.elevation_end %} to {% endif %}
+                            {{locality.elevation_end|default:""}} {{locality.elevation_unit|default:""}}
+                        </td>
+                    <tr>
+                    {% endwith %}
+                </table>
+            </div>
+            <div class="tab-pane" id="foodrecord_{{foodrecord.id}}_context">
+                <table class="table table-striped table-hover">
+                    <tr>
+                        <td>Basis</td><td>{{foodrecord.basis|default:"-"}}</td>
+                    <tr>
+                    <tr>
+                        <td>Outcome</td><td>{{foodrecord.outcome|default:"-"}}</td>
+                    <tr>
+                    <tr>
+                        <td>Ingestion orientation</td><td>{{foodrecord.ingestion_direction|default:"-"}}</td>
+                    <tr>
+                    <tr>
+                        <td>Event date</td><td>{{foodrecord.event_date|default:"-"}}</td>
+                    <tr>
+                    <tr>
+                        <td>Start time</td><td>{{foodrecord.start_time|default:"-"}}</td>
+                    <tr>
+                    <tr>
+                        <td>End time</td><td>{{foodrecord.end_time|default:"-"}}</td>
+                    <tr>
+                    <tr>
+                        <td>Habitat</td><td>{{foodrecord.habitat|default:"-"}}</td>
+                    <tr>
+                    <tr>
+                        <td>Verbatim habitat</td><td>{{foodrecord.verbatim_habitat|default:"-"}}</td>
+                    <tr>
+                </table>
+            </div>
+            <div class="tab-pane" id="foodrecord_{{foodrecord.id}}_ref">
+                <p>{{foodrecord.ref}}</p>
+            </div>
+        </div>
+    </div>
+</td>
+</tr>

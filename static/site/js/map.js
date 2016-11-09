@@ -13,8 +13,8 @@ var map = (function() {
                     [-200, -200],
                     [200, 200]
                 ],
-                attributionControl: false,
-            }, 
+                attributionControl: false
+            }
         ).setView([15, 0], 2);
 
         (function() {
@@ -56,7 +56,7 @@ mapCoordinates = function(map, coordinates) {
             fillColor: '#f03',
             fillOpacity: 0.5,
             radius: 5,
-            weight: 1,
+            weight: 1
         }).bindPopup().addTo(map);
     }
 }
