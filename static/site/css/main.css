@@ -81,6 +81,14 @@ footer {
     max-height: 100%;
 }
 
+.accordion-toggle {
+    cursor: pointer;
+}
+
+.field-label {
+    font-weight: bold;
+}
+
 #map-tab, #table-tab {
     background-color: #f1f1f1;
     color: #337ab7;
@@ -95,3 +103,6 @@ footer {
     left: 310px;*/
 }
 
+#download {
+    padding: 0px;
+}

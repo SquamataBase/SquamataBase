@@ -50,13 +50,16 @@ var map = (function() {
 
 mapCoordinates = function(map, coordinates) {
     for (i = 0; i < coordinates.length; i++) {
-        var coordinate = [coordinates[i][1], coordinates[i][2]];
+        var coordinate = [coordinates[i][0], coordinates[i][1]];
+        var predator = coordinates[i][2];
+        var prey = coordinates[i][3];
+        var popup = "<table class='table'><tr><td class='field-label'>Predator</td><td>"+predator+"</td></tr><tr><td class='field-label'>Prey</td><td>"+prey+"</td></tr></table>"
         var circle = L.circleMarker(coordinate, {
             color: 'red',
             fillColor: '#f03',
             fillOpacity: 0.5,
             radius: 5,
             weight: 1
-        }).bindPopup().addTo(map);
+        }).bindPopup(popup).addTo(map);
     }
 }

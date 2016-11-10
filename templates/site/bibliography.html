@@ -1,0 +1,80 @@
+{% load bibliography %}
+
+<table class="table table-striped">
+    <tr>
+        <td class="field-label">Author{{authors|pluralize}}</td>
+        <td>{{authorstr}}</td>
+    </tr>
+    <tr>
+        <td class="field-label">Title</td>
+        <td>{{details.title}}</td>
+    </tr>
+    {% if ref.ref_type.term == 'journal_article' %}
+        <tr>
+            <td class="field-label">Journal</td>
+            <td>{{details.journal}}</td>
+        </tr>
+        <tr>
+            <td class="field-label">Volume</td>
+            <td>{{details.volume}}</td>
+        </tr>
+        <tr>
+            <td class="field-label">Issue</td>
+            <td>{{details.issue|default:"-"}}</td>
+        </tr>
+        <tr>
+            <td class="field-label">Year</td>
+            <td>{{details.year_published}}</td>
+        </tr>
+        <tr>
+            <td class="field-label">Page start</td>
+            <td>{{details.page_start}}</td>
+        </tr>
+        <tr>
+            <td class="field-label">Page end</td>
+            <td>{{details.page_end}}</td>
+        </tr>
+    {% elif ref.ref_type.term == 'book' %}
+        <tr>
+            <td class="field-label">Publisher</td>
+            <td>{{details.publisher}}</td>
+        </tr>
+        <tr>
+            <td class="field-label">Place</td>
+            <td>{{details.place}}</td>
+        </tr>
+        <tr>
+            <td class="field-label">Pages</td>
+            <td>{{details.pages}}</td>
+        </tr>
+        <tr>
+            <td class="field-label">Year</td>
+            <td>{{details.year_published}}</td>
+        </tr>
+    {% elif ref.ref_type.term == 'book_chapter' %}
+        <tr>
+            <td class="field-label">Book chapter <i>published in </i>:</td>
+            <td>{{details.book_title}}</td>
+        </tr>
+        <tr>
+            <td class="field-label">Publisher</td>
+            <td>{{details.publisher}}</td>
+        </tr>
+        <tr>
+            <td class="field-label">Place</td>
+            <td>{{details.place}}</td>
+        </tr>
+        <tr>
+            <td class="field-label">Page start</td>
+            <td>{{details.page_start}}</td>
+        </tr>
+        <tr>
+            <td class="field-label">Page end</td>
+            <td>{{details.page_end}}</td>
+        </tr>
+        <tr>
+            <td class="field-label">Year</td>
+            <td>{{details.year_published}}</td>
+        </tr>
+    {% endif %}
+</table>

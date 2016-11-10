@@ -3,6 +3,8 @@ from django.views.generic import TemplateView
 from django.views.generic.list import BaseListView
 from django.http import HttpResponse
 from django.db.models import Q
+from django.utils.html import format_html
+from django.utils.safestring import mark_safe
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from SquamataBase.Specimen.models import *
 from SquamataBase.FoodRecord.models import *
@@ -45,12 +47,8 @@ class SiteView(TemplateView):
         for obj in qs:
             if obj.locality is not None:
                 if obj.locality.point is not None:
-                    coordinates.append([obj.id, obj.locality.point.y, obj.locality.point.x])  # leaflet expects lat-long format
+                    coordinates.append([obj.locality.point.y, obj.locality.point.x, str(obj.predator.taxon), str(obj.prey.taxon)])  # leaflet expects lat-long format
         return coordinates
-
-
-class FoodRecordView(TemplateView):
-    template_name = 'site/foodrecord.html'
 
 
 class BaseAPIView(BaseListView):
@@ -122,6 +120,7 @@ class FoodRecordAPI(BaseAPIView):
     ]
 
     def dispatch(self, request, *args, **kwargs):
+        self.taxon = request.GET.get('taxon', '').lower().capitalize()
         self.predator = request.GET.get('predator', '').lower().capitalize()
         self.prey = request.GET.get('prey', '').lower().capitalize()
         self.view = request.GET.get('view', 'basic').lower()
@@ -147,7 +146,11 @@ class FoodRecordAPI(BaseAPIView):
         return super(BaseAPIView, self).dispatch(request, *args, **kwargs)
 
     def get_queryset(self):
-        if self.predator and not self.prey:
+        if self.taxon:
+            all_taxa = [d.pk for taxon in Taxon.objects.filter(scientific_name=self.taxon) for d in taxon.get_descendants()]
+            query = Q(**{'predator__taxon__pk__in': all_taxa}) | Q(**{'prey__taxon__pk__in': all_taxa})
+            return FoodRecord.objects.filter(query).select_related(*self.related_fields)
+        elif self.predator and not self.prey:
             all_taxa = [d.pk for taxon in Taxon.objects.filter(scientific_name=self.predator) for d in taxon.get_descendants()]
             return FoodRecord.objects.filter(Q(**{'predator__taxon__pk__in': all_taxa})).select_related(*self.related_fields)
         elif self.prey and not self.predator:
