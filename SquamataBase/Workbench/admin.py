@@ -254,6 +254,9 @@ class FoodRecordWorkbenchAdmin(nested_admin.NestedModelAdmin):
 
     change_form_template = 'admin/Workbench/extra/wbfoodrecord_changeform.html'
     inlines = [SpecimenNestedInlineAdmin, RefNestedInlineAdmin, FoodRecordNestedInlineAdmin]
+    list_per_page = 30
+    list_display = ('id', 'get_fr', 'get_predator', 'get_prey')
+    actions = ['duplicate', 'add_another_prey', 'add_to_dataset']
 
     class Media:
         js = ('admin/js/responsive_tabs.js',
@@ -263,10 +266,6 @@ class FoodRecordWorkbenchAdmin(nested_admin.NestedModelAdmin):
         css = {
             'all': ('admin/css/admin_tabs.css', 'admin/Workbench/css/inline_specimen.css',),
         }
-
-    list_display = ('id', 'get_fr', 'get_predator', 'get_prey')
-    actions = ['duplicate', 'add_another_prey', 'add_to_dataset']
-
 
     def change_view(self, request, object_id, form_url='', extra_context=None):
         """Hook to make workbench foreign keys dynamic.
