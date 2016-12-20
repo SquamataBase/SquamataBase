@@ -1,6 +1,7 @@
 from django.contrib import admin
 from django.http import HttpResponseRedirect
 from django.utils.html import format_html
+from django.db.models import Q
 import nested_admin
 from SquamataBase.Glossary.models import *
 from SquamataBase.Specimen.models import *
@@ -257,6 +258,7 @@ class FoodRecordWorkbenchAdmin(nested_admin.NestedModelAdmin):
     list_per_page = 30
     list_display = ('id', 'get_fr', 'get_predator', 'get_prey')
     actions = ['duplicate', 'add_another_prey', 'add_to_dataset']
+    search_fields = ['id',]  # search is not actually carried out on id field. just a placeholder to make django display search functionality
 
     class Media:
         js = ('admin/js/responsive_tabs.js',
@@ -281,6 +283,12 @@ class FoodRecordWorkbenchAdmin(nested_admin.NestedModelAdmin):
         Ref.objects.filter(id=foodrecord.ref.id).update(wb_id=object_id)
         return super(FoodRecordWorkbenchAdmin, self).change_view(request, object_id, form_url, extra_context)
 
+    def get_search_results(self, request, queryset, search_term):
+        queryset, use_distinct = super(FoodRecordWorkbenchAdmin, self).get_search_results(request, queryset, search_term)
+        search_term = search_term.lower().capitalize()
+        q = Q(predator__taxon__scientific_name__startswith=search_term) | Q(prey__taxon__scientific_name__startswith=search_term)
+        queryset |= self.model.objects.filter(pk__in=FoodRecord.objects.filter(q).values_list('wb_id', flat=True))
+        return queryset, use_distinct
 
     def get_fr(self, obj):
         f = FoodRecord.objects.get(wb_id=obj.id)
