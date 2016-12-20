@@ -55,7 +55,7 @@ class DataSetAdmin(admin.ModelAdmin):
     change_form_template = 'admin/FoodRecord/extra/dataset_changeform.html'
     fieldsets = (
         ('Data Source', {
-            'fields': ('ref',),
+            'fields': ('ref_type', 'ref',),
         }),
         ('Predator Set', {
             'fields': ('n_predators_examined', 'n_predators_ate'),
