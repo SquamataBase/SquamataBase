@@ -7,7 +7,7 @@ register = template.Library()
 
 @register.inclusion_tag('site/bibliography.html')
 def bibliography(ref):
-    authors = Person.objects.filter(id__in=Contribution.objects.filter(ref=ref).values_list('person_id', flat=True))
+    authors = Contribution.objects.order_by('id').filter(ref=ref).select_related('person')
     if ref.ref_type.term == 'journal_article':
         item = JournalArticle.objects.get(ref=ref)
     elif ref.ref_type.term == 'book_chapter':
@@ -16,9 +16,9 @@ def bibliography(ref):
         item = Book.objects.get(ref=ref)
     else:
         item = None
-    authorstr = format_html("<p>{}", " ".join([authors[0].first_name, authors[0].last_name]))
+    authorstr = format_html("<p>{}", " ".join([authors[0].person.first_name, authors[0].person.last_name]))
     for a in range(1, len(authors)):
-        authorstr = format_html("{}<br>{}", mark_safe(authorstr), " ".join([authors[a].first_name, authors[a].last_name]))
+        authorstr = format_html("{}<br>{}", mark_safe(authorstr), " ".join([authors[a].person.first_name, authors[a].person.last_name]))
     authorstr = format_html("{}</p>", mark_safe(authorstr))
         
     return {'authorstr': authorstr,
