@@ -96,6 +96,6 @@ class PersonAutocomplete(autocomplete.Select2QuerySetView):
         vals = text.strip().split(',')
         assert len(vals) == 2
         first_name = ' '.join([w.capitalize() for w in vals[1].strip().split(' ')])
-        last_name = ' '.join([w.capitalize() for w in vals[0].strip().split(' .')])
+        last_name = ' '.join([w.capitalize() for w in vals[0].strip().split(' ')])
         return self.get_queryset().create(**{'first_name': first_name, 'last_name': last_name})
 
