@@ -48,6 +48,9 @@ class SiteView(TemplateView):
             if obj.locality is not None:
                 if obj.locality.point is not None:
                     coordinates.append([obj.locality.point.y, obj.locality.point.x, str(obj.predator.taxon), str(obj.prey.taxon)])  # leaflet expects lat-long format
+                elif obj.locality.named_place is not None:
+                    if obj.locality.named_place.point is not None:
+                        coordinates.append([obj.locality.named_place.point.y, obj.locality.named_place.point.x, str(obj.predator.taxon), str(obj.prey.taxon)])
         return coordinates
 
 
