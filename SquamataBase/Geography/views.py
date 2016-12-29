@@ -69,9 +69,9 @@ class NamedPlaceAutocomplete(autocomplete.Select2QuerySetView):
         county = self.forwarded.get('adm2', None)
         place = text.strip()
         return self.get_queryset().create(**{
-            'adm0': country,
-            'adm1': state,
-            'adm2': county,
+            'adm0_id': int(country) if country else None,
+            'adm1_id': int(state) if state else None,
+            'adm2_id': int(county) if county else None,
             'place_name': place,
             })
 
