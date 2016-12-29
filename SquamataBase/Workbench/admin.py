@@ -421,7 +421,7 @@ class FoodRecordWorkbenchAdmin(nested_admin.NestedModelAdmin):
                     ref_assigned = True
             f = DataSetFoodRecord(dataset=dataset, foodrecord=foodrecord)
             f.save()
-            if foodrecord.locality not in dataset_localities:
+            if foodrecord.locality and foodrecord.locality not in dataset_localities:
                 dataset_localities.extend([foodrecord.locality])
                 l = DataSetLocality(dataset=dataset, locality=foodrecord.locality)
                 l.save()
