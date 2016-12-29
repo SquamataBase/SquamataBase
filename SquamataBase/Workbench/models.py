@@ -12,4 +12,5 @@ class FoodRecordWorkbench(Workbench):
         verbose_name_plural = 'food records'
 
     def __str__(self):
-        return 'Food Record'
+        from SquamataBase.FoodRecord.models import FoodRecord
+        return str(FoodRecord.objects.get(wb=self.pk))

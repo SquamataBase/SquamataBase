@@ -110,9 +110,7 @@ class FoodRecord(models.Model):
         db_table = 'sb_foodrecord'
     
     def __str__(self):
-        foodrecord_str = ' -> '.join([self.predator.taxon.scientific_name,
-                                      self.prey.taxon.scientific_name])
-        return '. '.join([str(self.id), foodrecord_str, str(self.ref)])
+        return self.predator.taxon.scientific_name.upper() + '. DIET: ' + self.prey.taxon.scientific_name.upper()
 
 
 class FoodRecordMedia(models.Model):
