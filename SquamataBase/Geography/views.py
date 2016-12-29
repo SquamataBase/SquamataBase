@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from django.db.models import Q
+from django.utils.translation import ugettext as _
 from dal import autocomplete
 from .models import *
 
@@ -41,6 +42,38 @@ class NamedPlaceAutocomplete(autocomplete.Select2QuerySetView):
             return qs
                     
         return NamedPlace.objects.none()
+
+    def get_create_option(self, context, q):
+        """Form the correct create_option to append to results."""
+        country = self.forwarded.get('adm0', None)
+        state = self.forwarded.get('adm1', None)
+        county = self.forwarded.get('adm2', None)
+        create_option = []
+        display_create_option = False
+        if self.create_field and q:
+            page_obj = context.get('page_obj', None)
+            if page_obj is None or page_obj.number == 1:
+                display_create_option = True
+        if display_create_option and self.has_add_permission(self.request):
+            create_option = [{
+                'id': q,
+                'text': _('Create "%(new_value)s"') % {'new_value': q},
+                'create_id': True,
+            }]
+        return create_option
+
+    def create_object(self, text):
+        """Create a new place name."""
+        country = self.forwarded.get('adm0', None)
+        state = self.forwarded.get('adm1', None)
+        county = self.forwarded.get('adm2', None)
+        place = text.strip()
+        return self.get_queryset().create(**{
+            'adm0': country,
+            'adm1': state,
+            'adm2': county,
+            'place_name': place,
+            })
 
 
 class LocalityAutocomplete(autocomplete.Select2QuerySetView):

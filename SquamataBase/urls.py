@@ -19,7 +19,7 @@ autocompletes = [
             name='taxon-autocomplete',),
     url(r'^admin/admu-autocomplete/$', AdmUnitAutocomplete.as_view(),
             name='admu-autocomplete',),
-    url(r'^admin/placename-autocomplete/$', NamedPlaceAutocomplete.as_view(),
+    url(r'^admin/placename-autocomplete/$', NamedPlaceAutocomplete.as_view(create_field='place_name'),
             name='placename-autocomplete',),
     url(r'^admin/locality-autocomplete/$', LocalityAutocomplete.as_view(),
             name='locality-autocomplete',),
