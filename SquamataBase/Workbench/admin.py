@@ -360,7 +360,6 @@ class FoodRecordWorkbenchAdmin(nested_admin.NestedModelAdmin):
             foodrecord = FoodRecord.objects.get(wb=wb)  # select the food record attached to the workbench instance
             wb.id = None  # clone the workbench instance
             wb.save()
-            self.log_addition(request, wb, message)
             pred = foodrecord.predator
             prey = foodrecord.prey
             pred.id = None  # clone the predator
@@ -374,6 +373,7 @@ class FoodRecordWorkbenchAdmin(nested_admin.NestedModelAdmin):
             foodrecord.predator = pred
             foodrecord.prey = prey
             foodrecord.save()
+            self.log_addition(request, wb, message)
             self.message_user(request, "Food record successfully duplicated. You may edit it below.")
             return HttpResponseRedirect("/admin/Workbench/foodrecordworkbench/%s/change/" % wb.id)
     duplicate.short_description = 'Duplicate selected food record'
@@ -390,7 +390,6 @@ class FoodRecordWorkbenchAdmin(nested_admin.NestedModelAdmin):
             foodrecord = FoodRecord.objects.get(wb=wb)  # select the food record attached to the workbench instance
             wb.id = None  # clone the workbench instance
             wb.save()
-            self.log_addition(request, wb, message)
             prey = foodrecord.prey
             prey.id = None  # clone the prey
             prey.wb = wb
@@ -399,6 +398,7 @@ class FoodRecordWorkbenchAdmin(nested_admin.NestedModelAdmin):
             foodrecord.wb = wb
             foodrecord.prey = prey
             foodrecord.save()
+            self.log_addition(request, wb, message)
             self.message_user(request, "Prey item successfully added. You may edit it below.")
             return HttpResponseRedirect("/admin/Workbench/foodrecordworkbench/%s/change/" % wb.id)
     add_another_prey.short_description = 'Add prey item to selected food record'
