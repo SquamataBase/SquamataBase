@@ -160,7 +160,7 @@ class LocalityForm(forms.ModelForm):
                 url = 'placename-autocomplete',
                 attrs = {
                     'data-placeholder': 'Search for place names . . .',
-                    'data-minimum-input-length': 2,
+                    'data-minimum-input-length': 0,
                 },
                 forward = ['adm0','adm1','adm2']
             ),

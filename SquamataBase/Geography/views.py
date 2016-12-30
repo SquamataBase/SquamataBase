@@ -26,22 +26,20 @@ class NamedPlaceAutocomplete(autocomplete.Select2QuerySetView):
     def get_queryset(self):
         if not self.request.user.is_authenticated():
             return NamedPlace.objects.none()
-
+        qs = NamedPlace.objects.defer('point').all()
+        country = self.forwarded.get('adm0', None)
+        state = self.forwarded.get('adm1', None)
+        county = self.forwarded.get('adm2', None)
+        
+        if country:
+            qs = qs.filter(Q(adm0_id=country))
+        if state:
+            qs = qs.filter(Q(adm1_id=state))
+        if county:
+            qs = qs.filter(Q(adm2_id=county))
         if self.q:
-            country = self.forwarded.get('adm0', None)
-            state = self.forwarded.get('adm1', None)
-            county = self.forwarded.get('adm2', None)
-            qs = NamedPlace.objects.defer('point').all()
-            if country:
-                qs = qs.filter(Q(adm0_id=country))
-            if state:
-                qs = qs.filter(Q(adm1_id=state))
-            if county:
-                qs = qs.filter(Q(adm2_id=county))
-            qs = qs.filter(Q(**{'place_name__unaccent__istartswith': self.q}))
-            return qs
-                    
-        return NamedPlace.objects.none()
+            qs = qs.filter(Q(**{'place_name__unaccent__istartswith': self.q}))             
+        return qs
 
     def get_create_option(self, context, q):
         """Form the correct create_option to append to results."""
