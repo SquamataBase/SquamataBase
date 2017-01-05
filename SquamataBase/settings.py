@@ -3,6 +3,8 @@ import os
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
+# Build paths to fixture directories like this: os.path.join(BASE_FIXDIR, ...)
+BASE_FIXDIR = os.path.dirname(BASE_DIR)
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'keep-me-secret'
@@ -149,8 +151,64 @@ FIXTURES = {
     'FoodRecord': os.path.join(BASE_DIR, '..', 'SquamataBase-Fixtures-0', 'FoodRecord'),
     'Geography': os.path.join(BASE_DIR, '..', 'SquamataBase-Fixtures-0', 'Geography'),
     'Glossary': os.path.join(BASE_DIR, '..', 'SquamataBase-Fixtures-0', 'Glossary'),
+    'Occurrence': os.path.join(BASE_DIR, '..', 'SquamataBase-Fixtures-0', 'Occurrence'),
     'Specimen': os.path.join(BASE_DIR, '..', 'SquamataBase-Fixtures-0', 'Specimen'),
     'Workbench': os.path.join(BASE_DIR, '..', 'SquamataBase-Fixtures-0', 'Workbench'),
+}
+
+
+FIXTURES = {
+    'Bibliography': {
+        'app_label': 'Bibliography',
+        'backup': True,
+        'dirs': [
+            os.path.join(BASE_FIXDIR, 'SquamataBase-Fixtures-0'),
+        ],
+    },
+    'FoodRecord': {
+        'app_label': 'FoodRecord',
+        'backup': True,
+        'dirs': [
+            os.path.join(BASE_FIXDIR, 'SquamataBase-Fixtures-0'),
+        ],
+    },
+    'Geography': {
+        'app_label': 'Geography',
+        'backup': False,
+        'dirs': [
+            os.path.join(BASE_FIXDIR, 'SquamataBase-Fixtures-0'),
+        ],
+        'exclude': ['NamedPlace', 'Locality', 'SpatialRefSys'],
+    },
+    'Occurrence': {
+        'app_label': 'Geography',
+        'backup': True,
+        'dirs': [
+            os.path.join(BASE_FIXDIR, 'SquamataBase-Fixtures-0'),
+        ],
+        'exclude': ['AdmUnit', 'AdmUnitBoundary', 'SpatialRefSys'],
+    },
+    'Glossary': {
+        'app_label': 'Glossary',
+        'backup': True,
+        'dirs': [
+            os.path.join(BASE_FIXDIR, 'SquamataBase-Fixtures-0'),
+        ],
+    },
+    'Specimen': {
+        'app_label': 'Specimen',
+        'backup': True,
+        'dirs': [
+            os.path.join(BASE_FIXDIR, 'SquamataBase-Fixtures-0'),
+        ],
+    },
+    'Workbench': {
+        'app_label': 'Workbench',
+        'backup': True,
+        'dirs': [
+            os.path.join(BASE_FIXDIR, 'SquamataBase-Fixtures-0'),
+        ],
+    },
 }
 
 from SquamataBase.settings_local import *

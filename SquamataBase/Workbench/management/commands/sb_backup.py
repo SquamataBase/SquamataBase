@@ -49,57 +49,35 @@ def split_json_stream(infile, PAGE_SIZE=10000):
 class Command(BaseCommand):
     help = 'Creates a backup of SquamataBase'
 
-    def add_arguments(self, parser):
-        # arguments to datadump command that we'll use
-        parser.add_argument(
-            'args', metavar='app_label', nargs='*',
-            help='Restricts dumped data to the specified app_label or app_label.ModelName.',
-        )
-        parser.add_argument(
-            '-e', '--exclude', dest='exclude', action='append', default=['Geography.SpatialRefSys'],
-            help='An app_label or app_label.ModelName to exclude '
-                 '(use multiple --exclude to exclude multiple apps/models).',
-        )
-        # additional arguments specific to this command
+    def add_arguments(self, parser):        
         parser.add_argument(
             '-p', '--page-size', default=10000, dest='page_size',
             help='Specifies maximum number of objects per JSON array.'
         )
 
-
-    def handle(self, *app_labels, **options):
-        page_size = options.pop('page_size')
-        # remaining options belong to datadump
-        if len(app_labels) == 0:
-            app_labels = ['Bibliography', 'FoodRecord', 'Geography', 'Glossary', 'Specimen', 'Workbench']
+    def handle(self, *args, **options):
         try:
-            settings.FIXTURES
+            fixtures = settings.FIXTURES
         except AttributeError:
             raise ImproperlyConfigured(
                 'The settings file is missing a fixture registry.'
                 'Database backups will not be performed without one.'
             )
-        for label in app_labels:
-            try:
-                settings.FIXTURES[label]
-            except KeyError:
-                raise ImproperlyConfigured(
-                    'The %(app)s app is missing from the fixture registry in the settings file. '
-                    'Database backups will not be performed unless this registry is complete.',
-                    params={'app': label}
-                )
-        for label in app_labels:
-            options.update(
-                {
-                    'output': os.path.join(settings.FIXTURES[label], '.'.join([label.lower(), 'json']))
-                }
-            )
-            if options['verbosity'] > 0 and label not in options['exclude']:
-                print('Creating fixture for %s objects' % label)
-            call_command('dumpdata', *[label], **options)
-            if options['verbosity'] > 0 and label not in options['exclude']:
+        PAGE_SIZE = options.pop('page_size')
+        for fixture, content in fixtures.items():
+            if not content['backup']:
+                continue
+            app_label = content['app_label']
+            options.update({
+                'output': os.path.join(content['dirs'][-1], fixture, fixture.lower()+'.json'),
+                'exclude': ['.'.join([app_label, model_label]) for model_label in content.get('exclude', [])],
+            })
+            if options['verbosity'] > 0:
+                print('Creating fixture for %s objects' % fixture)
+            call_command('dumpdata', *[app_label], **options)
+            if options['verbosity'] > 0:
                 print('Formatting fixture . . .')
-            split_json_stream(options['output'],  page_size)
+            split_json_stream(options['output'],  PAGE_SIZE)
             os.remove(options['output'])
         
 
