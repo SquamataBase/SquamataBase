@@ -80,9 +80,18 @@ class Command(BaseCommand):
                 'output': os.path.join(content['dirs'][-1], fixture, fixture.lower()+'.json'),
                 'exclude': ['.'.join([app_label, model_label]) for model_label in content.get('exclude', [])],
             })
+            if content.get('include', False):
+                app_labels = ['.'.join([app_label, model_label]) for model_label in content['include']]
+            else:
+                app_labels = [app_label]
+            if len(set(app_labels).intersection(options['exclude'])):
+                raise ImproperlyConfigured(
+                        'Cannot simultaneously include and exclude models '
+                        'from the %s fixture.' % app_label
+                    )
             if options['verbosity'] > 0:
                 print('Creating fixture for %s objects' % fixture)
-            call_command('dumpdata', *[app_label], **options)
+            call_command('dumpdata', *app_labels, **options)
             if options['verbosity'] > 0:
                 print('Formatting fixture . . .')
             split_json_stream(options['output'],  PAGE_SIZE)

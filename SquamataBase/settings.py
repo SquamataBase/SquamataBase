@@ -204,6 +204,7 @@ FIXTURES = {
         'dirs': [
             os.path.join(BASE_FIXDIR, 'SquamataBase-Fixtures-0'),
         ],
+        'include': ['Taxon',]
     },
 }
 
