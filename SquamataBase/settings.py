@@ -106,11 +106,8 @@ WSGI_APPLICATION = 'SquamataBase.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.contrib.gis.db.backends.postgis',
-        'NAME': 'squamatabase',
-        'HOST': 'localhost',
-        'USER': '',
-        'PASSWORD': '',
+        'ENGINE': 'django.contrib.gis.db.backends.spatialite',
+        'NAME': os.path.join(BASE_DIR, 'squamatabase.sqlite'),
     },
 }
 
