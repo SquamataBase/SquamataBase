@@ -19,7 +19,7 @@ def split_json_stream(infile, PAGE_SIZE=10000):
             The chunk size to use for splitting the fixture file.
             Each chunk is a single model instance.
     """
-    outfile_prefix = infile.rstrip('.json')
+    outfile_prefix = infile.split('.json')[0]
     with open(infile) as f:
         object_count = 0
         file_count = 0
@@ -94,10 +94,10 @@ class Command(BaseCommand):
                     'output': os.path.join(settings.FIXTURES[label], '.'.join([label.lower(), 'json']))
                 }
             )
-            if options['verbosity'] > 0:
+            if options['verbosity'] > 0 and label not in options['exclude']:
                 print('Creating fixture for %s objects' % label)
             call_command('dumpdata', *[label], **options)
-            if options['verbosity'] > 0:
+            if options['verbosity'] > 0 and label not in options['exclude']:
                 print('Formatting fixture . . .')
             split_json_stream(options['output'],  page_size)
             os.remove(options['output'])
