@@ -198,6 +198,13 @@ FIXTURES = {
             os.path.join(BASE_FIXDIR, 'SquamataBase-Fixtures-0'),
         ],
     },
+    'Taxonomy': {
+        'app_label': 'Taxonomy',
+        'backup': False,
+        'dirs': [
+            os.path.join(BASE_FIXDIR, 'SquamataBase-Fixtures-0'),
+        ],
+    },
 }
 
 from SquamataBase.settings_local import *
