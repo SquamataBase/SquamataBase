@@ -68,27 +68,35 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "static"),
 ]
 
-# Order of the apps and models on the admin index page.
-# Blank specifies alphabetical order.
-ADMIN_REORDER = [
-    ('Workbench', []),
-    ('Specimen', []),
-    ('Bibliography', ['Ref', 'Person', 'Journal']),
-    ('FoodRecord', ['FoodRecord', 'DataSet']),
-    ('Glossary', []),
-    ('Geography', []),
-    ('Taxonomy', [])
-]
+# Layout for the admin page
 
-# Registered apps to be excluded from the admin index page
-# if logged in user is not superuser.
-ADMIN_EXCLUDE = [
-    ('Specimen', []),
-    ('Bibliography', ['Person', 'Journal']),
-    ('FoodRecord', []),
-    ('Geography', []),
-    ('Glossary', []),
-]
+ADMIN_REORDER = {
+    'app_layout': [
+        'auth',
+        'Workbench',
+        'Specimen',
+        'Bibliography',
+        'FoodRecord',
+        'Glossary',
+        'Geography',
+        'Taxonomy'
+    ],
+    'model_layout': {
+        'Bibliography': ['Ref', 'Person', 'Journal'],
+        'FoodRecord': ['FoodRecord', 'DataSet']
+    },
+    'exclude': {
+        'apps': [
+            'Specimen',
+            'FoodRecord',
+            'Geography',
+            'Glossary'
+        ],
+        'app_models': {
+            'Bibliography': ['Person', 'Journal']
+        }
+    }
+}
 
 WSGI_APPLICATION = 'SquamataBase.wsgi.application'
 
