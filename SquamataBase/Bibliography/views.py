@@ -1,3 +1,4 @@
+from unidecode import unidecode
 from django.shortcuts import render
 from django.db.models import Q, Value
 from django.db.models.functions import Concat
@@ -60,8 +61,8 @@ class PersonAutocomplete(autocomplete.Select2QuerySetView):
             return Person.objects.none()
 
         if self.q:
-            qs = Person.objects.annotate(full_name=Concat('first_name', Value(' '), 'last_name'))
-            return qs.filter(full_name__unaccent__icontains=self.q)
+            qs = Person.objects.annotate(full_name=Concat('first_name', Value(' '), 'last_name'), full_name_ascii=Concat('first_name_ascii', Value(' '), 'last_name_ascii'))
+            return qs.filter(Q(full_name__icontains=self.q) | Q(full_name_ascii__icontains=self.q))
 
         return Person.objects.none()
 
@@ -97,5 +98,12 @@ class PersonAutocomplete(autocomplete.Select2QuerySetView):
         assert len(vals) == 2
         first_name = ' '.join([w.capitalize() for w in vals[1].strip().split(' ')])
         last_name = ' '.join([w.capitalize() for w in vals[0].strip().split(' ')])
-        return self.get_queryset().create(**{'first_name': first_name, 'last_name': last_name})
+        first_name_ascii = unidecode(first_name)
+        last_name_ascii = unidecode(last_name)
+        return self.get_queryset().create(**{
+            'first_name': first_name,
+            'last_name': last_name,
+            'first_name_ascii': first_name_ascii,
+            'last_name_ascii': last_name_ascii
+            })
 

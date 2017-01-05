@@ -26,7 +26,6 @@ INSTALLED_APPS = [
     'nested_admin',
     'dal',
     'dal_select2',
-    'django.contrib.postgres',  # include to use postgres unaccent extension
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',

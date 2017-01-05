@@ -35,8 +35,14 @@ class Person(models.Model):
     
     last_name = models.CharField(
         max_length=255)
+
+    last_name_ascii = models.CharField(
+        max_length=255)
     
     first_name = models.CharField(
+        max_length=255)
+
+    first_name_ascii = models.CharField(
         max_length=255)
 
     class Meta:
