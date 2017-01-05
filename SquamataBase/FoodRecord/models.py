@@ -168,7 +168,7 @@ class DataSet(models.Model):
         max_length=255, blank=True, null=True, validators=[validate_date])
         
     class Meta:
-        db_table = 'sb_dataset'
+        db_table = 'sb_frdataset'
         
     def __str__(self):
         return str(self.ref)
@@ -184,7 +184,7 @@ class DataSetLocality(models.Model):
         Locality, on_delete=models.PROTECT)
     
     class Meta:
-        db_table = 'sb_dataset_locality'
+        db_table = 'sb_frdataset_locality'
         verbose_name_plural = 'data set localities'
 
     def __str__(self):
@@ -201,7 +201,7 @@ class DataSetMethod(models.Model):
         OntologyTerm, on_delete=models.PROTECT)
     
     class Meta:
-        db_table = 'sb_dataset_method'
+        db_table = 'sb_frdataset_method'
 
     def __str__(self):
         return str(self.basis)
@@ -218,7 +218,7 @@ class DataSetFoodRecord(models.Model):
         on_delete=models.PROTECT)
     
     class Meta:
-        db_table = 'sb_dataset_foodrecord'
+        db_table = 'sb_frdataset_foodrecord'
         
     def __str__(self):
         return str(self.foodrecord)
