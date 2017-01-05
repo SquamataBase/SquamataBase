@@ -147,17 +147,6 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 FIXTURES = {
-    'Bibliography': os.path.join(BASE_DIR, '..', 'SquamataBase-Fixtures-0', 'Bibliography'),
-    'FoodRecord': os.path.join(BASE_DIR, '..', 'SquamataBase-Fixtures-0', 'FoodRecord'),
-    'Geography': os.path.join(BASE_DIR, '..', 'SquamataBase-Fixtures-0', 'Geography'),
-    'Glossary': os.path.join(BASE_DIR, '..', 'SquamataBase-Fixtures-0', 'Glossary'),
-    'Occurrence': os.path.join(BASE_DIR, '..', 'SquamataBase-Fixtures-0', 'Occurrence'),
-    'Specimen': os.path.join(BASE_DIR, '..', 'SquamataBase-Fixtures-0', 'Specimen'),
-    'Workbench': os.path.join(BASE_DIR, '..', 'SquamataBase-Fixtures-0', 'Workbench'),
-}
-
-
-FIXTURES = {
     'Bibliography': {
         'app_label': 'Bibliography',
         'backup': True,
