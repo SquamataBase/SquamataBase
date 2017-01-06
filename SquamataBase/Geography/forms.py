@@ -188,7 +188,11 @@ class LocalityForm(forms.ModelForm):
             point = Point(x=x, y=y, srid=my_srid)
             point.transform(ptransf)
             country = cleaned_data['adm0']
-            if settings.get('VALIDATE_COORDINATES', True):
+            try:
+                VALIDATE_COORDINATES = settings.VALIDATE_COORDINATES
+            except AttributeError:
+                VALIDATE_COORDINATES = True
+            if VALIDATE_COORDINATES:
                 try:
                     g = AdmUnitBoundary.objects.get(geoname_id=country.geoname_id)
                     if g.geom.intersects(point):
