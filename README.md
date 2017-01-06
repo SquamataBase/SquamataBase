@@ -29,6 +29,6 @@ git clone https://github.com/SquamataBase/SquamataBase
 cd SquamataBase-Fixtures-0/Taxonomy
 curl -L https://github.com/SquamataBase/SquamataBase-Taxonomy/releases/download/v1/taxonomy.txt.zip > taxonomy.txt.zip
 unzip taxonomy.txt.zip
-cd ../SquamataBase
+cd ../../SquamataBase
 python manage.py sb_init
 ```
