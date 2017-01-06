@@ -32,3 +32,4 @@ unzip taxonomy.txt.zip
 cd ../../SquamataBase
 python manage.py sb_init
 ```
+You are now ready to start using SquamataBase.
