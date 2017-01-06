@@ -30,13 +30,14 @@ class Command(BaseCommand):
 
     def handle(*args, **options):
         output = ".mode csv\n"
-        output += ".import %s\n" % options['path']
+        output += "PRAGMA foreign_keys=OFF;"
+        output += ".import %s sb_taxon\n" % options['path']
         output += ".read %s\n" % os.path.join(os.path.dirname(os.path.abspath(__file__)), '_create.sql')
+        output += "PRAGMA foreign_keys=ON;"
         with open("/tmp/taxonomyInit.txt", "w") as f:
             f.write(output)
         cmd = "cat %s | spatialite %s" % ("/tmp/taxonomyInit.txt", settings.DATABASES['default']['NAME'])
         print("Creating taxonomy tables and importing data.")
-        print(cmd)
         os.system(cmd)
         print("Import complete.")
         os.remove("/tmp/taxonomyInit.txt")
