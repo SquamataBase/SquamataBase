@@ -38,7 +38,7 @@ class NamedPlaceAutocomplete(autocomplete.Select2QuerySetView):
         if county:
             qs = qs.filter(Q(adm2_id=county))
         if self.q:
-            qs = qs.filter(Q(**{'place_name__unaccent__istartswith': self.q}))             
+            qs = qs.filter(Q(**{'place_name__istartswith': self.q}))             
         return qs
 
     def get_create_option(self, context, q):
@@ -81,7 +81,7 @@ class LocalityAutocomplete(autocomplete.Select2QuerySetView):
 
         if self.q:
             qs = Locality.objects.defer('point').all()
-            c  = Q(**{'named_place__place_name__unaccent__istartswith': self.q})
+            c  = Q(**{'named_place__place_name__istartswith': self.q})
             c |= Q(**{'dirtmap__istartswith': self.q})
             c |= Q(**{'verbatim_coordinates__startswith': self.q})
             c |= Q(**{'adm0__unit_name_ascii__istartswith': self.q})
