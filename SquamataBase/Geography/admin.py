@@ -13,10 +13,10 @@ class AdmUnitAdmin(admin.ModelAdmin):
     readonly_fields = ('geoname_id', 'admin_level', 'unit_name_ascii', 'unit_name', 'parent')
     search_fields = ('unit_name_ascii',)
 
-    def has_add_permission(self, obj):
+    def has_add_permission(self, request):
         return False
 
-    def has_delete_permission(self, obj):
+    def has_delete_permission(self, request, obj=None):
         return False
 
 @admin.register(AdmUnitBoundary)
@@ -35,10 +35,10 @@ class AdmUnitBoundaryAdmin(admin.OSMGeoAdmin):
         return obj.geoname_id.unit_name_ascii
     get_unit.short_description = 'Administrative unit'
     
-    def has_add_permission(self, obj):
+    def has_add_permission(self, request):
         return False
 
-    def has_delete_permission(self, obj):
+    def has_delete_permission(self, request, obj=None):
         return False
     
     
