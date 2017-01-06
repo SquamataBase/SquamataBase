@@ -8,7 +8,7 @@ from django.conf import settings
 class Command(BaseCommand):
     help = 'Restores SquamataBase from a collection of fixtures'
 
-    def add_arguments(self, parser):        
+    def add_arguments(self, parser):
         parser.add_argument(
             '-e', '--exclude', dest='exclude', action='append', default=[],
             help='An app_label to exclude '
