@@ -10,7 +10,7 @@ class Command(BaseCommand):
 
     def add_arguments(self, parser):
         parser.add_argument(
-            '-e', '--exclude', dest='exclude', action='append', default=[],
+            '-e', '--exclude', dest='exclude', action='append', default=['Taxonomy'],
             help='An app_label to exclude '
                  '(use multiple --exclude to exclude multiple apps/models).'
         )

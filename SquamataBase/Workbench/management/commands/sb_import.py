@@ -2,7 +2,7 @@ import os
 from django.core.exceptions import ImproperlyConfigured
 from django.core.management.base import BaseCommand, CommandError
 from django.conf import settings
-'''
+
 if settings.DATABASES['default']['ENGINE'].endswith('spatialite'):
     pass
 else:
@@ -10,7 +10,7 @@ else:
             'The sb_import command is only configured to work '
             'with sqlite databases.'
         )
-'''
+
 class Command(BaseCommand):
     help = 'Imports the SquamataBase taxonomy'
 

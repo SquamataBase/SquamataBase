@@ -69,13 +69,9 @@ class Command(BaseCommand):
                 continue
             app_label = content['app_label']
             if app_label == 'Taxonomy':
-                print('You have chosen to create a Taxonomy fixture.')
-                choice = input('Do you wish to continue? (Y/n):')
-                while choice.lower() not in ['y', 'yes', 'n', 'no']:
-                    print('Invalid choice.')
-                    choice = input('Do you wish to continue? (Y/n): ')
-                if choice.lower() == 'n' or choice.lower() == 'no':
-                    continue
+                print('You have chosen to create a Taxonomy fixture. '
+                    'This is not allowed.')
+                continue
             options.update({
                 'output': os.path.join(content['dirs'][-1], fixture, fixture.lower()+'.json'),
                 'exclude': ['.'.join([app_label, model_label]) for model_label in content.get('exclude', [])],
