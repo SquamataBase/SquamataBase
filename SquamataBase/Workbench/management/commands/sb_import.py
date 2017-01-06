@@ -22,7 +22,7 @@ class Command(BaseCommand):
                 'The settings file is missing a fixture registry. '
                 'No imports will be performed without one.'
                 )
-        TAXONOMY = os.path.join(fixtures['Taxonomy']['dirs'][-1], 'taxonomy.txt')
+        TAXONOMY = os.path.join(fixtures['Taxonomy']['dirs'][-1], 'Taxonomy', 'taxonomy.txt')
         parser.add_argument(
             '-p', '--path', default=TAXONOMY, dest='path',
             help='Absolute file path to taxonomy'
