@@ -38,6 +38,6 @@ class Command(BaseCommand):
             f.write(output)
         cmd = "cat %s | spatialite %s" % ("/tmp/taxonomyInit.txt", settings.DATABASES['default']['NAME'])
         print("Creating taxonomy tables and importing data.")
-        #os.system(cmd)
+        os.system(cmd)
         print("Import complete.")
-        #os.remove("/tmp/taxonomyInit.txt")
+        os.remove("/tmp/taxonomyInit.txt")
