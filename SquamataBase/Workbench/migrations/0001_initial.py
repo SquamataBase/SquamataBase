@@ -28,6 +28,8 @@ class Migration(migrations.Migration):
             ],
             options={
                 'proxy': True,
+                'verbose_name': 'food record',
+                'verbose_name_plural': 'food records'
             },
             bases=('Workbench.workbench',),
         ),

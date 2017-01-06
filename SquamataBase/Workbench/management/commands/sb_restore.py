@@ -9,7 +9,11 @@ class Command(BaseCommand):
     help = 'Restores SquamataBase from a collection of fixtures'
 
     def add_arguments(self, parser):        
-        pass
+        parser.add_argument(
+            '-e', '--exclude', dest='exclude', action='append', default=[],
+            help='An app_label to exclude '
+                 '(use multiple --exclude to exclude multiple apps).'
+        )
 
     def handle(self, *args, **options):
         try:
@@ -21,5 +25,8 @@ class Command(BaseCommand):
             )
         fixtures = []
         for fixture, content in f.items():
-            fixtures.extend([os.path.join(fixdir, fixture) for fixdir in content['dirs']])
+            if fixture in options['exclude']:
+                continue
+            fps = [os.path.join(fixdir, fixture) for fixdir in content['dirs']]
+            fixtures.extend([f for f in os.listdir(fp) for fp in fps if f.endswith('.json') or f.endswith('.json.zip')])
         call_command('loaddata', *fixtures)

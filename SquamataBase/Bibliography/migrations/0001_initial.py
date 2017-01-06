@@ -12,6 +12,7 @@ class Migration(migrations.Migration):
 
     dependencies = [
         ('Glossary', '0001_initial'),
+        ('Workbench', '0001_initial'),
     ]
 
     operations = [
@@ -19,7 +20,8 @@ class Migration(migrations.Migration):
             name='Ref',
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('ref_type', models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, to='Glossary.OntologyTerm'))
+                ('ref_type', models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, to='Glossary.OntologyTerm')),
+                ('wb', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, to='Workbench.Workbench'))
             ],
             options={
                 'verbose_name_plural': 'Data sources',
@@ -33,6 +35,8 @@ class Migration(migrations.Migration):
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('last_name', models.CharField(max_length=255)),
                 ('first_name', models.CharField(max_length=255)),
+                ('last_name_ascii', models.CharField(max_length=255)),
+                ('first_name_ascii', models.CharField(max_length=255)),
             ],
             options={
                 'verbose_name_plural': 'people',

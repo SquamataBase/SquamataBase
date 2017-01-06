@@ -17,6 +17,7 @@ class Migration(migrations.Migration):
         ('Geography', '0001_initial'),
         ('Specimen', '0001_initial'),
         ('Taxonomy', '0001_initial'),
+        ('Workbench', '0001_initial'),
     ]
 
     operations = [
@@ -31,7 +32,7 @@ class Migration(migrations.Migration):
                 ('context', models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, related_name='foodrecord_contextset', to='Glossary.OntologyTerm')),
                 ('conditions', models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, related_name='foodrecord_conditionset', to='Glossary.OntologyTerm')),
                 ('outcome', models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, related_name='foodrecord_outcomeset', to='Glossary.OntologyTerm')),
-                ('ingestion_direction', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='foodrecord_ingestedset', to='Glossary.OntologyTerm')),
+                ('ingestion_direction', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.PROTECT, related_name='foodrecord_ingestedset', to='Glossary.OntologyTerm')),
                 ('locality', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.PROTECT, related_name='foodrecord_localityset', to='Geography.Locality')),                
                 ('event_date', models.CharField(blank=True, max_length=255, null=True, validators=[SquamataBase.FoodRecord.validators.validate_date])),
                 ('start_time', models.CharField(blank=True, max_length=255, null=True, validators=[SquamataBase.FoodRecord.validators.validate_time])),
@@ -41,6 +42,8 @@ class Migration(migrations.Migration):
                 ('prey_capture_mode', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.PROTECT, related_name='foodrecord_preycaptureset', to='Glossary.OntologyTerm')),
                 ('prey_handle_mode', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.PROTECT, related_name='foodrecord_preyhandleset', to='Glossary.OntologyTerm')),
                 ('remark', models.TextField(blank=True, null=True)),
+                ('alimentary_pos', models.CharField(blank=True, max_length=255, null=True)),
+                ('wb', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, to='Workbench.Workbench')),
             ],
             options={
                 'db_table': 'sb_foodrecord',
@@ -73,7 +76,7 @@ class Migration(migrations.Migration):
                 ('end_date', models.CharField(blank=True, max_length=255, null=True, validators=[SquamataBase.FoodRecord.validators.validate_date])),
             ],
             options={
-                'db_table': 'sb_dataset',
+                'db_table': 'sb_frdataset',
             },
         ),
         migrations.CreateModel(
@@ -84,7 +87,7 @@ class Migration(migrations.Migration):
                 ('foodrecord', models.ForeignKey(help_text='search on latin name of predator or prey', on_delete=django.db.models.deletion.PROTECT, to='FoodRecord.FoodRecord')),
             ],
             options={
-                'db_table': 'sb_dataset_foodrecord',
+                'db_table': 'sb_frdataset_foodrecord',
             },
         ),
         migrations.CreateModel(
@@ -96,7 +99,7 @@ class Migration(migrations.Migration):
             ],
             options={
                 'verbose_name_plural': 'data set localities',
-                'db_table': 'sb_dataset_locality',
+                'db_table': 'sb_frdataset_locality',
             },
         ),
         migrations.CreateModel(
@@ -107,7 +110,7 @@ class Migration(migrations.Migration):
                 ('basis', models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, to='Glossary.OntologyTerm')),
             ],
             options={
-                'db_table': 'sb_dataset_method',
+                'db_table': 'sb_frdataset_method',
             },
         ),
     ]
