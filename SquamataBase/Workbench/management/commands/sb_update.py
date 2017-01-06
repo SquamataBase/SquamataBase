@@ -24,4 +24,5 @@ class Command(BaseCommand):
             if content['backup']:
                 fps = [os.path.join(fixdir, fixture) for fixdir in content['dirs']]
                 fixtures.extend([os.path.join(fp, f) for fp in fps for f in os.listdir(fp) if f.endswith('.json') or f.endswith('.json.zip')])
+        print("Updating fixture data (may take some time) . . .")
         call_command('loaddata', *fixtures)

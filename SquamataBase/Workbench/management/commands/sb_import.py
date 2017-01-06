@@ -37,7 +37,7 @@ class Command(BaseCommand):
         with open("/tmp/taxonomyInit.txt", "w") as f:
             f.write(output)
         cmd = "cat %s | spatialite -silent %s" % ("/tmp/taxonomyInit.txt", settings.DATABASES['default']['NAME'])
-        print("Importing taxonomy tables . . .")
+        print("Importing taxonomy tables (may take some time) . . .")
         os.system(cmd)
         print("Taxonomy import complete.")
         os.remove("/tmp/taxonomyInit.txt")
