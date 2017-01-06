@@ -36,8 +36,8 @@ class Command(BaseCommand):
         output += "PRAGMA foreign_keys=ON;\n"
         with open("/tmp/taxonomyInit.txt", "w") as f:
             f.write(output)
-        cmd = "cat %s | spatialite %s" % ("/tmp/taxonomyInit.txt", settings.DATABASES['default']['NAME'])
-        print("Creating taxonomy tables and importing data.")
+        cmd = "cat %s | spatialite -silent %s" % ("/tmp/taxonomyInit.txt", settings.DATABASES['default']['NAME'])
+        print("Importing taxonomy tables . . .")
         os.system(cmd)
-        print("Import complete.")
+        print("Taxonomy import complete.")
         os.remove("/tmp/taxonomyInit.txt")
