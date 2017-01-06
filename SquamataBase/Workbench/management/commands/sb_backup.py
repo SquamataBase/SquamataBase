@@ -1,3 +1,4 @@
+import datetime
 import os
 import json
 from django.core.exceptions import ImproperlyConfigured
@@ -31,7 +32,7 @@ def split_json_stream(infile, PAGE_SIZE=10000):
                 with open('{}-{}.json'.format(outfile_prefix, file_count), 'w') as outfile:
                     outfile.write(json.dumps(json.loads(objects), indent=0, separators=(',', ':'), sort_keys=True))
                     file_count += 1
-                return
+                return object_count
             if objects.endswith('}, {'): # JSON object boundary. This condition is sensitive to fixture file formatting used with dumpdata
                 object_count += 1
                 if object_count % PAGE_SIZE == 0:
@@ -44,7 +45,6 @@ def split_json_stream(infile, PAGE_SIZE=10000):
                     # reset JSON string
                     objects = '[{'
             objects += next_char
-
 
 class Command(BaseCommand):
     help = 'Creates a backup of SquamataBase'
@@ -64,6 +64,8 @@ class Command(BaseCommand):
                 'Database backups will not be performed without one.'
             )
         PAGE_SIZE = options.pop('page_size')
+        commit_msg = 'Backup for {:%Y-%m-%d %H:%M:%S}\n'.format(datetime.datetime.now())
+        commit_dirs = []
         for fixture, content in fixtures.items():
             if not content['backup']:
                 continue
@@ -90,7 +92,13 @@ class Command(BaseCommand):
             call_command('dumpdata', *app_labels, **options)
             if options['verbosity'] > 0:
                 print('Formatting fixture . . .')
-            split_json_stream(options['output'],  PAGE_SIZE)
+            objcount = split_json_stream(options['output'],  PAGE_SIZE)
             os.remove(options['output'])
+            commit_msg += '%s %s objects\n' % (objcount, fixture)
+            commit_dirs.append(os.path.join(content['dirs'][-1]))
+        commit_dirs = list(set(commit_dirs))
+        for commit_dir in commit_dirs:
+            os.chdir(commit_dir)
+            os.system('echo "%s" | git commit -a --file -' % commit_msg)
         
 
