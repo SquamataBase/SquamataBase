@@ -12,7 +12,7 @@ class Command(BaseCommand):
         parser.add_argument(
             '-e', '--exclude', dest='exclude', action='append', default=[],
             help='An app_label to exclude '
-                 '(use multiple --exclude to exclude multiple apps).'
+                 '(use multiple --exclude to exclude multiple apps/models).'
         )
 
     def handle(self, *args, **options):
@@ -28,5 +28,5 @@ class Command(BaseCommand):
             if fixture in options['exclude']:
                 continue
             fps = [os.path.join(fixdir, fixture) for fixdir in content['dirs']]
-            fixtures.extend([f for f in os.listdir(fp) for fp in fps if f.endswith('.json') or f.endswith('.json.zip')])
+            fixtures.extend([os.path.join(fp, f) for fp in fps for f in os.listdir(fp) if f.endswith('.json') or f.endswith('.json.zip')])
         call_command('loaddata', *fixtures)
