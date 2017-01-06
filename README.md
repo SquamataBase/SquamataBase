@@ -3,8 +3,8 @@
 Django web application to administer SquamataBase.
 
 ## Requirements
-+ python 3, pip
-+ django, django-autocomplete-light, django-nested-admin
++ python (version 3.4 or 3.5), pip
++ django (version 1.10), django-autocomplete-light (version 3), django-nested-admin (version 3)
 + SpatiaLite
 
 To install the Python package dependencies use `pip`
