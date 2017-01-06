@@ -16,6 +16,9 @@ class AdmUnitAdmin(admin.ModelAdmin):
     def has_add_permission(self, obj):
         return False
 
+    def has_delete_permission(self, obj):
+        return False
+
 @admin.register(AdmUnitBoundary)
 class AdmUnitBoundaryAdmin(admin.OSMGeoAdmin):
     list_per_page = 10
@@ -33,6 +36,9 @@ class AdmUnitBoundaryAdmin(admin.OSMGeoAdmin):
     get_unit.short_description = 'Administrative unit'
     
     def has_add_permission(self, obj):
+        return False
+
+    def has_delete_permission(self, obj):
         return False
     
     

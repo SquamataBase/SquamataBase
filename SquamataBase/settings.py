@@ -87,10 +87,12 @@ ADMIN_REORDER = {
     },
     'exclude': {
         'apps': [
+            'auth',
             'Specimen',
             'FoodRecord',
             'Geography',
-            'Glossary'
+            'Glossary',
+            'Taxonomy'
         ],
         'app_models': {
             'Bibliography': ['Person', 'Journal']

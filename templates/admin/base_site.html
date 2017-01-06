@@ -11,7 +11,7 @@ SquamataBase
 
 {% block branding %}
 {% admin_reorder %}
-{% if request.user.is_superuser %}{% else %}{% admin_exclude %}{% endif %}
+{% admin_exclude %}
 <h1 id="site-name"><a href="{% url 'admin:index' %}">SquamataBase Administration</a></h1>
 {% endblock %}
 
