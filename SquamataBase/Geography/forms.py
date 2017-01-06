@@ -2,6 +2,7 @@ from django.contrib.gis import forms
 from django.contrib.gis.gdal import SpatialReference, CoordTransform
 from django.contrib.gis.geos import Point
 from django.core.exceptions import ValidationError, ObjectDoesNotExist
+from django.conf import settings
 from dal import autocomplete
 from .models import *
 from .widgets import *
@@ -187,14 +188,15 @@ class LocalityForm(forms.ModelForm):
             point = Point(x=x, y=y, srid=my_srid)
             point.transform(ptransf)
             country = cleaned_data['adm0']
-            try:
-                g = AdmUnitBoundary.objects.get(geoname_id=country.geoname_id)
-                if g.geom.intersects(point):
+            if settings.get('VALIDATE_COORDINATES', True):
+                try:
+                    g = AdmUnitBoundary.objects.get(geoname_id=country.geoname_id)
+                    if g.geom.intersects(point):
+                        pass
+                    else:
+                        raise ValidationError('Point does not fall within'
+                                              ' selected country boundary.')
+                except ObjectDoesNotExist:
                     pass
-                else:
-                    raise ValidationError('Point does not fall within'
-                                          ' selected country boundary.')
-            except ObjectDoesNotExist:
-                pass
             cleaned_data['point'] = point
 
