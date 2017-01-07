@@ -93,13 +93,8 @@ class BackupService(Service):
             <string>/usr/local/var/log/squamatabase.backups.log</string>
         <key>StandardErrorPath</key>
             <string>/usr/local/var/log/squamatabase.backups.log</string>
-        <key>StartCalendarInterval</key>
-            <dict>
-                <key>Minute</key>
-                <integer>00</integer>
-                <key>Hour</key>
-                <integer>22</integer>
-            </dict>
+        <key>StartInterval</key>
+            <integer>86400</integer>
     </dict>
 </plist>
 ''' % settings.BASE_DIR
