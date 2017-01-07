@@ -1,6 +1,6 @@
 # SquamataBase
 
-Django web application to administer SquamataBase.
+Django web application to administer SquamataBase on macOS.
 
 ## Requirements
 + python (version 3.4 or 3.5), pip
@@ -31,5 +31,8 @@ curl -L https://github.com/SquamataBase/SquamataBase-Taxonomy/releases/download/
 unzip taxonomy.txt.zip
 cd ../../SquamataBase
 python manage.py sb_init
+python manage.py sb_services start ui
 ```
-You are now ready to start using SquamataBase.
+You are now ready to start using SquamataBase. Just point your browser to http://localhost:8000. 
+
+For more information consult the project wiki https://github.com/SquamataBase/SquamataBase/wiki.
