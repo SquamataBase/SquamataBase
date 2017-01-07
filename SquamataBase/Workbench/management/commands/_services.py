@@ -82,6 +82,8 @@ class BackupService(Service):
                 <string>/usr/local/opt/python3/bin/python3</string>
                 <string>manage.py</string>
                 <string>sb_backup</string>
+                <string>--verbosity</string>
+                <string>0</string>
             </array>
         <key>WorkingDirectory</key>
             <string>%s</string>
