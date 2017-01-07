@@ -8,7 +8,8 @@ from .forms import *
 
 @admin.register(Person)
 class PersonAdmin(admin.ModelAdmin):
-    pass
+    search_fields = ('last_name_ascii', 'first_name_ascii')
+    list_display = ('id', 'last_name', 'first_name')
 
         
 @admin.register(Journal)

@@ -61,8 +61,9 @@ class PersonAutocomplete(autocomplete.Select2QuerySetView):
             return Person.objects.none()
 
         if self.q:
-            qs = Person.objects.annotate(full_name=Concat('first_name', Value(' '), 'last_name'), full_name_ascii=Concat('first_name_ascii', Value(' '), 'last_name_ascii'))
-            return qs.filter(Q(full_name__icontains=self.q) | Q(full_name_ascii__icontains=self.q))
+            qs = Person.objects.annotate(full_name_ascii=Concat('first_name_ascii', Value(' '), 'last_name_ascii'))
+            q = unidecode(self.q)
+            return qs.filter(Q(full_name_ascii__icontains=q))
 
         return Person.objects.none()
 
