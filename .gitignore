@@ -1,5 +1,5 @@
 .DS_Store
 *.pyc
 *.sqlite
-settings_local.py
+SquamataBase/settings_local.py
 fixtures/
