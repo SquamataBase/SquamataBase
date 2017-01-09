@@ -1,7 +1,7 @@
 import os
 from django.conf import settings
 
-class Service(object):
+class ServiceMixin(object):
     SERVICE_HOME = os.path.join(os.environ['HOME'], 'Library', 'LaunchAgents')
 
     def start(self):
@@ -35,7 +35,7 @@ class Service(object):
     def status(self):
         return '(started)' if self.is_active() else '(stopped)'
 
-class UIService(Service):
+class UIService(ServiceMixin):
     def __init__(self):
         self.VERBOSE_NAME = 'SquamataBase User Interface service'
         self.LABEL = os.path.join(self.SERVICE_HOME, 'squamatabase.ui.plist')
@@ -66,7 +66,7 @@ class UIService(Service):
 ''' % settings.BASE_DIR
 
 
-class BackupService(Service):
+class BackupService(ServiceMixin):
     def __init__(self):
         self.VERBOSE_NAME = 'SquamataBase Backup service'
         self.LABEL = os.path.join(self.SERVICE_HOME, 'squamatabase.backup.plist')
@@ -91,8 +91,13 @@ class BackupService(Service):
             <string>/usr/local/var/log/squamatabase.backups.log</string>
         <key>StandardErrorPath</key>
             <string>/usr/local/var/log/squamatabase.backups.log</string>
-        <key>StartInterval</key>
-            <integer>86400</integer>
+        <key>StartCalendarInterval</key>
+            <dict>
+                <key>Minute</key>
+                    <integer>15</integer>
+                <key>Hour</key>
+                    <integer>12</integer>
+            </dict>
     </dict>
 </plist>
 ''' % settings.BASE_DIR
