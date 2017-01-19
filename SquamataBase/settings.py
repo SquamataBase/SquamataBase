@@ -11,7 +11,7 @@ SECRET_KEY = 'keep-me-secret'
 
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['localhost']
 
 # Application definition
 
@@ -64,6 +64,7 @@ TEMPLATES = [
     },
 ]
 
+
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "static"),
 ]
@@ -110,6 +111,15 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.contrib.gis.db.backends.spatialite',
         'NAME': os.path.join(BASE_DIR, 'squamatabase.sqlite'),
+        'CONN_MAX_AGE': None,
+        # when CONN_MAX_AGE is set to 0 (default) we run up against a 'ERROR: too many connections: max 64' 
+        # whenever we hit 64 requests because a new connection is opened for each request. 
+        # even though the connections are closed at the end of each request they appear to
+        # maintain their hold on the database due to an internal leak, as discussed in this post:
+        # https://groups.google.com/forum/#!topic/spatialite-users/xrV7CA_GlwM.
+        # by setting CONN_MAX_AGE = None connections will never expire and when this is used
+        # in combination with python manage.py runserver --nothreading these error messages
+        # disappear because we reuse the same connection for each subsequent request.
     },
 }
 
