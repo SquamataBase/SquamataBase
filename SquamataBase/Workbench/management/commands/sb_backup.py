@@ -7,7 +7,7 @@ from django.core.management import call_command
 from django.conf import settings
 
 
-def split_json_stream(infile, PAGE_SIZE=10000):
+def split_json_stream(infile, PAGE_SIZE=10000, MAX_SIZE=2):
     """Splits a Django fixture file into chunks.
 
         .. py:attribute:: infile
@@ -19,13 +19,21 @@ def split_json_stream(infile, PAGE_SIZE=10000):
 
             The chunk size to use for splitting the fixture file.
             Each chunk is a single model instance.
+
+        .. py:attribute:: MAX_SIZE
+
+            Approximate maximum file size (in megabytes) for each fixture
+            file.
     """
     outfile_prefix = infile.split('.json')[0]
+    chunk = MAX_SIZE * 1000 * 1000
     with open(infile) as f:
         object_count = 0
         file_count = 0
+        chars_written = 0
         objects = ''
         while True:
+            chars_written += 1
             next_char = f.read(1)
             if not next_char: # EOF
                 object_count += 1
@@ -35,7 +43,7 @@ def split_json_stream(infile, PAGE_SIZE=10000):
                 return object_count
             if objects.endswith('}, {'): # JSON object boundary. This condition is sensitive to fixture file formatting used with dumpdata
                 object_count += 1
-                if object_count % PAGE_SIZE == 0:
+                if object_count % PAGE_SIZE == 0 or chars_written >= chunk:
                     objects = objects.rstrip(', {')
                     objects += ']'
                     # dump logic
@@ -44,6 +52,7 @@ def split_json_stream(infile, PAGE_SIZE=10000):
                         file_count += 1
                     # reset JSON string
                     objects = '[{'
+                    chars_written = 0
             objects += next_char
 
 class Command(BaseCommand):
