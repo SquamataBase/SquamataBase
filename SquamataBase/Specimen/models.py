@@ -128,13 +128,19 @@ class Specimen(models.Model):
         db_table = 'sb_specimen'
         
     def __str__(self):
-        vouchers = SpecimenVoucher.objects.filter(specimen=self.id)
-        voucher_str= ':'.join([str(v) for v in vouchers])
+        voucher_str= ':'.join([str(v) for v in self.vouchers])
         if voucher_str != '':
             return ' | '.join([str(self.id), self.taxon.scientific_name,
                                 voucher_str])
         return ' | '.join([str(self.id), self.taxon.scientific_name])
 
+    @property
+    def measurements(self):
+        return SpecimenMeasurement.objects.filter(specimen_id=self.id)
+
+    @property
+    def vouchers(self):
+        return SpecimenVoucher.objects.filter(specimen_id=self.id)
 
 class SpecimenIntersection(models.Model):
     """Overlapping sets of individual organisms."""
@@ -179,7 +185,7 @@ class SpecimenMeasurement(models.Model):
         verbose_name = 'measurement'
 
     def __str__(self):
-        return ''
+        return ' '.join([str(self.measurement_type), str(self.measurement_value), str(self.measurement_unit)])
 
 class SpecimenVoucher(models.Model):
     """Voucher specimens associated with individual organisms."""
