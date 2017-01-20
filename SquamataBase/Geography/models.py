@@ -1,4 +1,5 @@
 from django.contrib.gis.db import models
+from django.contrib.gis.geos.point import Point
 from SquamataBase.Glossary.models import OntologyTerm
 
 
@@ -79,6 +80,7 @@ class AdmUnitBoundary(models.Model):
         
     geoname_id = models.OneToOneField(AdmUnit, primary_key=True, db_column='geoname_id')
           
+    # wgs84 srid
     geom = models.MultiPolygonField(srid=4326)
     
     class Meta:
@@ -88,6 +90,19 @@ class AdmUnitBoundary(models.Model):
         
     def __str__(self):
         return str(self.geoname_id)
+
+    @property
+    def point(self):
+        """Choose a uniform random point within boundary."""
+        from numpy import random
+        ext = self.geom.extent
+        lon = random.uniform(low=ext[0], high=ext[2])
+        lat = random.uniform(low=ext[1], high=ext[3])
+        pnt = Point(x=lon, y=lat, srid=self.geom.srid)
+        if self.geom.intersects(pnt):
+            return pnt
+        else:
+            return self.point
         
 
 class NamedPlace(models.Model):
@@ -208,4 +223,28 @@ class Locality(models.Model):
         else:
             return ', '.join([str(a) for a in [self.dirtmap, self.adm2, self.adm1, self.adm0] if a != '' and a is not None])
 
+    def get_point(self):
+        if self.point is not None:
+            return self.point
+        else:
+            try:
+                if self.named_place.point is not None:
+                    return self.named_place.point
+                else:
+                    raise AttributeError
+            except AttributeError:
+                try:
+                    bndry = AdmUnitBoundary.objects.get(geoname_id=self.adm2)
+                    return bndry.point
+                except:
+                    try:
+                        bndry = AdmUnitBoundary.objects.get(geoname_id=self.adm1)
+                        return bndry.point
+                    except:
+                        try:
+                            bndry = AdmUnitBoundary.objects.get(geoname_id=self.adm0)
+                            return bndry.point
+                        except:
+                            return None
+                
                

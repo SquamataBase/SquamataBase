@@ -112,6 +112,18 @@ class FoodRecord(models.Model):
     def __str__(self):
         return self.predator.taxon.scientific_name.upper() + '. DIET: ' + self.prey.taxon.scientific_name.upper()
 
+    @property
+    def point(self):
+        try:
+            return self.locality.get_point()
+        except AttributeError:
+            # if there is no locality there might be one associated
+            # with a dataset
+            try:
+                d = DataSetFoodRecord.objects.get(foodrecord=self).dataset
+                return d.point
+            except:
+                return None
 
 class FoodRecordMedia(models.Model):
     """External files associated with food records."""
@@ -172,6 +184,17 @@ class DataSet(models.Model):
         
     def __str__(self):
         return str(self.ref)
+
+    @property
+    def point(self):
+        """Choose a uniform random point from set of dataset localities."""
+        from numpy import random
+        localities = DataSetLocality.objects.filter(dataset=self)
+        p = None
+        for i, l in enumerate(localities):
+            if not random.randint(i+1):
+                p = l.locality.get_point()
+        return p
         
         
 class DataSetLocality(models.Model):
