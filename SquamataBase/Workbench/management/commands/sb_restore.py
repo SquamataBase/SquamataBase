@@ -31,3 +31,9 @@ class Command(BaseCommand):
             fixtures.extend([os.path.join(fp, f) for fp in fps for f in os.listdir(fp) if f.endswith('.json') or f.endswith('.json.zip')])
         print("Loading fixture data (may take some time) . . .")
         call_command('loaddata', *fixtures)
+        BNDRY = os.path.join(f['Geography']['dirs'][-1], 'Geography', 'sb_adm_boundary.sql')
+        output = ".read %s utf-8\n" % BNDRY
+        cmd = "echo '%s' | spatialite -silent %s" % (output, settings.DATABASES['default']['NAME'])
+        print("Importing administrative boundary shapefiles (may take some time) . . .")
+        os.system(cmd)
+        print("Shapefile import complete.")
