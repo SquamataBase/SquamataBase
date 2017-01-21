@@ -16,3 +16,4 @@ class Command(BaseCommand):
         call_command('createsuperuser', *args, **options)
         call_command('sb_import', *args, **options)
         call_command('sb_restore', *args, **options)
+        import SquamataBase.Workbench.management # calls __init__.py

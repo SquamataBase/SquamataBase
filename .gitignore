@@ -2,4 +2,5 @@
 *.pyc
 *.sqlite
 SquamataBase/settings_local.py
+SquamataBase/Workbench/management/squamatabase
 fixtures/
