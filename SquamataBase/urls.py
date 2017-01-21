@@ -1,5 +1,6 @@
 from django.conf.urls import url, include
 from django.contrib.gis import admin
+from django.views.generic.base import RedirectView
 from SquamataBase.Specimen.views import *
 from SquamataBase.Taxonomy.views import *
 from SquamataBase.Geography.views import *
@@ -46,6 +47,7 @@ autocompletes = [
 
 urlpatterns = [
     url(r'^$', SiteView.as_view(), name='index'),
+    url(r'^favicon\.ico$', RedirectView.as_view(url='/static/favicon.ico')),
     url(r'^admin/', admin.site.urls),
     url(r'^nested_admin/', include('nested_admin.urls')),
     url(r'^data/foodrecords/$', FoodRecordAPI.as_view(), name='foodrecords'),
