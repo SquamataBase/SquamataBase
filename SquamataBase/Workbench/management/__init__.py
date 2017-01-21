@@ -17,6 +17,10 @@ index=0
 browsers=($(which xdg-open) $(which gnome-open) $(which firefox) $(which google-chrome) $(which open))
 while [ "${browsers[index]}" = "" ]
 do
+    if [ $index = 4]
+    then
+        break
+    fi
     index=$(( $index+1 ))
 done
 browser=${browsers[index]}
@@ -25,7 +29,7 @@ then
     echo "Could not find web browser for development server"
     exit 1
 fi
-browser="$browser http://localhost:8000/admin/ &"
+browser="$browser http://localhost:8000/admin/"
 
 if [ "$1" = "" ]
 then
@@ -35,7 +39,7 @@ then
 elif [ "$1" = "ui" ]
 then
     cd /Users/mgrundler/Developer/SquamataBase/SquamataBase
-    sleep 2 && open http://localhost:8000/admin/ &
+    sleep 2 && ${browser} &
     python="$python manage.py runserver --nothreading"
     ${python}
     echo ""
