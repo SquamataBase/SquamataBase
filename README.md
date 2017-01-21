@@ -1,9 +1,7 @@
 # SquamataBase
 
-Django web application to administer SquamataBase.
-
 ## Requirements
-+ python (version 3.4 or 3.5), pip
++ python (version 3.4 or 3.5)
 + django (version 1.10), django-autocomplete-light (version 3), django-nested-admin (version 3)
 + SpatiaLite
 
@@ -14,10 +12,11 @@ pip install django-autocomplete-light
 pip install django-nested-admin
 ```
 
-The recommended way to install the SpatiaLite dependency for macOS users is via HomeBrew:
+The recommended way to install the SpatiaLite dependency is to get a hold of spatialite-tools. For macOS users you can just use Homebrew:
 ```bash
 brew install spatialite-tools
 ```
+See the SpatiaLite website (https://www.gaia-gis.it/fossil/libspatialite/index) for more details.
 
 ## Installation
 In a directory of your choosing execute the following commands.
@@ -32,19 +31,12 @@ unzip taxonomy.txt.zip
 cd ../../SquamataBase
 python manage.py sb_init
 ```
-You are now ready to start using SquamataBase. Just run the following command in the SquamataBase directory
+You are now ready to start using SquamataBase. In a new terminal window you can type
 ```bash
-python manage.py runserver
+squamatabase
 ```
-and then point your browser to http://localhost:8000.
-
-For macOS users a convenient service is available that only needs to be executed once, after which the server will start automatically upon login
+to start a python shell to interface with the database or
 ```bash
-python manage.py sb_services start ui
+squamatabase ui
 ```
-To stop it just type
-```bash
-python manage.py sb_services stop ui
-```
-
-For more information consult the project wiki https://github.com/SquamataBase/SquamataBase/wiki.
+to launch a user interface in your web browser.
