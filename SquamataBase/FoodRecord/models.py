@@ -124,21 +124,6 @@ class FoodRecord(models.Model):
                 return d.point
             except:
                 return None
-
-class FoodRecordMedia(models.Model):
-    """External files associated with food records."""
-    
-    filepath = models.CharField(
-        max_length=255)
-        
-    foodrecord = models.ForeignKey(
-        FoodRecord, on_delete=models.PROTECT)
-
-    class Meta:
-        db_table = 'sb_foodrecord_media'
-        
-    def __str__(self):
-        return ''
         
         
 class DataSet(models.Model):
