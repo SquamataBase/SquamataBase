@@ -37,6 +37,7 @@ class Taxon(models.Model):
     def __str__(self):
         return self.scientific_name
 
+    @property
     def ancestors(self):
         SQL = """
             WITH RECURSIVE q AS (
@@ -54,6 +55,7 @@ class Taxon(models.Model):
         """
         return Taxon.objects.raw(SQL, [self.col_taxon_id])
 
+    @property
     def descendants(self):
         SQL = """
             WITH RECURSIVE q AS (
