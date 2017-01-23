@@ -1,6 +1,5 @@
 .DS_Store
 *.pyc
 *.sqlite
-SquamataBase/settings_local.py
+*.sqlite3
 SquamataBase/Workbench/management/squamatabase
-fixtures/
