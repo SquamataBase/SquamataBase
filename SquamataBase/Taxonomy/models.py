@@ -73,6 +73,10 @@ class Taxon(models.Model):
         """
         return Taxon.objects.raw(SQL, [self.col_taxon_id])
 
+    @property
+    def synonyms(self):
+        return Taxon.objects.filter(accepted_name=self)
+
 class TaxonView(models.Model):
     """SQL view of a subset of taxa.
 
