@@ -38,7 +38,7 @@ class SiteView(TemplateView):
         return super(SiteView, self).dispatch(request, *args, **kwargs)
 
     def get_queryset(self):
-        all_taxa = [d.pk for taxon in Taxon.objects.filter(scientific_name=self.q) for d in taxon.get_descendants()]
+        all_taxa = [d.pk for taxon in Taxon.objects.filter(scientific_name=self.q) for d in taxon.descendants]
         query = Q(**{'predator__taxon__pk__in': all_taxa}) | Q(**{'prey__taxon__pk__in': all_taxa})
         return FoodRecord.objects.filter(query)
 
@@ -150,18 +150,18 @@ class FoodRecordAPI(BaseAPIView):
 
     def get_queryset(self):
         if self.taxon:
-            all_taxa = [d.pk for taxon in Taxon.objects.filter(scientific_name=self.taxon) for d in taxon.get_descendants()]
+            all_taxa = [d.pk for taxon in Taxon.objects.filter(scientific_name=self.taxon) for d in taxon.descendants]
             query = Q(**{'predator__taxon__pk__in': all_taxa}) | Q(**{'prey__taxon__pk__in': all_taxa})
             return FoodRecord.objects.filter(query).select_related(*self.related_fields)
         elif self.predator and not self.prey:
-            all_taxa = [d.pk for taxon in Taxon.objects.filter(scientific_name=self.predator) for d in taxon.get_descendants()]
+            all_taxa = [d.pk for taxon in Taxon.objects.filter(scientific_name=self.predator) for d in taxon.descendants]
             return FoodRecord.objects.filter(Q(**{'predator__taxon__pk__in': all_taxa})).select_related(*self.related_fields)
         elif self.prey and not self.predator:
-            all_taxa = [d.pk for taxon in Taxon.objects.filter(scientific_name=self.prey) for d in taxon.get_descendants()]
+            all_taxa = [d.pk for taxon in Taxon.objects.filter(scientific_name=self.prey) for d in taxon.descendants]
             return FoodRecord.objects.filter(Q(**{'prey__taxon__pk__in': all_taxa})).select_related(*self.related_fields)
         elif self.predator and self.prey:
-            all_pred = [d.pk for taxon in Taxon.objects.filter(scientific_name=self.predator) for d in taxon.get_descendants()]
-            all_prey = [d.pk for taxon in Taxon.objects.filter(scientific_name=self.prey) for d in taxon.get_descendants()]
+            all_pred = [d.pk for taxon in Taxon.objects.filter(scientific_name=self.predator) for d in taxon.descendants]
+            all_prey = [d.pk for taxon in Taxon.objects.filter(scientific_name=self.prey) for d in taxon.descendants]
             return FoodRecord.objects.filter(
                 Q(**{'predator__taxon__pk__in': all_pred})).filter(
                     Q(**{'prey__taxon__pk__in': all_prey})).select_related(*self.related_fields)
