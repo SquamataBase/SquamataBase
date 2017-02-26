@@ -53,7 +53,7 @@ class ContributionInlineAdmin(admin.TabularInline):
 
 
 class RefTypeFilter(admin.SimpleListFilter):
-    title = 'Data source'
+    title = 'Publication type'
     parameter_name = 'ref_type__id__exact'
 
     def lookups(self, request, model_admin):
@@ -66,6 +66,24 @@ class RefTypeFilter(admin.SimpleListFilter):
     def queryset(self, request, queryset):
         if self.value():
             return queryset.filter(ref_type_id=self.value())
+        return queryset
+
+
+class JournalFilter(RefTypeFilter):
+    title = 'Publication name'
+    parameter_name = 'pub__id__exact'
+
+    def lookups(self, request, model_admin):
+
+        qs = Journal.objects.all()
+        
+        for j in qs:
+            yield (str(j.id), str(j))
+
+    def queryset(self, request, queryset):
+        if self.value():
+            articles = JournalArticle.objects.all()
+            return Ref.objects.filter(id__in=articles.filter(journal_id=self.value()).values_list('ref_id', flat=True))
         return queryset
 
 
@@ -82,7 +100,7 @@ class RefAdmin(admin.ModelAdmin):
     exclude = ('wb',)
     list_display = ('id', 'get_title',)
     search_fields = ('journalarticle__title', 'book__title', 'bookchapter__title',)
-    list_filter = (RefTypeFilter, )
+    list_filter = (RefTypeFilter, JournalFilter)
 
     class Media:
         js = ('Bibliography/js/dynamic_ref_form.js',)
