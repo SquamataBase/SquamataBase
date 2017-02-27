@@ -69,21 +69,44 @@ class RefTypeFilter(admin.SimpleListFilter):
         return queryset
 
 
-class JournalFilter(RefTypeFilter):
+class RefNameFilter(RefTypeFilter):
     title = 'Publication name'
     parameter_name = 'pub__id__exact'
-
+    pubtype = 'ref_type__id__exact'
+    model = None
     def lookups(self, request, model_admin):
-
-        qs = Journal.objects.all()
+        import itertools
+        if self.pubtype in request.GET:
+            term = OntologyTerm.objects.get(id=int(request.GET[self.pubtype])).term
+            if term == 'journal_article':
+                self.model = Journal
+            elif term == 'book':
+                self.model = Book
+            elif term == 'book_chapter':
+                self.model = BookChapter
+            else:
+                self.model = None
+            qs = self.model.objects.all()
+        else:
+            self.model = None
+            qs = itertools.chain(Book.objects.all(), BookChapter.objects.all(), Journal.objects.all())
         
         for j in qs:
-            yield (str(j.id), str(j))
+            yield (str(j.pk), str(j))
 
     def queryset(self, request, queryset):
         if self.value():
-            articles = JournalArticle.objects.all()
-            return Ref.objects.filter(id__in=articles.filter(journal_id=self.value()).values_list('ref_id', flat=True))
+            if self.model == Journal:
+                articles = JournalArticle.objects.all()
+                return Ref.objects.filter(id__in=articles.filter(journal_id=self.value()).values_list('ref_id', flat=True))
+            elif self.model == Book:
+                articles = Book.objects.all()
+                return Ref.objects.filter(id__in=articles.filter(pk=self.value()).values_list('ref_id', flat=True))
+            elif self.model == BookChapter:
+                articles = BookChapter.objects.all()
+                return Ref.objects.filter(id__in=articles.filter(pk=self.value()).values_list('ref_id', flat=True))
+            else:
+                return queryset
         return queryset
 
 
@@ -100,7 +123,7 @@ class RefAdmin(admin.ModelAdmin):
     exclude = ('wb',)
     list_display = ('id', 'get_title',)
     search_fields = ('journalarticle__title', 'book__title', 'bookchapter__title',)
-    list_filter = (RefTypeFilter, JournalFilter)
+    list_filter = (RefTypeFilter, RefNameFilter)
 
     class Media:
         js = ('Bibliography/js/dynamic_ref_form.js',)
