@@ -38,7 +38,7 @@ then
     ${python}
 elif [ "$1" = "ui" ]
 then
-    cd /Users/mgrundler/Developer/SquamataBase/SquamataBase
+    cd %s
     sleep 2 && ${browser} &
     python="$python manage.py runserver --nothreading"
     ${python}
