@@ -3,7 +3,7 @@
 ## Requirements
 + Python (3.4+)
 + Django (version 1.10.5+), django-autocomplete-light (3+), django-nested-admin (3+)
-+ SQLite (3+)
++ SQLite (3.7.3+)
 + SpatiaLite (4.3.0a+)
 
 To install the Python package dependencies use `pip`
@@ -17,7 +17,7 @@ The recommended way to install the SpatiaLite dependency is to get a hold of spa
 ```bash
 brew install spatialite-tools
 ```
-For other systems follow the instructions on the SpatiaLite website (https://www.gaia-gis.it/fossil/spatialite-tools/). 
+For other systems you will need to follow the instructions on the SpatiaLite website [here](https://www.gaia-gis.it/fossil/spatialite-tools/) and [here](https://www.gaia-gis.it/fossil/spatialite-tools/). 
 
 ## Installation
 In a directory of your choosing execute the following commands.
