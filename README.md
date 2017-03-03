@@ -17,7 +17,7 @@ The recommended way to install the SpatiaLite dependency is to get a hold of spa
 ```bash
 brew install spatialite-tools
 ```
-For other systems you will need to follow the instructions on the SpatiaLite website [here](https://www.gaia-gis.it/fossil/spatialite-tools/) and [here](https://www.gaia-gis.it/fossil/spatialite-tools/). 
+For other systems you will need to follow the instructions on the SpatiaLite website [here](https://www.gaia-gis.it/fossil/libspatialite/) and [here](https://www.gaia-gis.it/fossil/spatialite-tools/). 
 
 ## Installation
 In a directory of your choosing execute the following commands.
