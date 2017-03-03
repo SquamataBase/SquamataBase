@@ -58,7 +58,7 @@ else
 fi
 
 exit 0
-''' % (settings.BASE_DIR, settings.BASE_DIR, settings.BASE_DIR)
+''' % (settings.BASE_DIR, settings.BASE_DIR, settings.BASE_DIR, settings.BASE_DIR)
 
 if not os.path.exists(os.path.join(SERVICE_HOME, 'squamatabase')):
     with open(os.path.join(SERVICE_HOME, 'squamatabase'), 'w') as o:
