@@ -13,7 +13,7 @@ To use SquamataBase you will need:
 
 Detailed installation instructions can be found on the websites of each required dependency. 
 
-**NOTE:** It is _highly recommended_ way to satisfy the SpatiaLite dependency using the spatialite-tools library. To satisfy this dependency, first install [libspatialite](https://www.gaia-gis.it/fossil/libspatialite/index). Afterwards, install [spatialite-tools](https://www.gaia-gis.it/fossil/spatialite-tools/index), which is built on top of libspatialite. This ensures that SQLite and SpatiaLite communicate nicely.
+**NOTE:** It is _highly recommended_ way to satisfy the SpatiaLite dependency using the spatialite-tools library. To satisfy this dependency, first install [libspatialite](https://www.gaia-gis.it/fossil/libspatialite/index). Afterwards, install [spatialite-tools](https://www.gaia-gis.it/fossil/spatialite-tools/index), which is built on top of libspatialite. This ensures that SQLite and SpatiaLite communicate nicely. This [website](https://docs.djangoproject.com/en/dev/ref/contrib/gis/install/spatialite/) provides helpful information on installing SpatiaLite.
 
 ## Installation
 After satisfying the required dependencies, use a terminal to execute the following commands in a directory of your choosing:
