@@ -3,7 +3,7 @@
 ## Requirements
 To use SquamataBase you will need:
 + [Python](https://python.org) (3.5.x)
-+ [Django](https://www.djangoproject.com) (1.10.5+), django-autocomplete-light (3.0.15+), django-nested-admin (3.2.1+)
++ [Django](https://www.djangoproject.com) (1.10.5+), [django-autocomplete-light](https://github.com/yourlabs/django-autocomplete-light) (3.0.15+), [django-nested-admin](https://github.com/theatlantic/django-nested-admin) (3.2.1+)
 + [SQLite](https://sqlite.org) (3.7.3+)
 + [SpatiaLite](http://www.gaia-gis.it/gaia-sins/) (4.3.0a+)
 + [Git](https://git-scm.com/)
