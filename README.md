@@ -27,7 +27,7 @@ After this step, open the file called `settings_local.py` and find the line that
 ```python
 SPATIALITE_LIBRARY_PATH = '/usr/local/lib/mod_spatialite.dylib'
 ```
-If this does not indicate the SpatiaLite library path make sure to change it appropriately. See [here](https://docs.djangoproject.com/en/1.10/ref/contrib/gis/install/spatialite/) for additional instructions. After verifying the SpatiaLite library path you can finish the installation process with these commands
+If this does not indicate your SpatiaLite library path make sure to change it appropriately. See [here](https://docs.djangoproject.com/en/1.10/ref/contrib/gis/install/spatialite/) for additional instructions. After verifying the SpatiaLite library path you can finish the installation process with these commands
 ```bash
 git clone https://github.com/SquamataBase/SquamataBase-Fixtures-0
 cd SquamataBase-Fixtures-0/Taxonomy
