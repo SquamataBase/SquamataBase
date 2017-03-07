@@ -17,11 +17,19 @@ Detailed installation instructions can be found on the websites of each required
 
 ## Installation
 After satisfying the required dependencies, use a terminal to execute the following commands in a directory of your choosing:
+After satisfying the required dependencies, use a terminal to execute the following commands in a directory of your choosing:
 ```bash
 mkdir SquamataBase
 cd SquamataBase
-git clone https://github.com/SquamataBase/SquamataBase-Fixtures-0
 git clone https://github.com/SquamataBase/SquamataBase
+```
+After this step, open the file called `settings_local.py` and find the line that says
+```python
+SPATIALITE_LIBRARY_PATH = '/usr/local/lib/mod_spatialite.dylib'
+```
+If this does not indicate the SpatiaLite library path make sure to change it appropriately. See [here](https://docs.djangoproject.com/en/1.10/ref/contrib/gis/install/spatialite/) for additional instructions. After verifying the SpatiaLite library path you can finish the installation process with these commands
+```bash
+git clone https://github.com/SquamataBase/SquamataBase-Fixtures-0
 cd SquamataBase-Fixtures-0/Taxonomy
 curl -L https://github.com/SquamataBase/SquamataBase-Fixtures-0/releases/download/v1/taxonomy.txt.zip > taxonomy.txt.zip
 unzip taxonomy.txt.zip
