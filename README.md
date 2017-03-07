@@ -1,10 +1,16 @@
 # SquamataBase
 
 ## Requirements
-+ Python (3.4+)
-+ Django (version 1.10.5+), django-autocomplete-light (3+), django-nested-admin (3+)
-+ SQLite (3.7.3+)
-+ SpatiaLite (4.3.0a+)
+To use SquamataBase you will need:
++ [Python](https://python.org) (3.5.x)
++ [Django](https://www.djangoproject.com) (1.10.5+), django-autocomplete-light (3.0.15+), django-nested-admin (3.2.1+)
++ [SQLite](https://sqlite.org) (3.7.3+)
++ [SpatiaLite](http://www.gaia-gis.it/gaia-sins/) (4.3.0a+)
++ [Git](https://git-scm.com/)
+
+Detailed installation instructions can be found on the websites of each required dependency. 
+
+**NOTE:** It is _highly recommended_ way to satisfy the SpatiaLite dependency using the spatialite-tools library. To satisfy this dependency, first install [libspatialite](https://www.gaia-gis.it/fossil/libspatialite/index). Afterwards, install [spatialite-tools](https://www.gaia-gis.it/fossil/spatialite-tools/index), which is built on top of libspatialite. This ensures that SQLite and SpatiaLite communicate nicely.
 
 To install the Python package dependencies use `pip`
 ```bash
@@ -13,14 +19,8 @@ pip install django-autocomplete-light
 pip install django-nested-admin
 ```
 
-The recommended way to install the SpatiaLite dependency is to get a hold of spatialite-tools. For macOS users you can just use Homebrew:
-```bash
-brew install spatialite-tools
-```
-For other systems you will need to follow the instructions on the SpatiaLite website [here](https://www.gaia-gis.it/fossil/libspatialite/) and [here](https://www.gaia-gis.it/fossil/spatialite-tools/). 
-
 ## Installation
-In a directory of your choosing execute the following commands.
+After satisfying the requirements, use a terminal to execute the following commands in a directory of your choosing:
 ```bash
 mkdir SquamataBase
 cd SquamataBase
