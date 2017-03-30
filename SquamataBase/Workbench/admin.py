@@ -257,7 +257,7 @@ class FoodRecordWorkbenchAdmin(nested_admin.NestedModelAdmin):
     inlines = [SpecimenNestedInlineAdmin, RefNestedInlineAdmin, FoodRecordNestedInlineAdmin]
     list_per_page = 30
     list_display = ('id', 'get_fr', 'get_predator', 'get_prey')
-    actions = ['duplicate', 'add_another_prey', 'add_to_dataset']
+    actions = ['duplicate', 'add_another_prey', 'make_prey_predator', 'add_to_dataset']
     search_fields = ['id',]  # search is not actually carried out on id field. just a placeholder to make django display search functionality
 
     class Media:
@@ -272,14 +272,15 @@ class FoodRecordWorkbenchAdmin(nested_admin.NestedModelAdmin):
     def change_view(self, request, object_id, form_url='', extra_context=None):
         """Hook to make workbench foreign keys dynamic.
         
-           Predator specimens and references may be shared across workbench
+           Specimens and references may be shared across workbench
            rows, so we add a hook here in the change view to dynamically 
            update these fields when the edit view is first loaded. The
            data in that field doesn't need to be persistent as it is only used
            to create better form views for adding and editing records.
         """
-        foodrecord = FoodRecord.objects.select_related('predator', 'ref').get(wb_id=object_id)
+        foodrecord = FoodRecord.objects.select_related('predator', 'prey', 'ref').get(wb_id=object_id)
         Specimen.objects.filter(id=foodrecord.predator.id).update(wb_id=object_id)
+        Specimen.objects.filter(id=foodrecord.prey.id).update(wb_id=object_id)
         Ref.objects.filter(id=foodrecord.ref.id).update(wb_id=object_id)
         return super(FoodRecordWorkbenchAdmin, self).change_view(request, object_id, form_url, extra_context)
 
@@ -401,7 +402,33 @@ class FoodRecordWorkbenchAdmin(nested_admin.NestedModelAdmin):
             self.log_addition(request, wb, message)
             self.message_user(request, "Prey item successfully added. You may edit it below.")
             return HttpResponseRedirect("/admin/Workbench/foodrecordworkbench/%s/change/" % wb.id)
-    add_another_prey.short_description = 'Add prey item to selected food record'
+    add_another_prey.short_description = "Add prey item to selected food record's predator"
+
+
+    def make_prey_predator(self, request, queryset):
+        """Action to add prey item to prey of another predator."""
+        
+        if len(queryset) > 1:
+            from django.contrib import messages
+            self.message_user(request, "This action may only be applied to one record at a time.", messages.WARNING)
+        else:
+            message=[{'added': {}}]
+            wb = queryset[0]  # get the selected workbench instance
+            foodrecord = FoodRecord.objects.get(wb=wb)  # select the food record attached to the workbench instance
+            wb.id = None  # clone the workbench instance
+            wb.save()
+            prey = Specimen(taxon=foodrecord.prey.taxon, verbatim_name=foodrecord.prey.verbatim_name, ambiguous=foodrecord.prey.ambiguous)
+            prey.wb = wb
+            prey.save()
+            foodrecord.id = None  # clone the food record
+            foodrecord.wb = wb
+            foodrecord.predator = foodrecord.prey # make original prey specimen the predator
+            foodrecord.prey = prey
+            foodrecord.save()
+            self.log_addition(request, wb, message)
+            self.message_user(request, "Prey item successfully added. You may edit it below.")
+            return HttpResponseRedirect("/admin/Workbench/foodrecordworkbench/%s/change/" % wb.id)
+    make_prey_predator.short_description = "Add prey item to selected food record's prey"
 
 
     def add_to_dataset(self, request, queryset):
