@@ -100,7 +100,7 @@ class LocalityAdmin(admin.OSMGeoAdmin):
         }),
         ('Coordinates', {
             'fields': (
-                'verbatim_coordinates', 'verbatim_srid', 'coord_format', 'utm_zone'),
+                'verbatim_coordinates', 'verbatim_srid', 'coord_format', 'utm_zone', ('coordinate_uncertainty', 'uncertainty_unit'), 'georeferenced_from'),
         }),
         ('Elevation', {
             'fields': (
@@ -127,7 +127,7 @@ class LocalityAdmin(admin.OSMGeoAdmin):
         obj.save()
         
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
-        if db_field.name == 'elevation_unit':
+        if db_field.name == 'elevation_unit' or db_field.name == 'uncertainty_unit':
             try:
                 cid = OntologyCollection.objects.get(collection_name='measurement_units').id
             except ObjectDoesNotExist:
