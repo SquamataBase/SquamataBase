@@ -110,14 +110,19 @@ class NamedPlaceForm(forms.ModelForm):
             point.transform(ptransf)
             country = cleaned_data['adm0']
             try:
-                g = AdmUnitBoundary.objects.get(geoname_id=country.geoname_id)
-                if g.geom.intersects(point):
-                    pass
-                else:
-                    raise ValidationError('Point does not fall within'
-                                          ' selected country boundary.')
-            except ObjectDoesNotExist:
-                pass    
+                VALIDATE_COORDINATES = settings.VALIDATE_COORDINATES
+            except AttributeError:
+                VALIDATE_COORDINATES = True
+            if VALIDATE_COORDINATES:
+                try:
+                    g = AdmUnitBoundary.objects.get(geoname_id=country.geoname_id)
+                    if g.geom.intersects(point):
+                        pass
+                    else:
+                        raise ValidationError('Point does not fall within'
+                                              ' selected country boundary.')
+                except ObjectDoesNotExist:
+                    pass    
             cleaned_data['point'] = point
             
             
