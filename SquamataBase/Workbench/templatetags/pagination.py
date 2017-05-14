@@ -6,7 +6,7 @@ register = template.Library()
 DOT = '.'
 
 @register.simple_tag
-def paginator_number(cl, i, query):
+def paginator_number(cl, i, query, role):
     if cl.paginator.num_pages == 1:
         return '';
     if i == DOT:
@@ -14,14 +14,15 @@ def paginator_number(cl, i, query):
     elif i == cl.number-1:
         return format_html('<li class="page-item active"><a class="page-link">{} <span class="sr-only">(current)</span></a></li> ', i+1);
     else:
-        return format_html('<li class="page-item"><a class="page-link" href="?taxon={}&page={}">{}</a></li> ',
+        return format_html('<li class="page-item"><a class="page-link" href="?taxon={}&taxonrole={}&page={}">{}</a></li> ',
                            query,
+                           role,
                            i+1,
                            i+1);
                                 
 
 @register.inclusion_tag('site/pagination.html')
-def pagination(cl, query):
+def pagination(cl, query, role):
     paginator, page_num = cl.paginator, cl.number-1;
     
     ON_EACH_SIDE = 3;
@@ -49,4 +50,4 @@ def pagination(cl, query):
         else:
             page_range.extend(range(page_num + 1, paginator.num_pages));
 
-    return { 'cl' : cl, 'page_range' : page_range, 'query' : query}; 
+    return { 'cl' : cl, 'page_range' : page_range, 'query' : query, 'role': role}; 
