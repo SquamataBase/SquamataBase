@@ -100,7 +100,7 @@ class TaxonomyAPI(BaseAPIView):
                         'id': ancestor.col_taxon_id,
                         'scientific_name': ancestor.scientific_name,
                         'rank': ancestor.taxon_rank,
-                    } for ancestor in result.get_ancestors()
+                    } for ancestor in result.ancestors
                 ],
             } for result in context['object_list']
         ]
