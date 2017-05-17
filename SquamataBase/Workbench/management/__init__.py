@@ -2,7 +2,8 @@ import os
 import stat
 from django.conf import settings
 
-SERVICE_HOME = os.path.dirname(os.path.abspath(__file__))
+#SERVICE_HOME = os.path.dirname(os.path.abspath(__file__))
+SERVICE_HOME = "/usr/local/bin"
 bash_script = \
 '''#!/bin/bash
 
@@ -65,9 +66,9 @@ if not os.path.exists(os.path.join(SERVICE_HOME, 'squamatabase')):
         o.write(bash_script)
     st = os.stat(os.path.join(SERVICE_HOME, 'squamatabase'))
     os.chmod(os.path.join(SERVICE_HOME, 'squamatabase'), st.st_mode | stat.S_IEXEC)
-    with open(os.path.join(os.environ['HOME'], '.bash_profile'), 'a') as o:
-        o.write('\n# path to SquamataBase command\n')
-        o.write('export PATH="%s:$PATH"\n' % SERVICE_HOME)
+    #with open(os.path.join(os.environ['HOME'], '.bash_profile'), 'a') as o:
+    #    o.write('\n# path to SquamataBase command\n')
+    #    o.write('export PATH="%s:$PATH"\n' % SERVICE_HOME)
 
 del SERVICE_HOME
 del bash_script
