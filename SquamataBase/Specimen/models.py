@@ -62,7 +62,7 @@ class Voucher(models.Model):
 
     def __str__(self):
         voucher = ' '.join([self.museum.museum_abbr,
-                            (self.catalog_number if self.catalog_number is not ''
+                            (self.catalog_number if self.catalog_number
                                 else self.field_number)])
         if self.museum_collection is not None:
             return ' '.join([voucher, '({} Collection)'.format(str(self.museum_collection))])
