@@ -24,7 +24,6 @@ class SiteView(TemplateView):
         kwargs['taxonrole'] = self.taxonrole
         if self.q:
             # logic to query food records and add them to the request context data
-            #qs = self.get_queryset(self.q, self.taxonrole)
             qs, nres, coordinates = eval_qs(self.q, self.taxonrole)
             paginator = Paginator(qs, 10)
             page = request.GET.get('page')
