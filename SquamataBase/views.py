@@ -1,4 +1,5 @@
 import json
+from functools import lru_cache
 from django.views.generic import TemplateView
 from django.views.generic.list import BaseListView
 from django.http import HttpResponse
@@ -23,7 +24,7 @@ class SiteView(TemplateView):
         kwargs['taxonrole'] = self.taxonrole
         if self.q:
             # logic to query food records and add them to the request context data
-            qs = self.get_queryset()
+            qs = self.get_queryset(self.q, self.taxonrole)
             paginator = Paginator(qs, 10)
             page = request.GET.get('page')
             try:
@@ -33,34 +34,42 @@ class SiteView(TemplateView):
             except EmptyPage:
                 foodrecords = paginator.page(paginator.num_pages)
             kwargs['foodrecords'] = foodrecords
-            kwargs['n_results'] = len(qs)
-            kwargs['coordinates'] = self.fetch_coordinates(qs)
+            kwargs['n_results'] = len_qs(self.q, self.taxonrole)
+            kwargs['coordinates'] = fetch_coordinates(self.q, self.taxonrole)
             if page:
                 kwargs['page'] = page
         return super(SiteView, self).dispatch(request, *args, **kwargs)
 
-    def get_queryset(self):
-        all_taxa = [d.pk for taxon in Taxon.objects.filter(scientific_name=self.q) for d in taxon.descendants]
-        if self.taxonrole == 'pred':
+    @staticmethod
+    def get_queryset(q, context):
+        all_taxa = [d.pk for taxon in Taxon.objects.filter(scientific_name=q) for d in taxon.descendants]
+        if context == 'pred':
             query = Q(**{'predator__taxon__pk__in': all_taxa})
-        elif self.taxonrole == 'prey':
+        elif context == 'prey':
             query = Q(**{'prey__taxon__pk__in': all_taxa})
-        elif self.taxonrole == 'predprey':
+        elif context == 'predprey':
             query = Q(**{'predator__taxon__pk__in': all_taxa}) | Q(**{'prey__taxon__pk__in': all_taxa})
         else:
             return FoodRecord.objects.none()
         return FoodRecord.objects.filter(query)
 
-    def fetch_coordinates(self, qs):
-        coordinates = []
-        for obj in qs:
-            if obj.locality is not None:
-                if obj.locality.point is not None:
-                    coordinates.append([obj.locality.point.y, obj.locality.point.x, str(obj.predator.taxon), str(obj.prey.taxon)])  # leaflet expects lat-long format
-                elif obj.locality.named_place is not None:
-                    if obj.locality.named_place.point is not None:
-                        coordinates.append([obj.locality.named_place.point.y, obj.locality.named_place.point.x, str(obj.predator.taxon), str(obj.prey.taxon)])
-        return coordinates
+@lru_cache(maxsize=32)
+def len_qs(q, context):
+    qs = SiteView.get_queryset(q, context)
+    return len(qs)
+
+@lru_cache(maxsize=32)
+def fetch_coordinates(q, context):
+    coordinates = []
+    qs = SiteView.get_queryset(q, context)
+    for obj in qs:
+        if obj.locality is not None:
+            if obj.locality.point is not None:
+                coordinates.append([obj.locality.point.y, obj.locality.point.x, str(obj.predator.taxon), str(obj.prey.taxon)])  # leaflet expects lat-long format
+            elif obj.locality.named_place is not None:
+                if obj.locality.named_place.point is not None:
+                    coordinates.append([obj.locality.named_place.point.y, obj.locality.named_place.point.x, str(obj.predator.taxon), str(obj.prey.taxon)])
+    return coordinates
 
 
 class BaseAPIView(BaseListView):
