@@ -51,7 +51,11 @@
                     <tr>
                         <td class="field-label">Coordinates</td>
                         <td>
-                            {{locality.point|default:"-"}}
+                            {% if locality.point %}
+                                {{locality.point}}
+                            {% else %}
+                                {{locality.named_place.point|default:"-"}}
+                            {% endif %}
                         </td>
                     </tr>
                     <tr>
