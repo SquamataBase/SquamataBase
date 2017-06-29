@@ -24,7 +24,8 @@ class SiteView(TemplateView):
         kwargs['taxonrole'] = self.taxonrole
         if self.q:
             # logic to query food records and add them to the request context data
-            qs = self.get_queryset(self.q, self.taxonrole)
+            #qs = self.get_queryset(self.q, self.taxonrole)
+            qs, nres, coordinates = eval_qs(self.q, self.taxonrole)
             paginator = Paginator(qs, 10)
             page = request.GET.get('page')
             try:
@@ -34,8 +35,8 @@ class SiteView(TemplateView):
             except EmptyPage:
                 foodrecords = paginator.page(paginator.num_pages)
             kwargs['foodrecords'] = foodrecords
-            kwargs['n_results'] = len_qs(self.q, self.taxonrole)
-            kwargs['coordinates'] = fetch_coordinates(self.q, self.taxonrole)
+            kwargs['n_results'] = nres
+            kwargs['coordinates'] = coordinates
             if page:
                 kwargs['page'] = page
         return super(SiteView, self).dispatch(request, *args, **kwargs)
@@ -53,23 +54,22 @@ class SiteView(TemplateView):
             return FoodRecord.objects.none()
         return FoodRecord.objects.filter(query)
 
-@lru_cache(maxsize=32)
-def len_qs(q, context):
-    qs = SiteView.get_queryset(q, context)
-    return len(qs)
 
 @lru_cache(maxsize=32)
-def fetch_coordinates(q, context):
-    coordinates = []
+def eval_qs(q, context):
     qs = SiteView.get_queryset(q, context)
+    nres = 0
+    coordinates = []
     for obj in qs:
+        nres += 1
         if obj.locality is not None:
             if obj.locality.point is not None:
                 coordinates.append([obj.locality.point.y, obj.locality.point.x, str(obj.predator.taxon), str(obj.prey.taxon)])  # leaflet expects lat-long format
             elif obj.locality.named_place is not None:
                 if obj.locality.named_place.point is not None:
                     coordinates.append([obj.locality.named_place.point.y, obj.locality.named_place.point.x, str(obj.predator.taxon), str(obj.prey.taxon)])
-    return coordinates
+    return (qs, nres, coordinates)
+
 
 
 class BaseAPIView(BaseListView):
