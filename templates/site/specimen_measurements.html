@@ -1,0 +1,7 @@
+{% load specimen_measurements %}
+
+{% for measurement in measurements %}
+    <tr>
+        <td class="field-label">{{measurement.measurement_type}}</td><td>{{measurement.measurement_value}} {{measurement.measurement_unit}}</td>
+    </tr>
+{% endfor %}

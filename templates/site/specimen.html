@@ -1,3 +1,4 @@
+{% load specimen_measurements %}
 <table class="table table-striped">
     <tr>
         <td class="field-label">Scientific name</td><td>{{specimen.taxon.scientific_name}}</td>
@@ -14,6 +15,7 @@
     <tr>
         <td class="field-label">Volume</td><td>{{specimen.volume|default:"-"}} {{specimen.volume_unit|default:""}}</td>
     </tr>
+    {% block specimen_measurements %}{% specimen_measurements specimen.id %}{% endblock %}
     <tr>
         <td class="field-label">Component part</td><td>{{specimen.component_part|default:"-"}}</td>
     </tr>
