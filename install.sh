@@ -41,11 +41,9 @@ pip="$pip install -r requirements.txt"
 ${pip}
 
 cd ..
-wget 'https://github.com/SquamataBase/SquamataBase-Fixtures-0/archive/v1.tar.gz'
+wget 'https://github.com/SquamataBase/SquamataBase-Fixtures-0/archive/2017-06-30.tar.gz'
 
-tar xzf 'v1.tar.gz'
-
-mv 'SquamataBase-Fixtures-0-1' 'SquamataBase-Fixtures-0'
+tar xzf '2017-06-30.tar.gz' && mv 'SquamataBase-Fixtures-0-2017-06-30' 'SquamataBase-Fixtures-0'
 cd 'SquamataBase-Fixtures-0/Taxonomy'
 wget 'https://github.com/SquamataBase/SquamataBase-Fixtures-0/releases/download/v1/taxonomy.txt.zip'
 unzip 'taxonomy.txt.zip'
