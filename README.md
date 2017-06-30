@@ -19,6 +19,7 @@ echo 'export PATH="/usr/local/opt/sqlite/bin:$PATH"' >> ~/.bash_profile
 brew install python3
 brew install spatialite-tools
 brew install gdal
+brew install wget
 ```
 
 ## Installation
