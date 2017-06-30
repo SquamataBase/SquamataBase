@@ -20,6 +20,7 @@ mkdir SquamataBase
 cd SquamataBase
 wget https://github.com/SquamataBase/SquamataBase/archive/2017-06-30.tar.gz
 tar xzf 2017-06-30.tar.gz && mv SquamataBase-2017-06-30 SquamataBase
+rm 2017-06-30.tar.gz
 ```
 After this step, open the file called `settings_local.py` and find the line that says
 ```python
@@ -29,6 +30,7 @@ If this does not indicate your SpatiaLite library path make sure to change it ap
 ```bash
 cd SquamataBase
 make
+rm 2017-06-30.tar.gz
 ```
 You are now ready to start using SquamataBase. In a new terminal window you can type
 ```bash
