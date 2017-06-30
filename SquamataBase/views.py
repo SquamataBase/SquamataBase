@@ -287,6 +287,6 @@ class FoodRecordAPI(BaseAPIView):
         return HttpResponse(
             json.dumps({
                 'foodrecords': self.get_results(context),
-            }),
+            }, indent=1),
             content_type='application/json',
         )
