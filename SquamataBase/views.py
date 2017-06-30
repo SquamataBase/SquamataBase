@@ -277,6 +277,7 @@ class FoodRecordAPI(BaseAPIView):
     def get_results(self, context):
         return [
             {
+                'id': result.pk,
                 'predator': self.get_specimen_json(result.predator),
                 'prey': self.get_specimen_json(result.prey),
                 'details': self.get_details_json(result), 
