@@ -1,0 +1,4 @@
+django==1.11.2
+django-autocomplete-light==3.2.9
+django-nested-admin==3.0.17
+Unidecode==0.4.21
