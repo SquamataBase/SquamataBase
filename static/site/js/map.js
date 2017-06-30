@@ -13,7 +13,8 @@ var map = (function() {
                     [-200, -200],
                     [200, 200]
                 ],
-                attributionControl: false
+                attributionControl: false,
+                scrollWheelZoom: false
             }
         ).setView([15, 0], 2);
 
@@ -47,6 +48,13 @@ var map = (function() {
 
 })();
 
+map.on('click', function() {
+    if (map.scrollWheelZoom.enabled()) {
+        map.scrollWheelZoom.disable();
+    } else {
+        map.scrollWheelZoom.enable();
+    }
+});
 
 mapCoordinates = function(map, coordinates) {
     for (i = 0; i < coordinates.length; i++) {
