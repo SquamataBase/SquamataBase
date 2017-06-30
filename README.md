@@ -11,9 +11,20 @@ To use SquamataBase you will need:
 
 SpatiaLite is built on top of several required spatial libraries (GEOS, PROJ.4, GDAL), which should be installed prior to SpatiaLite. Instructions for doing so are available [here](https://docs.djangoproject.com/en/dev/ref/contrib/gis/install/geolibs/). Instructions for SpatiaLite itself are [here](https://docs.djangoproject.com/en/dev/ref/contrib/gis/install/spatialite/). 
 
-Windows installation is not currently supported.
+**Note**
+The pain that comes along with satisfying required dependencies can be eased considerably by using a package manager. For macOS, it is _highly recommended_ to use [Homebrew](https://brew.sh). With Homebrew, the following commands will satisfy all required dependencies:
+```bash
+brew install sqlite
+echo 'export PATH="/usr/local/opt/sqlite/bin:$PATH"' >> ~/.bash_profile
+brew install python3
+brew install spatialite-tools
+brew install gdal
+```
 
 ## Installation
+**Note** 
+Windows installation is not currently supported.
+
 After satisfying the required dependencies, use a terminal to execute the following commands in a directory of your choosing:
 ```bash
 mkdir SquamataBase
