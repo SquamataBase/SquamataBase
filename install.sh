@@ -14,13 +14,6 @@ then
     exit 1
 fi
 
-wget=$(which wget)
-if [ "${wget}" = "" ]
-then
-    echo "Missing wget installation"
-    exit 1
-fi
-
 if [[ "$OSTYPE" == "cygwin" ]]
 then
     echo "Windows installation not supported"
@@ -48,11 +41,9 @@ pip="$pip install -r requirements.txt"
 ${pip}
 
 cd ..
-wget="$wget https://github.com/SquamataBase/SquamataBase-Fixtures-0/archive/v1.tar.gz"
-${wget}
+wget 'https://github.com/SquamataBase/SquamataBase-Fixtures-0/archive/v1.tar.gz'
 
 tar xzf 'v1.tar.gz'
-
 
 mv 'SquamataBase-Fixtures-0-1' 'SquamataBase-Fixtures-0'
 cd 'SquamataBase-Fixtures-0/Taxonomy'
