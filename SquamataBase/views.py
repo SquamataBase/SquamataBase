@@ -117,7 +117,7 @@ class TaxonomyAPI(BaseAPIView):
         return HttpResponse(
             json.dumps({
                 'taxa': self.get_results(context),
-            }),
+            }, indent=1),
             content_type='application/json',
         )
 
