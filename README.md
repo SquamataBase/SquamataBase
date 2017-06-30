@@ -18,7 +18,6 @@ After satisfying the required dependencies, use a terminal to execute the follow
 ```bash
 mkdir SquamataBase
 cd SquamataBase
-mkdir SquamataBase
 wget https://github.com/SquamataBase/SquamataBase/archive/2017-06-30.tar.gz
 tar xzf 2017-06-30.tar.gz && mv SquamataBase-2017-06-30 SquamataBase
 ```
