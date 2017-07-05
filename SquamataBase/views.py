@@ -54,7 +54,7 @@ class SiteView(TemplateView):
         return FoodRecord.objects.filter(query)
 
 
-@lru_cache(maxsize=32)
+@lru_cache(maxsize=1)
 def eval_qs(q, context):
     qs = SiteView.get_queryset(q, context)
     nres = 0
