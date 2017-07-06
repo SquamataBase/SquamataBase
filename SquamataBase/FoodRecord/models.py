@@ -180,6 +180,11 @@ class DataSet(models.Model):
             if not random.randint(i+1):
                 p = l.locality.get_point()
         return p
+
+    @property
+    def foodrecords(self):
+        d = DataSetFoodRecord.objects.filter(dataset=self).only('foodrecord').values_list('foodrecord', flat=True)
+        return FoodRecord.objects.filter(pk__in=d)
         
         
 class DataSetLocality(models.Model):
