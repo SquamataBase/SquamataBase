@@ -132,8 +132,14 @@ class FoodRecordAPI(BaseAPIView):
         'prey__taxon',
         'predator__mass_unit',
         'predator__volume_unit',
+        'predator__lifestage',
+        'predator__sex',
+        'predator__component_part',
         'prey__mass_unit',
         'prey__volume_unit',
+        'prey__lifestage',
+        'prey__sex',
+        'prey__component_part',
         'locality__adm0',
         'locality__adm1',
         'locality__adm2',
@@ -155,12 +161,6 @@ class FoodRecordAPI(BaseAPIView):
                 'prey_handle_mode',
                 'prey_capture_mode',
                 'ingestion_direction',
-                'predator__lifestage',
-                'predator__sex',
-                'predator__component_part',
-                'prey__lifestage',
-                'prey__sex',
-                'prey__component_part',
                 'locality__elevation_unit',
                 'locality__named_place',
             ])
@@ -205,15 +205,13 @@ class FoodRecordAPI(BaseAPIView):
             "mass_unit": convert(obj.mass_unit, str),
             "volume": convert(obj.volume, float),
             "volume_unit": convert(obj.volume_unit, str),
+            "lifestage": convert(obj.lifestage, str),
+            "sex": convert(obj.sex, str),
+            "component": convert(obj.component_part, str),
         }
         if self.view == 'detailed':
             measurements = SpecimenMeasurement.objects.filter(specimen=obj).select_related('measurement_type', 'measurement_unit')
             json_response.update({
-                "lifestage": convert(obj.lifestage, str),
-                "sex": convert(obj.sex, str),
-                "component": convert(obj.component_part, str),
-                "mass": convert(obj.mass, float),
-                "volume": convert(obj.volume, float),
                 "measurements": [
                     {
                         "type": str(measurement.measurement_type),
