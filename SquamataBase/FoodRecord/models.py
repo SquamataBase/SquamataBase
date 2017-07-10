@@ -1,4 +1,5 @@
 from django.db import models
+from django.conf import settings
 from SquamataBase.Bibliography.models import Ref
 from SquamataBase.Geography.models import Locality
 from SquamataBase.Glossary.models import OntologyTerm
@@ -173,12 +174,13 @@ class DataSet(models.Model):
     @property
     def point(self):
         """Choose a uniform random point from set of dataset localities."""
-        from numpy import random
-        localities = DataSetLocality.objects.filter(dataset=self)
         p = None
-        for i, l in enumerate(localities):
-            if not random.randint(i+1):
-                p = l.locality.get_point()
+        if settings.ALLOW_RANDOM_COORDINATES:
+            from numpy import random
+            localities = DataSetLocality.objects.filter(dataset=self)        
+            for i, l in enumerate(localities):
+                if not random.randint(i+1):
+                    p = l.locality.get_point()
         return p
 
     @property

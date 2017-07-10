@@ -1,5 +1,6 @@
 from django.contrib.gis.db import models
 from django.contrib.gis.geos.point import Point
+from django.conf import settings
 from SquamataBase.Glossary.models import OntologyTerm
 
 
@@ -233,18 +234,21 @@ class Locality(models.Model):
                 else:
                     raise AttributeError
             except AttributeError:
-                try:
-                    bndry = AdmUnitBoundary.objects.get(geoname_id=self.adm2)
-                    return bndry.point
-                except:
+                if settings.ALLOW_RANDOM_COORDINATES:
                     try:
-                        bndry = AdmUnitBoundary.objects.get(geoname_id=self.adm1)
+                        bndry = AdmUnitBoundary.objects.get(geoname_id=self.adm2)
                         return bndry.point
                     except:
                         try:
-                            bndry = AdmUnitBoundary.objects.get(geoname_id=self.adm0)
+                            bndry = AdmUnitBoundary.objects.get(geoname_id=self.adm1)
                             return bndry.point
                         except:
-                            return None
+                            try:
+                                bndry = AdmUnitBoundary.objects.get(geoname_id=self.adm0)
+                                return bndry.point
+                            except:
+                                return None
+                else:
+                    return None
                 
                
